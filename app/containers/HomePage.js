@@ -1,8 +1,8 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import { bindRoutineCreators } from 'redux-saga-routines';
 import { MegadraftEditor, editorStateFromRaw, editorStateToJSON } from 'megadraft';
 
 import { textInputAction } from '../reducers/nlp';
@@ -69,12 +69,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindRoutineCreators(
-    {
-      textInputAction,
-    },
-    dispatch,
-  );
+  return bindActionCreators({
+    textInputAction,
+  }, dispatch);
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
@@ -92,7 +89,7 @@ export default class HomePage extends Component {
       const contentJSON = JSON.parse(serializedContent);
       if (contentJSON.blocks) {
         const content = contentJSON.blocks.map(block => block.text);
-        this.props.textInputAction.trigger(content);
+        this.props.textInputAction(content);
       }
     }
   };
