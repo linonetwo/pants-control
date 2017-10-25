@@ -60,6 +60,9 @@ app.on('ready', async () => {
   }
 
   mainWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegrationInWorker: true
+    },
     show: false,
     width: 2000,
     height: 800

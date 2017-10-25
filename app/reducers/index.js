@@ -1,10 +1,14 @@
 // @flow
 import { combineReducers } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 import { routerReducer as router } from 'react-router-redux';
-import counter from './counter';
+import { routinesWatcherSaga } from 'redux-saga-routines';
+import NLPSaga from './nlp';
+
+export const sagaMiddleware = createSagaMiddleware();
+export const sagas = [routinesWatcherSaga, NLPSaga];
 
 const rootReducer = combineReducers({
-  counter,
   router,
 });
 
