@@ -88,7 +88,7 @@ export default class HomePage extends Component {
     if (serializedContent) {
       const contentJSON = JSON.parse(serializedContent);
       if (contentJSON.blocks) {
-        const content = contentJSON.blocks.map(block => block.text);
+        const content = contentJSON.blocks.map(block => block.text).join(' ');
         this.props.textInputAction(content);
       }
     }

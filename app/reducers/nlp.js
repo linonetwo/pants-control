@@ -34,5 +34,5 @@ function* processTextOnType(action) {
 }
 
 export default function* NLPSaga() {
-  yield all([takeLatest(processTextOnType.TRIGGER, processTextOnType)]);
+  yield all([takeLatest(textInputAction.TRIGGER, processTextOnType)]);
 }
