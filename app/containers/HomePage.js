@@ -1,7 +1,11 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { bindRoutineCreators } from 'redux-saga-routines';
 import { MegadraftEditor, editorStateFromRaw, editorStateToJSON } from 'megadraft';
+
+import { textInputAction } from '../reducers/nlp';
 
 const Container = styled.div`
   width: 100%;
@@ -59,6 +63,21 @@ const SignalCreatorStandard = styled.button`
   border: 0;
 `;
 
+function mapStateToProps(state) {
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindRoutineCreators(
+    {
+      textInputAction,
+    },
+    dispatch,
+  );
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
 export default class HomePage extends Component {
   state = { editorState: editorStateFromRaw(null) };
 
