@@ -79,6 +79,10 @@ function mapDispatchToProps(dispatch) {
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class HomePage extends Component {
+  props: {
+    textInputAction: Function,
+  }
+
   state = { editorState: editorStateFromRaw(null) };
 
   onEditorChange = editorState => {
@@ -88,7 +92,7 @@ export default class HomePage extends Component {
       const contentJSON = JSON.parse(serializedContent);
       if (contentJSON.blocks) {
         const content = contentJSON.blocks.map(block => block.text);
-        console.log(content)
+        this.props.textInputAction.trigger(content);
       }
     }
   };
