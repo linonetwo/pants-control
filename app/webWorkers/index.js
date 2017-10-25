@@ -1,6 +1,6 @@
 import createWorkerMiddleware from './redux-worker-middleware';
 
-import SearchWorker from './search.worker';
+import NLPWorker from './nlp.worker';
 
-const workerMiddleware = createWorkerMiddleware(new SearchWorker());
+const workerMiddleware = createWorkerMiddleware(new NLPWorker());
 export default workerMiddleware;
