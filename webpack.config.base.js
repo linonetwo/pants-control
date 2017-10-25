@@ -10,7 +10,12 @@ export default {
   externals: Object.keys(externals || {}),
 
   module: {
-    rules: [{
+    rules: [
+      {
+        test: /\.worker\.js$/,
+        use: { loader: 'worker-loader' },
+      },
+      {
       test: /\.jsx?$/,
       exclude: /node_modules/,
       use: {
