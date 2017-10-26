@@ -134,6 +134,7 @@
     "electron": "^1.6.10",
     "electron-builder": "^19.8.0",
     "electron-devtools-installer": "^2.2.0",
+    "electron-rebuild": "^1.6.0",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
     "eslint": "^3.19.0",
@@ -160,6 +161,7 @@
     "jest": "^20.0.4",
     "jsdom": "^11.0.0",
     "minimist": "^1.2.0",
+    "node-loader": "^0.6.0",
     "react-addons-test-utils": "^15.6.0",
     "react-test-renderer": "^15.6.1",
     "redux-logger": "^3.0.6",
@@ -201,7 +203,7 @@
     "styled-props": "^1.1.1"
   },
   "devEngines": {
-    "node": ">=7.x",
+    "node": ">=8.x",
     "npm": ">=4.x",
     "yarn": ">=0.21.3"
   }

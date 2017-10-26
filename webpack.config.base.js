@@ -16,6 +16,10 @@ export default {
         use: { loader: 'worker-loader' },
       },
       {
+        test: /\.node$/,
+        use: 'node-loader'
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {

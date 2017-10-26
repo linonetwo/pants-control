@@ -59,6 +59,10 @@ export default merge.smart(baseConfig, {
         use: { loader: 'worker-loader' },
       },
       {
+        test: /\.node$/,
+        use: 'node-loader',
+      },
+      {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
