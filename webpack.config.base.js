@@ -17,7 +17,7 @@ export default {
       },
       {
         test: /\.node$/,
-        use: 'node-loader'
+        use: 'node-loader',
       },
       {
         test: /\.jsx?$/,

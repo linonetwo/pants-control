@@ -1,7 +1,6 @@
 // @flow
 import { createRoutine } from 'redux-saga-routines';
 import { takeLatest, call, all, put } from 'redux-saga/effects';
-import nodejieba from 'nodejieba';
 
 type ActionType = {
   type: string,
@@ -16,7 +15,7 @@ type ActionType = {
 // ╚═╝  ╚═╝╚═╝     ╚═╝
 
 function annoTateText(content: string): string {
-  return nodejieba.tag(content);
+  return content;
 }
 
 // ████████╗ █████╗ ███████╗██╗  ██╗
