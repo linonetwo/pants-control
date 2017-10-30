@@ -186,7 +186,6 @@
     "font-awesome": "^4.7.0",
     "history": "^4.6.3",
     "megadraft": "^0.4.31",
-    "nodejieba": "^2.2.5",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-hot-loader": "3.0.0-beta.6",
@@ -198,6 +197,7 @@
     "redux-saga": "^0.16.0",
     "redux-saga-routines": "^2.2.1",
     "redux-thunk": "^2.2.0",
+    "segmentit": "^1.0.3",
     "source-map-support": "^0.4.15",
     "styled-components": "^2.2.1",
     "styled-props": "^1.1.1"

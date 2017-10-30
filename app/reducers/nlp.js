@@ -1,10 +1,11 @@
 // @flow
 import { createRoutine } from 'redux-saga-routines';
 import { takeLatest, call, all, put } from 'redux-saga/effects';
+import Segmentit, { useDefault } from 'segmentit';
 
 type ActionType = {
   type: string,
-  payload: any
+  payload: any,
 };
 
 //  █████╗ ██████╗ ██╗
@@ -14,8 +15,13 @@ type ActionType = {
 // ██║  ██║██║     ██║
 // ╚═╝  ╚═╝╚═╝     ╚═╝
 
-function annoTateText(content: string): string {
-  return content;
+const segmentit = useDefault(new Segmentit());
+type SegmentToken = {
+  w: string,
+  p: ?number,
+};
+function annoTateText(content: string): Array<SegmentToken> {
+  return segmentit.doSegment(content);
 }
 
 // ████████╗ █████╗ ███████╗██╗  ██╗
