@@ -7829,9 +7829,9 @@ schema-utils@^0.3.0:
   dependencies:
     ajv "^5.0.0"
 
-segmentit@^1.0.3:
-  version "1.0.3"
-  resolved "http://registry.npm.taobao.org/segmentit/download/segmentit-1.0.3.tgz#a96ed00268ee791e3946b5032ff9d6a237ae3745"
+segmentit@^1.0.6:
+  version "1.0.6"
+  resolved "http://registry.npm.taobao.org/segmentit/download/segmentit-1.0.6.tgz#dd05b8340bfc58c8b783c59ef48d2365809db0af"
   dependencies:
     babel-runtime "~6.23.0"
     flow-typed "^2.2.1"
