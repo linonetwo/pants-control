@@ -1,7 +1,10 @@
 // @flow
 import { createRoutine } from 'redux-saga-routines';
 import { takeLatest, call, all, put } from 'redux-saga/effects';
-import Segmentit, { useDefault } from 'segmentit';
+import Segmentit, { useDefault, enPOSTag } from 'segmentit';
+import { tail } from 'lodash';
+
+import addInventory from '../knowledge/addInventory.json';
 
 type ActionType = {
   type: string,
@@ -21,7 +24,13 @@ type SegmentToken = {
   p: ?number,
 };
 function annoTateText(content: string): Array<SegmentToken> {
-  return segmentit.doSegment(content);
+  return segmentit.doSegment(content).map(item => ({ w: item.w, p: enPOSTag(item.p) }));
+}
+
+function nerByRules(tokens: Array<SegmentToken>): { [x: string]: string } {
+  addInventory.rules.forEach(({ rule }) => {
+    const ruleForMatching = tail(rule.replace(/>/g, '').split('<'));
+  });
 }
 
 // ████████╗ █████╗ ███████╗██╗  ██╗

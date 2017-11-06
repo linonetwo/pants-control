@@ -1,0 +1,8 @@
+{
+  "author": "linonetwo",
+  "rules": [
+    {"example": "一条红色CK内裤", "rule": "<mq><n><nx><n>"},
+    {"example": "一条红色内裤", "rule": "<mq><n><n>"},
+    {"example": "一条内裤", "rule": "<mq><n>"}
+  ]
+}

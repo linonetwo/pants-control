@@ -185,6 +185,7 @@
     "electron-debug": "^1.2.0",
     "font-awesome": "^4.7.0",
     "history": "^4.6.3",
+    "lodash": "^4.17.4",
     "megadraft": "^0.4.31",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
