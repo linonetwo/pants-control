@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Tooltip } from 'rebass';
 import styled from 'styled-components';
 import { MegadraftEditor, editorStateFromRaw, editorStateToJSON } from 'megadraft';
 
@@ -65,20 +66,25 @@ const SignalCreatorStandard = styled.button`
 
 function mapStateToProps(state) {
   return {
+    userInputProperties: state.cards.userInputProperties,
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    textInputAction,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      textInputAction,
+    },
+    dispatch
+  );
 }
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class HomePage extends Component {
   props: {
     textInputAction: Function,
-  }
+    userInputProperties: string[][],
+  };
 
   state = { editorState: editorStateFromRaw(null) };
 
@@ -111,7 +117,14 @@ export default class HomePage extends Component {
               <MegadraftEditor editorState={this.state.editorState} onChange={this.onEditorChange} />
             </ActorContent>
             <MetaInfoContainer>
-              <SignalCreatorStandard>库存管理</SignalCreatorStandard>
+              <Tooltip text="插件">
+                <SignalCreatorStandard>库存管理</SignalCreatorStandard>
+              </Tooltip>
+              {this.props.userInputProperties.map(([type, value]) => (
+                <Tooltip key={type} text={type}>
+                  <SignalCreatorStandard>{value}</SignalCreatorStandard>
+                </Tooltip>
+              ))}
             </MetaInfoContainer>
           </ActorContainer>
         </ActorFlow>
