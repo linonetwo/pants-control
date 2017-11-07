@@ -198,7 +198,7 @@
     "redux-saga": "^0.16.0",
     "redux-saga-routines": "^2.2.1",
     "redux-thunk": "^2.2.0",
-    "segmentit": "^1.0.6",
+    "segmentit": "^1.1.2",
     "source-map-support": "^0.4.15",
     "styled-components": "^2.2.1",
     "styled-props": "^1.1.1"
