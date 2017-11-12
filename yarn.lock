@@ -2855,6 +2855,14 @@ draft-js@0.10.3:
     immutable "~3.7.4"
     object-assign "^4.1.0"
 
+draft-js@^0.10.4:
+  version "0.10.4"
+  resolved "http://registry.npm.taobao.org/draft-js/download/draft-js-0.10.4.tgz#147741642097c8120d8edc232e9503e8b7fb8d35"
+  dependencies:
+    fbjs "^0.8.15"
+    immutable "~3.7.4"
+    object-assign "^4.1.0"
+
 duplexer2@0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/duplexer2/-/duplexer2-0.0.2.tgz#c614dcf67e2fb14995a91711e5a617e8a60a31db"

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Tooltip } from 'rebass';
 import styled from 'styled-components';
-import { MegadraftEditor, editorStateFromRaw, editorStateToJSON } from 'megadraft';
+import { MegadraftEditor, editorStateFromRaw } from 'megadraft';
+import { convertToRaw } from 'draft-js';
 
 import { textInputAction } from '../reducers/nlp';
 
@@ -75,7 +76,7 @@ function mapDispatchToProps(dispatch) {
     {
       textInputAction,
     },
-    dispatch
+    dispatch,
   );
 }
 
@@ -88,17 +89,33 @@ export default class HomePage extends Component {
 
   state = { editorState: editorStateFromRaw(null) };
 
-  onEditorChange = editorState => {
+  onEditorChange = (editorState: Object) => {
     this.setState({ editorState });
-    const serializedContent: ?string = editorStateToJSON(editorState);
-    if (serializedContent) {
-      const contentJSON = JSON.parse(serializedContent);
+  };
+
+  annotateContent = () => {
+    if (this.state.editorState) {
+      const contentJSON = convertToRaw(this.state.editorState.getCurrentContent());
       if (contentJSON.blocks) {
         const content = contentJSON.blocks.map(block => block.text).join(' ');
         this.props.textInputAction(content);
       }
     }
   };
+
+  onSave() {
+    this.annotateContent();
+  }
+
+  keyBindings = [
+    {
+      name: 'save',
+      isKeyBound: (e: SyntheticKeyboardEvent) => e.key === 's' && (e.metaKey || e.ctrlKey),
+      action: () => {
+        this.onSave();
+      },
+    },
+  ];
 
   render() {
     return (
@@ -114,7 +131,11 @@ export default class HomePage extends Component {
         <ActorFlow>
           <ActorContainer>
             <ActorContent>
-              <MegadraftEditor editorState={this.state.editorState} onChange={this.onEditorChange} />
+              <MegadraftEditor
+                editorState={this.state.editorState}
+                onChange={this.onEditorChange}
+                keyBindings={this.keyBindings}
+              />
             </ActorContent>
             <MetaInfoContainer>
               <Tooltip text="插件">
