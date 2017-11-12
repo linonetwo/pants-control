@@ -57,9 +57,9 @@ export const textInputAction = createRoutine('textInput');
 
 function* segmentTextOnType(action) {
   try {
-    const text: string = action.payload;
+    const { text, id }: { text: string, id: string } = action.payload;
     const tokens: Array<SegmentToken> = annoTateText(text);
-    yield put(textInputAction.success(tokens));
+    yield put(textInputAction.success({ id, tokens }));
   } catch (error) {
     yield put(textInputAction.failure(error));
     console.error(error);
@@ -69,9 +69,9 @@ function* segmentTextOnType(action) {
 export const getPropertyByRuleMatchingAction = createRoutine('getPropertyByRuleMatching');
 function* getPropertyByRuleMatching(action) {
   try {
-    const tokens: Array<SegmentToken> = action.payload;
-    const properties = omit(nerByRules(addInventory.rules, tokens), ['_']);
-    yield put(getPropertyByRuleMatchingAction.success(properties));
+    const { tokens, id }: { tokens: Array<SegmentToken>, id: string } = action.payload;
+    const tags = omit(nerByRules(addInventory.rules, tokens), ['_']);
+    yield put(getPropertyByRuleMatchingAction.success({ id, tags }));
   } catch (error) {
     yield put(getPropertyByRuleMatchingAction.failure(error));
     console.error(error);
