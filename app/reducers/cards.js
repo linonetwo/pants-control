@@ -4,6 +4,7 @@ import { findIndex, toPairs } from 'lodash';
 import { createRoutine } from 'redux-saga-routines';
 import { all, takeLatest, put, select } from 'redux-saga/effects';
 import { Map, List, fromJS } from 'immutable';
+import uuidv5 from 'uuid/v5';
 
 import { getPropertyByRuleMatchingAction } from './nlp';
 
@@ -25,6 +26,8 @@ type ActionType = {
 //    ██║   ██╔══██║╚════██║██╔═██╗
 //    ██║   ██║  ██║███████║██║  ██╗
 //    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+
+export const addNewCardAction = createRoutine('addNewCard');
 
 export default function* cardSaga() {
   yield all([]);
@@ -57,12 +60,23 @@ export function cardsReducer(
   action: ActionType,
 ): Map<CardsInitialStateType> {
   switch (action.type) {
+    case addNewCardAction.TRIGGER: {
+      const id = uuidv5('http://example.com/hello', uuidv5.URL);
+      return state.set(
+        'cards',
+        state.get('cards').unshift(
+          fromJS({
+            id,
+            tags: [],
+            content: '',
+            focused: true,
+          }),
+        ),
+      );
+    }
     case getPropertyByRuleMatchingAction.SUCCESS: {
       const thisCardIndex = state.get('cards').findIndex(aCard => aCard.id === action.payload.id);
-      return {
-        ...state,
-        cards: state.setIn(['cards', thisCardIndex, 'tags'], fromJS(action.payload.tags)),
-      };
+      return state.setIn(['cards', thisCardIndex, 'tags'], fromJS(action.payload.tags));
     }
     default:
       return state;

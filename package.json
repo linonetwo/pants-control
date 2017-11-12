@@ -204,7 +204,8 @@
     "segmentit": "^1.1.4",
     "source-map-support": "^0.4.15",
     "styled-components": "^2.2.1",
-    "styled-props": "^1.1.1"
+    "styled-props": "^1.1.1",
+    "uuid": "^3.1.0"
   },
   "devEngines": {
     "node": ">=8.x",
