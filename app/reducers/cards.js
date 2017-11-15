@@ -76,7 +76,7 @@ export function cardsReducer(
       );
     }
     case getPropertyByRuleMatchingAction.SUCCESS: {
-      const thisCardIndex = state.get('cards').findIndex(aCard => aCard.id === action.payload.id);
+      const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);
       return state.setIn(['cards', thisCardIndex, 'tags'], fromJS(toPairs(action.payload.tags)));
     }
     default:
