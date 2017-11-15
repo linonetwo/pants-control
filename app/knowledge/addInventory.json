@@ -1,0 +1,8 @@
+{
+  "author": "linonetwo",
+  "rules": [
+    {"example": "一条红色CK内裤", "rule": "mq a nx n", "fields": ["_", "颜色", "品牌", "类型"]},
+    {"example": "一条红色内裤", "rule": "mq a n", "fields": ["_", "颜色", "类型"]},
+    {"example": "一条内裤", "rule": "mq n", "fields": ["_", "类型"]}
+  ]
+}

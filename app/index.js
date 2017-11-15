@@ -2,10 +2,12 @@ import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
+import { sagas, sagaMiddleware } from './reducers';
 import { configureStore, history } from './store/configureStore';
 import './app.global.css';
 
 const store = configureStore();
+sagas.forEach(sagaMiddleware.run);
 
 render(
   <AppContainer>

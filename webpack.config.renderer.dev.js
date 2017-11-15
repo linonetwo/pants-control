@@ -28,9 +28,11 @@ const manifest = path.resolve(dll, 'renderer.json');
  * Warn if the DLL is not built
  */
 if (!(fs.existsSync(dll) && fs.existsSync(manifest))) {
-  console.log(chalk.black.bgYellow.bold(
-    'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"'
-  ));
+  console.log(
+    chalk.black.bgYellow.bold(
+      'The DLL files are missing. Sit back while we build them for you with "npm run build-dll"',
+    ),
+  );
   execSync('npm run build-dll');
 }
 
@@ -47,7 +49,7 @@ export default merge.smart(baseConfig, {
   ],
 
   output: {
-    publicPath: `http://localhost:${port}/dist/`
+    publicPath: `http://localhost:${port}/dist/`,
   },
 
   module: {
@@ -63,32 +65,33 @@ export default merge.smart(baseConfig, {
               // Here, we include babel plugins that are only required for the
               // renderer process. The 'transform-*' plugins must be included
               // before react-hot-loader/babel
+              'transform-decorators-legacy',
               'transform-class-properties',
               'transform-es2015-classes',
-              'react-hot-loader/babel'
+              'react-hot-loader/babel',
             ],
-          }
-        }
+          },
+        },
       },
       {
         test: /\.global\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
             options: {
               sourceMap: true,
             },
-          }
-        ]
+          },
+        ],
       },
       {
         test: /^((?!\.global).)*\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
@@ -97,9 +100,9 @@ export default merge.smart(baseConfig, {
               sourceMap: true,
               importLoaders: 1,
               localIdentName: '[name]__[local]__[hash:base64:5]',
-            }
+            },
           },
-        ]
+        ],
       },
       // WOFF Font
       {
@@ -109,7 +112,7 @@ export default merge.smart(baseConfig, {
           options: {
             limit: 10000,
             mimetype: 'application/font-woff',
-          }
+          },
         },
       },
       // WOFF2 Font
@@ -120,8 +123,8 @@ export default merge.smart(baseConfig, {
           options: {
             limit: 10000,
             mimetype: 'application/font-woff',
-          }
-        }
+          },
+        },
       },
       // TTF Font
       {
@@ -130,9 +133,9 @@ export default merge.smart(baseConfig, {
           loader: 'url-loader',
           options: {
             limit: 10000,
-            mimetype: 'application/octet-stream'
-          }
-        }
+            mimetype: 'application/octet-stream',
+          },
+        },
       },
       // EOT Font
       {
@@ -147,15 +150,15 @@ export default merge.smart(baseConfig, {
           options: {
             limit: 10000,
             mimetype: 'image/svg+xml',
-          }
-        }
+          },
+        },
       },
       // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
         use: 'url-loader',
-      }
-    ]
+      },
+    ],
   },
 
   plugins: [
@@ -188,21 +191,21 @@ export default merge.smart(baseConfig, {
      * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
     }),
 
     new webpack.LoaderOptionsPlugin({
-      debug: true
+      debug: true,
     }),
 
     new ExtractTextPlugin({
-      filename: '[name].css'
+      filename: '[name].css',
     }),
   ],
 
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
 
   devServer: {
@@ -219,7 +222,7 @@ export default merge.smart(baseConfig, {
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
-      poll: 100
+      poll: 100,
     },
     historyApiFallback: {
       verbose: true,
@@ -228,14 +231,10 @@ export default merge.smart(baseConfig, {
     before() {
       if (process.env.START_HOT) {
         console.log('Staring Main Process...');
-        spawn(
-          'npm',
-          ['run', 'start-main-dev'],
-          { shell: true, env: process.env, stdio: 'inherit' }
-        )
-        .on('close', code => process.exit(code))
-        .on('error', spawnError => console.error(spawnError));
+        spawn('npm', ['run', 'start-main-dev'], { shell: true, env: process.env, stdio: 'inherit' })
+          .on('close', code => process.exit(code))
+          .on('error', spawnError => console.error(spawnError));
       }
-    }
+    },
   },
 });

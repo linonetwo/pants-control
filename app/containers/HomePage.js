@@ -1,7 +1,15 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import styled from 'styled-components';
-import { MegadraftEditor, editorStateFromRaw, editorStateToJSON } from 'megadraft';
+import { Map, List } from 'immutable';
+
+import { textInputAction } from '../reducers/nlp';
+import { addNewCardAction } from '../reducers/cards';
+import type { Card } from '../reducers/cards';
+
+import Actor from '../components/Actor';
 
 const Container = styled.div`
   width: 100%;
@@ -20,80 +28,40 @@ const ActorFlow = styled.div`
   flex-direction: column;
 `;
 
-const ActorContainer = styled.div`
-  max-width: 100%;
-  max-height: 1000px;
-  min-height: 70px;
-  padding: 10px;
+function mapStateToProps(state) {
+  return {
+    cards: state.cards.get('cards'),
+  };
+}
 
-  background-color: white;
-  box-shadow: inset 0 0 0 1px #dee1e3, 0 0 4px #dee1e3;
-  border-radius: 4px;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      textInputAction,
+      addNewCardAction,
+    },
+    dispatch,
+  );
+}
 
-  color: #333333;
-`;
-const ActorContent = styled.article`
-  padding: 10px 0;
-
-  display: flex;
-  flex-direction: column;
-  min-height: 50px;
-  width: 100%;
-`;
-const MetaInfoContainer = styled.nav`
-  max-height: 30px;
-  width: 100%;
-`;
-const SignalCreatorStandard = styled.button`
-  border-radius: 99999px;
-  padding: 8px 16px;
-
-  color: #333333;
-  background-color: white;
-  display: inline-block;
-  vertical-align: middle;
-  text-align: center;
-  text-decoration: none;
-
-  box-shadow: inset 0 0 0 2px;
-  border: 0;
-`;
-
+@connect(mapStateToProps, mapDispatchToProps)
 export default class HomePage extends Component {
-  state = { editorState: editorStateFromRaw(null) };
-
-  onEditorChange = editorState => {
-    this.setState({ editorState });
-    const serializedContent: ?string = editorStateToJSON(editorState);
-    if (serializedContent) {
-      const contentJSON = JSON.parse(serializedContent);
-      if (contentJSON.blocks) {
-        const content = contentJSON.blocks.map(block => block.text);
-        console.log(content)
-      }
-    }
+  props: {
+    textInputAction: Function,
+    addNewCardAction: Function,
+    cards: List<Map<Card>>,
   };
 
   render() {
     return (
       <Container>
         <ActorFlow>
-          <ActorContainer>
-            <MetaInfoContainer>
-              <SignalCreatorStandard>库存管理</SignalCreatorStandard>
-            </MetaInfoContainer>
-            <ActorContent>asdfasdfasdf</ActorContent>
-          </ActorContainer>
-        </ActorFlow>
-        <ActorFlow>
-          <ActorContainer>
-            <ActorContent>
-              <MegadraftEditor editorState={this.state.editorState} onChange={this.onEditorChange} />
-            </ActorContent>
-            <MetaInfoContainer>
-              <SignalCreatorStandard>库存管理</SignalCreatorStandard>
-            </MetaInfoContainer>
-          </ActorContainer>
+          <button onClick={() => this.props.addNewCardAction()}>+</button>
+          {this.props.cards
+            .toArray()
+            .map(aCard => (
+              <Actor key={aCard.get('id')} id={aCard.get('id')} textInputAction={this.props.textInputAction} tags={aCard.get('tags')} />
+            ))}
         </ActorFlow>
       </Container>
     );
