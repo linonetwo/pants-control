@@ -7,6 +7,7 @@ import { Map, List } from 'immutable';
 
 import { textInputAction } from '../reducers/nlp';
 import { addNewCardAction } from '../reducers/cards';
+import { executeCodeAction } from '../reducers/execute';
 import type { Card } from '../reducers/cards';
 
 import Actor from '../components/Actor';
@@ -39,6 +40,7 @@ function mapDispatchToProps(dispatch) {
     {
       textInputAction,
       addNewCardAction,
+      executeCodeAction,
     },
     dispatch,
   );
@@ -49,6 +51,7 @@ export default class HomePage extends Component {
   props: {
     textInputAction: Function,
     addNewCardAction: Function,
+    executeCodeAction: Function,
     cards: List<Map<Card>>,
   };
 
@@ -60,7 +63,13 @@ export default class HomePage extends Component {
           {this.props.cards
             .toArray()
             .map(aCard => (
-              <Actor key={aCard.get('id')} id={aCard.get('id')} textInputAction={this.props.textInputAction} tags={aCard.get('tags')} />
+              <Actor
+                key={aCard.get('id')}
+                id={aCard.get('id')}
+                textInputAction={this.props.textInputAction}
+                tags={aCard.get('tags')}
+                executeCodeAction={this.props.executeCodeAction}
+              />
             ))}
         </ActorFlow>
       </Container>

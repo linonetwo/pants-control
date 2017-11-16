@@ -50,6 +50,7 @@ export default class Actor extends Component {
     tags: List<List<string>>,
     id: string,
     textInputAction: Function,
+    executeCodeAction: Function,
   };
   state = { editorState: editorStateFromRaw(null) };
 
@@ -58,14 +59,20 @@ export default class Actor extends Component {
   };
 
   annotateContent = () => {
+    const text = this.getContent(' ');
+    this.props.textInputAction({ text, id: this.props.id });
+  };
+
+  getContent(joinBy: string): string {
     if (this.state.editorState) {
       const contentJSON = convertToRaw(this.state.editorState.getCurrentContent());
       if (contentJSON.blocks) {
-        const text = contentJSON.blocks.map(block => block.text).join(' ');
-        this.props.textInputAction({ text, id: this.props.id });
+        const text: string = contentJSON.blocks.map(block => block.text).join(joinBy);
+        return text;
       }
     }
-  };
+    return '';
+  }
 
   keyBindings = [
     {
@@ -75,10 +82,21 @@ export default class Actor extends Component {
         this.onSave();
       },
     },
+    {
+      name: 'execute',
+      isKeyBound: (e: SyntheticKeyboardEvent) => e.key === 'e' && (e.metaKey || e.ctrlKey),
+      action: () => {
+        this.runCode();
+      },
+    },
   ];
 
   onSave() {
     this.annotateContent();
+  }
+
+  runCode() {
+    this.props.executeCodeAction({ code: this.getContent('\n'), id: this.props.id, language: 'js/babel' });
   }
 
   render() {
