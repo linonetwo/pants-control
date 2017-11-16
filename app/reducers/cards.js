@@ -1,9 +1,8 @@
 // @flow
-import { delay } from 'bluebird';
-import { findIndex, toPairs } from 'lodash';
+import { toPairs } from 'lodash';
 import { createRoutine } from 'redux-saga-routines';
 import { all, takeLatest, put, select } from 'redux-saga/effects';
-import { Map, List, fromJS } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import uuidv4 from 'uuid/v4';
 
 import { getPropertyByRuleMatchingAction } from './nlp';
@@ -11,6 +10,13 @@ import { getPropertyByRuleMatchingAction } from './nlp';
 type ActionType = {
   type: string,
   payload: any,
+};
+
+export type Card = {
+  id: string,
+  tags: string[][], // [[key, value], ...]
+  content: string, // stringified EditorState
+  focused: boolean, // focused card will parse stringified EditorState then you can edit it
 };
 
 //  █████╗ ██████╗ ██╗
@@ -28,9 +34,15 @@ type ActionType = {
 //    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 
 export const addNewCardAction = createRoutine('addNewCard');
+function* addNewCard() {
+  const id = uuidv4();
+  yield put(addNewCardAction.request({ id }));
+}
 
 export default function* cardSaga() {
-  yield all([]);
+  yield all([
+    takeLatest(addNewCardAction.TRIGGER, addNewCard),
+  ]);
 }
 
 // ███████╗████████╗ ██████╗ ██████╗ ███████╗
@@ -39,13 +51,6 @@ export default function* cardSaga() {
 // ╚════██║   ██║   ██║   ██║██╔══██╗██╔══╝
 // ███████║   ██║   ╚██████╔╝██║  ██║███████╗
 // ╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
-
-export type Card = {
-  id: string,
-  tags: string[][], // [[key, value], ...]
-  content: string, // stringified EditorState
-  focused: boolean, // focused card will parse stringified EditorState then you can edit it
-};
 
 export type CardsInitialStateType = {
   cards: Array<Card>,
@@ -60,8 +65,8 @@ export function cardsReducer(
   action: ActionType,
 ): Map<CardsInitialStateType> {
   switch (action.type) {
-    case addNewCardAction.TRIGGER: {
-      const id = uuidv4();
+    case addNewCardAction.REQUEST: {
+      const { id } = action.payload;
       return state.set(
         'cards',
         // add a new card
