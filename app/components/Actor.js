@@ -6,6 +6,15 @@ import { convertToRaw } from 'draft-js';
 import { List } from 'immutable';
 import styled from 'styled-components';
 import vm from 'vm';
+import { ApolloClient } from 'apollo-client';
+import gql from 'graphql-tag';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+const client = new ApolloClient({
+  link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
+  cache: new InMemoryCache()
+});
 
 const ActorContainer = styled.div`
   max-width: 100%;
@@ -82,6 +91,13 @@ export default class Actor extends Component {
         this.onSave();
       },
     },
+    {
+      name: 'execute',
+      isKeyBound: (e: SyntheticKeyboardEvent) => e.key === 'e' && (e.metaKey || e.ctrlKey),
+      action: () => {
+        this.runCode();
+      },
+    },
   ];
 
   onSave() {
@@ -89,8 +105,8 @@ export default class Actor extends Component {
   }
 
   runCode() {
-    // eslint-disable-next-line object-shorthand
-    vm.runInNewContext(this.getContent('\n'), { require: require });
+    const stdout = vm.runInNewContext(this.getContent('\n'), { client, gql, console });
+    console.log(stdout);
   }
 
   render() {

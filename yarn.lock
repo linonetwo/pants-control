@@ -30,6 +30,10 @@
   version "0.1.0"
   resolved "http://registry.npm.taobao.org/@manaflair/redux-batch/download/@manaflair/redux-batch-0.1.0.tgz#55cad28fbd58719641a61718867e3aec81a32a53"
 
+"@types/async@2.0.45":
+  version "2.0.45"
+  resolved "http://registry.npm.taobao.org/@types/async/download/@types/async-2.0.45.tgz#0cfe971d7ed5542695740338e0455c91078a0e83"
+
 "@types/node@^6.0.46":
   version "6.0.78"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.78.tgz#5d4a3f579c1524e01ee21bf474e6fba09198f470"
@@ -37,6 +41,10 @@
 "@types/node@^7.0.18":
   version "7.0.30"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-7.0.30.tgz#209af44164286c2d648139ac6d53847ab0e1b5b8"
+
+"@types/zen-observable@0.5.3", "@types/zen-observable@^0.5.3":
+  version "0.5.3"
+  resolved "http://registry.npm.taobao.org/@types/zen-observable/download/@types/zen-observable-0.5.3.tgz#91b728599544efbb7386d8b6633693a3c2e7ade5"
 
 JSONStream@^0.8.4:
   version "0.8.4"
@@ -216,6 +224,67 @@ apollo-cache-control@^0.0.x:
   dependencies:
     graphql-extensions "^0.0.x"
 
+apollo-cache-inmemory@^1.1.1:
+  version "1.1.1"
+  resolved "http://registry.npm.taobao.org/apollo-cache-inmemory/download/apollo-cache-inmemory-1.1.1.tgz#1511f00eb845da88504abf867f408c3026a909ba"
+  dependencies:
+    apollo-cache "^1.0.1"
+    apollo-utilities "^1.0.2"
+    graphql-anywhere "^4.0.1"
+
+apollo-cache@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/apollo-cache/download/apollo-cache-1.0.1.tgz#66c16141173bc752d3ad3dce990310c10dfc4076"
+  dependencies:
+    apollo-utilities "^1.0.2"
+
+apollo-client-preset@^1.0.3:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/apollo-client-preset/download/apollo-client-preset-1.0.3.tgz#e1f5d2d34115806c5021ae17cd09a88f61f623f5"
+  dependencies:
+    apollo-cache-inmemory "^1.1.1"
+    apollo-client "^2.0.3"
+    apollo-link "1.0.0"
+    apollo-link-http "1.1.0"
+    graphql-tag "^2.4.2"
+
+apollo-client@^2.0.3:
+  version "2.0.3"
+  resolved "http://registry.npm.taobao.org/apollo-client/download/apollo-client-2.0.3.tgz#f99f32e2c851bbd52da1e1b113ce8f6a0cf94945"
+  dependencies:
+    "@types/zen-observable" "^0.5.3"
+    apollo-cache "^1.0.1"
+    apollo-link "^1.0.0"
+    apollo-link-dedup "^1.0.0"
+    apollo-utilities "^1.0.2"
+    symbol-observable "^1.0.2"
+    zen-observable "^0.6.0"
+  optionalDependencies:
+    "@types/async" "2.0.45"
+
+apollo-link-dedup@^1.0.0:
+  version "1.0.2"
+  resolved "http://registry.npm.taobao.org/apollo-link-dedup/download/apollo-link-dedup-1.0.2.tgz#bab659dde41f8dd627839142d4dad90e55251110"
+
+apollo-link-http@1.1.0:
+  version "1.1.0"
+  resolved "http://registry.npm.taobao.org/apollo-link-http/download/apollo-link-http-1.1.0.tgz#a85cc43d9a5286bb54ac32213f7a16bef3554ae4"
+
+apollo-link@1.0.0:
+  version "1.0.0"
+  resolved "http://registry.npm.taobao.org/apollo-link/download/apollo-link-1.0.0.tgz#3d334285789c217f95712ebce434d56ce7f3e991"
+  dependencies:
+    apollo-utilities "^0.2.0-beta.0"
+    zen-observable "^0.6.0"
+
+apollo-link@^1.0.0:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/apollo-link/download/apollo-link-1.0.3.tgz#759c36abeeb99e227eca45f919ee07fb8fee911e"
+  dependencies:
+    "@types/zen-observable" "0.5.3"
+    apollo-utilities "^1.0.0"
+    zen-observable "^0.6.0"
+
 apollo-server-core@^1.2.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/apollo-server-core/download/apollo-server-core-1.2.0.tgz#e851c47444991b6f89f88529237076b83e01e8ee"
@@ -241,7 +310,11 @@ apollo-tracing@^0.1.0:
   dependencies:
     graphql-extensions "^0.0.x"
 
-apollo-utilities@^1.0.1:
+apollo-utilities@^0.2.0-beta.0:
+  version "0.2.0-rc.3"
+  resolved "http://registry.npm.taobao.org/apollo-utilities/download/apollo-utilities-0.2.0-rc.3.tgz#7bd93be0f587f20c5b46e21880272e305759fdc2"
+
+apollo-utilities@^1.0.0, apollo-utilities@^1.0.1, apollo-utilities@^1.0.2:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/apollo-utilities/download/apollo-utilities-1.0.2.tgz#bcf348a7e613e82e2624ddb5be2b9f6bf1259c6d"
 
@@ -4366,12 +4439,22 @@ graceful-fs@~3.0.2:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
+graphql-anywhere@^4.0.1:
+  version "4.0.1"
+  resolved "http://registry.npm.taobao.org/graphql-anywhere/download/graphql-anywhere-4.0.1.tgz#eb53ed5c56ef42e21d34dc22951e3da38f88a342"
+  dependencies:
+    apollo-utilities "^1.0.2"
+
 graphql-extensions@^0.0.x:
   version "0.0.5"
   resolved "http://registry.npm.taobao.org/graphql-extensions/download/graphql-extensions-0.0.5.tgz#63bc4a3fd31aab12bfadf783cbc038a9a6937cf0"
   dependencies:
     core-js "^2.5.1"
     source-map-support "^0.5.0"
+
+graphql-tag@^2.4.2, graphql-tag@^2.5.0:
+  version "2.5.0"
+  resolved "http://registry.npm.taobao.org/graphql-tag/download/graphql-tag-2.5.0.tgz#b43bfd8b5babcd2c205ad680c03e98b238934e0f"
 
 graphql-tools@^2.7.2:
   version "2.7.2"
@@ -4598,6 +4681,10 @@ hoek@4.x.x:
 hoist-non-react-statics@^1.0.0, hoist-non-react-statics@^1.0.3, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
+
+hoist-non-react-statics@^2.2.0:
+  version "2.3.1"
+  resolved "http://registry.npm.taobao.org/hoist-non-react-statics/download/hoist-non-react-statics-2.3.1.tgz#343db84c6018c650778898240135a1420ee22ce0"
 
 home-or-tmp@^2.0.0:
   version "2.0.0"
@@ -5865,6 +5952,10 @@ lodash.flatten@^4.2.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.flatten/-/lodash.flatten-4.4.0.tgz#f31c22225a9632d2bbf8e4addbef240aa765a61f"
 
+lodash.flowright@^3.5.0:
+  version "3.5.0"
+  resolved "http://registry.npm.taobao.org/lodash.flowright/download/lodash.flowright-3.5.0.tgz#2b5fff399716d7e7dc5724fe9349f67065184d67"
+
 lodash.foreach@^4.3.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.foreach/-/lodash.foreach-4.5.0.tgz#1a6a35eace401280c7f06dddec35165ab27e3e53"
@@ -5916,7 +6007,7 @@ lodash.omitby@^4.5.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/lodash.omitby/-/lodash.omitby-4.6.0.tgz#5c15ff4754ad555016b53c041311e8f079204791"
 
-lodash.pick@^4.2.1:
+lodash.pick@^4.2.1, lodash.pick@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
 
@@ -7496,6 +7587,17 @@ react-addons-test-utils@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/react-addons-test-utils/-/react-addons-test-utils-15.6.0.tgz#062d36117fe8d18f3ba5e06eb33383b0b85ea5b9"
 
+react-apollo@^2.0.1:
+  version "2.0.1"
+  resolved "http://registry.npm.taobao.org/react-apollo/download/react-apollo-2.0.1.tgz#43997db9f294d81bd229eb705944fb36d5164607"
+  dependencies:
+    apollo-link "^1.0.0"
+    hoist-non-react-statics "^2.2.0"
+    invariant "^2.2.1"
+    lodash.flowright "^3.5.0"
+    lodash.pick "^4.4.0"
+    prop-types "^15.5.8"
+
 react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
@@ -8891,7 +8993,7 @@ svgo@^0.7.0:
     sax "~1.2.1"
     whet.extend "~0.9.9"
 
-symbol-observable@^1.0.1, symbol-observable@^1.0.3, symbol-observable@^1.0.4:
+symbol-observable@^1.0.1, symbol-observable@^1.0.2, symbol-observable@^1.0.3, symbol-observable@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.4.tgz#29bf615d4aa7121bdd898b22d4b3f9bc4e2aa03d"
 
@@ -9877,6 +9979,10 @@ yauzl@2.4.1:
   resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.4.1.tgz#9528f442dab1b2284e58b4379bb194e22e0c4005"
   dependencies:
     fd-slicer "~1.0.1"
+
+zen-observable@^0.6.0:
+  version "0.6.0"
+  resolved "http://registry.npm.taobao.org/zen-observable/download/zen-observable-0.6.0.tgz#8a6157ed15348d185d948cfc4a59d90a2c0f70ee"
 
 zip-stream@^1.1.0:
   version "1.1.1"
