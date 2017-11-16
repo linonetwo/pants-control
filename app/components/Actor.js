@@ -5,16 +5,6 @@ import { Tooltip } from 'rebass';
 import { convertToRaw } from 'draft-js';
 import { List } from 'immutable';
 import styled from 'styled-components';
-import vm from 'vm';
-import { ApolloClient } from 'apollo-client';
-import gql from 'graphql-tag';
-import { HttpLink } from 'apollo-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-
-const client = new ApolloClient({
-  link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
-  cache: new InMemoryCache()
-});
 
 const ActorContainer = styled.div`
   max-width: 100%;
@@ -60,6 +50,7 @@ export default class Actor extends Component {
     tags: List<List<string>>,
     id: string,
     textInputAction: Function,
+    executeCodeAction: Function,
   };
   state = { editorState: editorStateFromRaw(null) };
 
@@ -105,8 +96,7 @@ export default class Actor extends Component {
   }
 
   runCode() {
-    const stdout = vm.runInNewContext(this.getContent('\n'), { client, gql, console });
-    console.log(stdout);
+    this.props.executeCodeAction({ code: this.getContent('\n'), id: this.props.id, language: 'js/babel' });
   }
 
   render() {
