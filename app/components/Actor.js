@@ -5,6 +5,7 @@ import { Tooltip } from 'rebass';
 import { convertToRaw } from 'draft-js';
 import { List } from 'immutable';
 import styled from 'styled-components';
+import vm from 'vm';
 
 const ActorContainer = styled.div`
   max-width: 100%;
@@ -58,14 +59,20 @@ export default class Actor extends Component {
   };
 
   annotateContent = () => {
+    const text = this.getContent(' ');
+    this.props.textInputAction({ text, id: this.props.id });
+  };
+
+  getContent(joinBy: string): string {
     if (this.state.editorState) {
       const contentJSON = convertToRaw(this.state.editorState.getCurrentContent());
       if (contentJSON.blocks) {
-        const text = contentJSON.blocks.map(block => block.text).join(' ');
-        this.props.textInputAction({ text, id: this.props.id });
+        const text: string = contentJSON.blocks.map(block => block.text).join(joinBy);
+        return text;
       }
     }
-  };
+    return '';
+  }
 
   keyBindings = [
     {
@@ -79,6 +86,11 @@ export default class Actor extends Component {
 
   onSave() {
     this.annotateContent();
+  }
+
+  runCode() {
+    // eslint-disable-next-line object-shorthand
+    vm.runInNewContext(this.getContent('\n'), { require: require });
   }
 
   render() {
