@@ -51,6 +51,7 @@ export default class Actor extends Component {
     id: string,
     textInputAction: Function,
     executeCodeAction: Function,
+    saveCardContentAction: Function,
   };
   state = { editorState: editorStateFromRaw(null) };
 
@@ -62,6 +63,11 @@ export default class Actor extends Component {
     const text = this.getContent(' ');
     this.props.textInputAction({ text, id: this.props.id });
   };
+
+  saveContent = () => {
+    const content = convertToRaw(this.state.editorState.getCurrentContent());
+    this.props.saveCardContentAction({ content, id: this.props.id });
+  }
 
   getContent(joinBy: string): string {
     if (this.state.editorState) {
@@ -93,6 +99,7 @@ export default class Actor extends Component {
 
   onSave() {
     this.annotateContent();
+    this.saveContent();
   }
 
   runCode() {

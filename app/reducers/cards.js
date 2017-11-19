@@ -33,6 +33,8 @@ export type Card = {
 //    ██║   ██║  ██║███████║██║  ██╗
 //    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 
+export const saveCardContentAction = createRoutine('saveCardContent');
+
 export const addNewCardAction = createRoutine('addNewCard');
 function* addNewCard() {
   const id = uuidv4();
@@ -79,6 +81,10 @@ export function cardsReducer(
           }),
         ),
       );
+    }
+    case saveCardContentAction.TRIGGER: {
+      const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);
+      return state.setIn(['cards', thisCardIndex, 'content'], action.payload.content);
     }
     case getPropertyByRuleMatchingAction.SUCCESS: {
       const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);

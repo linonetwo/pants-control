@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Map, List } from 'immutable';
 
 import { textInputAction } from '../reducers/nlp';
-import { addNewCardAction } from '../reducers/cards';
+import { addNewCardAction, saveCardContentAction } from '../reducers/cards';
 import { executeCodeAction } from '../reducers/execute';
 import type { Card } from '../reducers/cards';
 
@@ -40,6 +40,7 @@ function mapDispatchToProps(dispatch) {
     {
       textInputAction,
       addNewCardAction,
+      saveCardContentAction,
       executeCodeAction,
     },
     dispatch,
@@ -51,6 +52,7 @@ export default class HomePage extends Component {
   props: {
     textInputAction: Function,
     addNewCardAction: Function,
+    saveCardContentAction: Function,
     executeCodeAction: Function,
     cards: List<Map<Card>>,
   };
@@ -67,6 +69,7 @@ export default class HomePage extends Component {
                 key={aCard.get('id')}
                 id={aCard.get('id')}
                 textInputAction={this.props.textInputAction}
+                saveCardContentAction={this.props.saveCardContentAction}
                 tags={aCard.get('tags')}
                 executeCodeAction={this.props.executeCodeAction}
               />
