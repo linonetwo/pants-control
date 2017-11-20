@@ -4,6 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import gql from 'graphql-tag';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { app } from 'electron';
 
 import { store } from '../store';
 
@@ -23,7 +24,7 @@ export default async function runLambda(req, res) {
       link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
       cache: new InMemoryCache(),
     });
-    stdout = String(await vm.runInNewContext(code, { client, gql, console, fs }));
+    stdout = String(await vm.runInNewContext(code, { client, gql, console, fs, getPath: app.getPath }));
     res.send(stdout);
   } else {
     res.send(req.params);

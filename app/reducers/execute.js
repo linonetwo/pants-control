@@ -3,10 +3,12 @@ import { createRoutine } from 'redux-saga-routines';
 import { takeLatest, call, all, put } from 'redux-saga/effects';
 
 import vm from 'vm';
+import fs from 'fs';
 import { ApolloClient } from 'apollo-client';
 import gql from 'graphql-tag';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { app, remote } from 'electron';
 
 //  █████╗ ██████╗ ██╗
 // ██╔══██╗██╔══██╗██║
@@ -32,7 +34,8 @@ function* executeCode(action) {
         link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
         cache: new InMemoryCache(),
       });
-      stdout = String(vm.runInNewContext(code, { client, gql, console }));
+      console.log(remote.app.getPath)
+      stdout = String(vm.runInNewContext(code, { client, gql, console, fs, getPath: remote.app.getPath }));
     }
     console.log(stdout);
     yield put(executeCodeAction.success({ id, stdout }));
