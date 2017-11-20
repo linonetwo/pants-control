@@ -45,15 +45,25 @@ const SignalCreatorStandard = styled.button`
   border: 0;
 `;
 
+type ActorProps = {
+  tags: List<List<string>>,
+  id: string,
+  initialContent: string,
+  textInputAction: Function,
+  executeCodeAction: Function,
+  saveCardToMemoryAction: Function,
+};
+type ActorState = {
+  editorState: Object,
+};
 export default class Actor extends Component {
-  props: {
-    tags: List<List<string>>,
-    id: string,
-    textInputAction: Function,
-    executeCodeAction: Function,
-    saveCardContentAction: Function,
-  };
-  state = { editorState: editorStateFromRaw(null) };
+  props: ActorProps;
+  state: ActorState;
+
+  constructor(props: ActorProps) {
+    super(props);
+    this.state = { editorState: editorStateFromRaw(props.initialContent && JSON.parse(props.initialContent)) };
+  }
 
   onEditorChange = (editorState: Object) => {
     this.setState({ editorState });
@@ -66,8 +76,8 @@ export default class Actor extends Component {
 
   saveContent = () => {
     const content = convertToRaw(this.state.editorState.getCurrentContent());
-    this.props.saveCardContentAction({ content, id: this.props.id });
-  }
+    this.props.saveCardToMemoryAction({ content, id: this.props.id });
+  };
 
   getContent(joinBy: string): string {
     if (this.state.editorState) {
