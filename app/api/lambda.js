@@ -9,9 +9,15 @@ import { store } from '../store';
 
 export default async function runLambda(req, res) {
   const { noteID, sectionID } = req.params;
-  const matchedCard = store.getState().cards.get('cards').find(card => card.get('id') === noteID);
+  const matchedCard = store
+    .getState()
+    .cards.get('cards')
+    .find(card => card.get('id') === noteID);
   if (matchedCard && matchedCard.get('content').blocks) {
-    const code: string = matchedCard.get('content').blocks.map(block => block.text).join('\n');
+    const code: string = matchedCard
+      .get('content')
+      .blocks.map(block => block.text)
+      .join('\n');
     let stdout = '';
     const client = new ApolloClient({
       link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
