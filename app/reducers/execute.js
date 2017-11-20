@@ -8,7 +8,7 @@ import { ApolloClient } from 'apollo-client';
 import gql from 'graphql-tag';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { app, remote } from 'electron';
+import { remote } from 'electron';
 
 //  █████╗ ██████╗ ██╗
 // ██╔══██╗██╔══██╗██║
