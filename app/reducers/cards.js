@@ -40,13 +40,13 @@ export const saveCardToMemoryAction = createRoutine('saveCardToMemory');
 export const saveCardToFsAction = createRoutine('saveCardToFs');
 function* saveCardToFs(action) {
   const { card, id }: { card: Object, id: string } = action.payload;
-  const loaderID: string = yield select(state => state.config.get('config').get('loader'));
-  if (!loaderID) {
-    // use default loader
+  const saverID: ?string = yield select(state => state.config.get('config').get('saver'));
+  if (!saverID) {
+    // use default saver
     const notePath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes', id, `${id}.json`);
     yield call(fs.outputJson, notePath, card);
   } else {
-    fetch(`http://localhost:3000/lambdav1/${loaderID}/aaa`, {
+    fetch(`http://localhost:3000/lambdav1/${saverID}/aaa`, {
       body: JSON.stringify({
         card,
         id,
@@ -55,29 +55,29 @@ function* saveCardToFs(action) {
   }
 }
 
-export const loadCardFromMemoryAction = createRoutine('loadCardFromMemory');
 export const loadCardFromFsAction = createRoutine('loadCardFromFs');
-function* loadCardFromFs(action) {
-  const loaderID: string = yield select(state => state.config.get('config').get('loader'));
+function* loadCardFromFs() {
+  const loaderID: ?string = yield select(state => state.config.get('config').get('loader'));
   let cards: Array<Card> = [];
   if (!loaderID) {
     // use default loader
     const noteRootPath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes');
     yield call(fs.ensureDir, noteRootPath);
     const noteDirNames: string[] = yield call(fs.readdir, noteRootPath);
+    // eslint-disable-next-line no-restricted-syntax
     for (const noteID of noteDirNames) {
       try {
-        const cardJSON = yield call(fs.readJson, path.join(noteRootPath, noteID, `${noteID}.json`))
+        const cardJSON = yield call(fs.readJson, path.join(noteRootPath, noteID, `${noteID}.json`));
         cards.push(cardJSON);
       } catch (error) {
-        console.error(`${noteID} doesn't exist?`)
+        console.error(`${noteID} doesn't exist?`);
       }
     }
   } else {
     const result = yield call(fetch, `http://localhost:3000/lambdav1/${loaderID}/aaa`);
     cards = result.data;
   }
-  yield put(loadCardFromMemoryAction.TRIGGER, cards);
+  yield put(loadCardFromFsAction.SUCCESS, cards);
 }
 
 export const addNewCardAction = createRoutine('addNewCard');
@@ -86,10 +86,13 @@ function* addNewCard() {
   yield put(addNewCardAction.request({ id }));
 }
 
-yield all([
-  takeLatest(addNewCardAction.TRIGGER, addNewCard),
-  takeLatest(saveCardToFsAction.TRIGGER, saveCardToFs),
-]);
+export default function* cardSaga() {
+  yield all([
+    takeLatest(addNewCardAction.TRIGGER, addNewCard),
+    takeLatest(saveCardToFsAction.TRIGGER, saveCardToFs),
+    takeLatest(loadCardFromFsAction.TRIGGER, loadCardFromFs),
+  ]);
+}
 
 // ███████╗████████╗ ██████╗ ██████╗ ███████╗
 // ██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗██╔════╝
@@ -130,7 +133,7 @@ export function cardsReducer(
       const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);
       return state.setIn(['cards', thisCardIndex, 'content'], action.payload.content);
     }
-    case loadCardFromMemoryAction.TRIGGER: {
+    case loadCardFromFsAction.SUCCESS: {
       const cards: Array<Card> = action.payload;
       return state.set('cards', cards);
     }
