@@ -63,6 +63,7 @@ function* loadCardToFs(action) {
   if (!loaderID) {
     // use default loader
     const noteRootPath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes');
+    yield call(fs.ensureDir, noteRootPath);
     const noteDirNames: string[] = yield call(fs.readdir, noteRootPath);
     for (const noteID of noteDirNames) {
       try {
