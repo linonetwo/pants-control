@@ -55,9 +55,9 @@ function* saveCardToFs(action) {
   }
 }
 
-export const loadCardToMemoryAction = createRoutine('loadCardToMemory');
-export const loadCardToFsAction = createRoutine('loadCardToFs');
-function* loadCardToFs(action) {
+export const loadCardFromMemoryAction = createRoutine('loadCardFromMemory');
+export const loadCardFromFsAction = createRoutine('loadCardFromFs');
+function* loadCardFromFs(action) {
   const loaderID: string = yield select(state => state.config.get('config').get('loader'));
   let cards: Array<Card> = [];
   if (!loaderID) {
@@ -77,7 +77,7 @@ function* loadCardToFs(action) {
     const result = yield call(fetch, `http://localhost:3000/lambdav1/${loaderID}/aaa`);
     cards = result.data;
   }
-  yield put(loadCardToMemoryAction.TRIGGER, cards);
+  yield put(loadCardFromMemoryAction.TRIGGER, cards);
 }
 
 export const addNewCardAction = createRoutine('addNewCard');
@@ -130,7 +130,7 @@ export function cardsReducer(
       const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);
       return state.setIn(['cards', thisCardIndex, 'content'], action.payload.content);
     }
-    case loadCardToMemoryAction.TRIGGER: {
+    case loadCardFromMemoryAction.TRIGGER: {
       const cards: Array<Card> = action.payload;
       return state.set('cards', cards);
     }
