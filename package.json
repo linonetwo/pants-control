@@ -187,6 +187,8 @@
     "devtron": "^1.4.0",
     "draft-js": "^0.10.4",
     "electron-debug": "^1.2.0",
+    "electron-json-storage": "^4.0.2",
+    "fix-path": "^2.1.0",
     "font-awesome": "^4.7.0",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
