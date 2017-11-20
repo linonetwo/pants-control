@@ -12,6 +12,6 @@ import { loadCardFromFsAction } from './cards';
 //    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 
 export default function* StartUpSaga() {
-  yield put(loadConfigAction());
-  yield put(loadCardFromFsAction());
+  yield put(loadConfigAction.trigger());
+  yield put(loadCardFromFsAction.trigger());
 }

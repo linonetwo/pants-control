@@ -38,21 +38,29 @@ export type Card = {
 
 export const saveCardToMemoryAction = createRoutine('saveCardToMemory');
 export const saveCardToFsAction = createRoutine('saveCardToFs');
-function* saveCardToFs(action) {
-  const { card, id }: { card: Object, id: string } = action.payload;
+function* saveCardToFs(id: string) {
+  const card: ?Map<Card> = yield select(state => state.cards.get('cards').find(aCard => aCard.get('id') === id));
+  if (!card) {
+    return;
+  }
   const saverID: ?string = yield select(state => state.config.get('config').get('saver'));
   if (!saverID) {
     // use default saver
     const notePath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes', id, `${id}.json`);
-    yield call(fs.outputJson, notePath, card);
+    yield call(fs.outputJson, notePath, card.toJS());
   } else {
     fetch(`http://localhost:3000/lambdav1/${saverID}/aaa`, {
       body: JSON.stringify({
-        card,
+        card: card.toJS(),
         id,
       }),
     });
   }
+}
+
+function* saveCard(action) {
+  yield put(saveCardToMemoryAction.request(action.payload));
+  yield call(saveCardToFs, action.payload.id);
 }
 
 export const loadCardFromFsAction = createRoutine('loadCardFromFs');
@@ -77,7 +85,7 @@ function* loadCardFromFs() {
     const result = yield call(fetch, `http://localhost:3000/lambdav1/${loaderID}/aaa`);
     cards = result.data;
   }
-  yield put(loadCardFromFsAction.SUCCESS, cards);
+  yield put(loadCardFromFsAction.success(cards));
 }
 
 export const addNewCardAction = createRoutine('addNewCard');
@@ -89,7 +97,7 @@ function* addNewCard() {
 export default function* cardSaga() {
   yield all([
     takeLatest(addNewCardAction.TRIGGER, addNewCard),
-    takeLatest(saveCardToFsAction.TRIGGER, saveCardToFs),
+    takeLatest(saveCardToMemoryAction.TRIGGER, saveCard),
     takeLatest(loadCardFromFsAction.TRIGGER, loadCardFromFs),
   ]);
 }
@@ -115,7 +123,7 @@ export function cardsReducer(
 ): Map<CardsInitialStateType> {
   switch (action.type) {
     case addNewCardAction.REQUEST: {
-      const { id } = action.payload;
+      const { id, content } = action.payload;
       return state.set(
         'cards',
         // add a new card
@@ -123,19 +131,19 @@ export function cardsReducer(
           fromJS({
             id,
             tags: [],
-            content: '',
+            content: content || '',
             focused: true,
           }),
         ),
       );
     }
-    case saveCardToMemoryAction.TRIGGER: {
+    case saveCardToMemoryAction.REQUEST: {
       const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);
-      return state.setIn(['cards', thisCardIndex, 'content'], action.payload.content);
+      return state.setIn(['cards', thisCardIndex, 'content'], JSON.stringify(action.payload.content));
     }
     case loadCardFromFsAction.SUCCESS: {
       const cards: Array<Card> = action.payload;
-      return state.set('cards', cards);
+      return state.set('cards', fromJS(cards));
     }
     case getPropertyByRuleMatchingAction.SUCCESS: {
       const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);

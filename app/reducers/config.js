@@ -7,9 +7,11 @@ import fixPath from 'fix-path';
 import os from 'os';
 import uuidv4 from 'uuid/v4';
 
+import { addNewCardAction } from './cards';
+
 type ActionType = {
   type: string,
-  payload: Object,
+  payload: any,
 };
 
 //  █████╗ ██████╗ ██╗
@@ -33,7 +35,8 @@ function saveConfigToFs(config: Object): Promise<void> {
 function loadConfigFromFs(): Promise<Object> {
   return new Promise((resolve, reject) =>
     storage.get('config', (error, data) => {
-      if (error || !data || typeof data !== 'string') return reject(error);
+      if (error) return reject(error);
+      if (!data || typeof data !== 'string') return resolve({});
       return resolve(JSON.parse(data));
     }),
   );
@@ -51,7 +54,8 @@ function saveKeyToFs(key: string, value: string): Promise<void> {
 function loadKeyFromFs(key: string): Promise<string> {
   return new Promise((resolve, reject) =>
     storage.get(key, (error, data) => {
-      if (error || !data || typeof data !== 'string') return reject(error);
+      if (error) return reject(error);
+      if (!data || typeof data !== 'string') return resolve('');
       return resolve(data);
     }),
   );
@@ -79,15 +83,16 @@ function* saveConfig(action) {
 export const loadConfigAction = createRoutine('loadConfig');
 function* loadConfig() {
   try {
-    let [config, id]: [Object, string] = yield all([call(loadConfigFromFs), call(loadKeyFromFs('configID'))]);
+    let [config, id]: [Object, string] = yield all([call(loadConfigFromFs), call(loadKeyFromFs, 'configID')]);
     // 如果是第一次运行还没有 config
     if (!config) {
       config = {};
       yield call(saveConfigToFs, config);
     }
     if (!id) {
-      id = uuidv4();
+      id = yield call(uuidv4);
       yield call(saveKeyToFs, 'configID', id);
+      yield put(addNewCardAction.request({ id, content: JSON.stringify(config) }));
     }
     yield put(loadConfigAction.success({ config, id }));
   } catch (error) {

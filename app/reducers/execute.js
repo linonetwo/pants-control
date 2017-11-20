@@ -34,7 +34,7 @@ function* executeCode(action) {
         link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
         cache: new InMemoryCache(),
       });
-      console.log(remote.app.getPath)
+      console.log(remote.app.getPath);
       stdout = String(vm.runInNewContext(code, { client, gql, console, fs, getPath: remote.app.getPath }));
     }
     console.log(stdout);
@@ -46,7 +46,5 @@ function* executeCode(action) {
 }
 
 export default function* NLPSaga() {
-  yield all([
-    takeLatest(executeCodeAction.TRIGGER, executeCode),
-  ]);
+  yield all([takeLatest(executeCodeAction.TRIGGER, executeCode)]);
 }
