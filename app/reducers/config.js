@@ -14,6 +14,11 @@ type ActionType = {
   payload: any,
 };
 
+type Config = {
+  noteLoaderID?: string,
+  noteSaveerID?: string,
+};
+
 //  █████╗ ██████╗ ██╗
 // ██╔══██╗██╔══██╗██║
 // ███████║██████╔╝██║
@@ -23,7 +28,7 @@ type ActionType = {
 
 storage.setDataPath(os.tmpdir());
 fixPath();
-function saveConfigToFs(config: Object): Promise<void> {
+function saveConfigToFs(config: Config): Promise<void> {
   return new Promise((resolve, reject) =>
     storage.set('config', JSON.stringify(config), error => {
       if (error) return reject(error);
@@ -32,7 +37,7 @@ function saveConfigToFs(config: Object): Promise<void> {
   );
 }
 
-function loadConfigFromFs(): Promise<Object> {
+function loadConfigFromFs(): Promise<Config> {
   return new Promise((resolve, reject) =>
     storage.get('config', (error, data) => {
       if (error) return reject(error);
@@ -70,7 +75,7 @@ function loadKeyFromFs(key: string): Promise<string> {
 
 export const saveConfigAction = createRoutine('saveConfig');
 function* saveConfig(action) {
-  const { config, id }: { config: Object, id: string } = action.payload;
+  const { config, id }: { config: Config, id: string } = action.payload;
   try {
     yield all([call(saveConfigToFs, config), call(saveKeyToFs, 'configID', id)]);
     yield put(saveConfigAction.success({ config, id }));
@@ -83,7 +88,7 @@ function* saveConfig(action) {
 export const loadConfigAction = createRoutine('loadConfig');
 function* loadConfig() {
   try {
-    let [config, id]: [Object, string] = yield all([call(loadConfigFromFs), call(loadKeyFromFs, 'configID')]);
+    let [config, id]: [Config, string] = yield all([call(loadConfigFromFs), call(loadKeyFromFs, 'configID')]);
     // 如果是第一次运行还没有 config
     if (!config) {
       config = {};
@@ -114,7 +119,7 @@ export default function* configSaga() {
 
 export type ConfigInitialStateType = {
   configID: string,
-  config: Object,
+  config: Config,
 };
 
 const configInitialState: Map<ConfigInitialStateType> = fromJS({

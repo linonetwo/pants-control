@@ -17,6 +17,7 @@ type ActionType = {
 
 export type Card = {
   id: string,
+  type: string, // mime type
   tags: string[][], // [[key, value], ...]
   content: string, // stringified EditorState
   focused: boolean, // focused card will parse stringified EditorState then you can edit it
