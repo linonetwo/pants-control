@@ -52,6 +52,7 @@ type ActorProps = {
   textInputAction: Function,
   executeCodeAction: Function,
   saveCardToMemoryAction: Function,
+  setAsConfigAction: Function,
 };
 type ActorState = {
   editorState: Object,
@@ -129,6 +130,11 @@ export default class Actor extends Component {
         <MetaInfoContainer>
           <Tooltip text="插件">
             <SignalCreatorStandard>库存管理</SignalCreatorStandard>
+            <SignalCreatorStandard
+              onClick={() => this.props.setAsConfigAction({ content: this.getContent('\n'), id: this.props.id })}
+            >
+              用于更新设置
+            </SignalCreatorStandard>
           </Tooltip>
           {this.props.tags.toJS().map(([type, value]) => (
             <Tooltip key={type} text={type}>

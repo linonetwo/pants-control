@@ -131,6 +131,7 @@ export function cardsReducer(
         state.get('cards').unshift(
           fromJS({
             id,
+            type: 'text/plain',
             tags: [],
             content: content || '',
             focused: true,

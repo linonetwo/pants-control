@@ -1,11 +1,13 @@
 // @flow
 import { createRoutine } from 'redux-saga-routines';
-import { takeLatest, call, all, put } from 'redux-saga/effects';
+import { takeLatest, call, all, put, select } from 'redux-saga/effects';
 import { Map, fromJS } from 'immutable';
 import storage from 'electron-json-storage';
 import fixPath from 'fix-path';
 import os from 'os';
 import uuidv4 from 'uuid/v4';
+
+import type { IOEffect } from 'redux-saga/effects';
 
 import { addNewCardAction } from './cards';
 
@@ -73,7 +75,19 @@ function loadKeyFromFs(key: string): Promise<string> {
 //    ██║   ██║  ██║███████║██║  ██╗
 //    ╚═╝   ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
 
+export const setAsConfigAction = createRoutine('setAsConfig');
 export const saveConfigAction = createRoutine('saveConfig');
+function* setAsConfig(action) {
+  const { content, id }: { content: string, id: string } = action.payload;
+  try {
+    const config = JSON.parse(content);
+    yield put(saveConfigAction.trigger({ config, id }));
+  } catch (error) {
+    yield put(setAsConfigAction.failure(content, error));
+    console.error(error);
+  }
+}
+
 function* saveConfig(action) {
   const { config, id }: { config: Config, id: string } = action.payload;
   try {
@@ -106,8 +120,12 @@ function* loadConfig() {
   }
 }
 
-export default function* configSaga() {
-  yield all([takeLatest(saveConfigAction.TRIGGER, saveConfig), takeLatest(loadConfigAction.TRIGGER, loadConfig)]);
+export default function* configSaga(): Generator<IOEffect, void, any> {
+  yield all([
+    takeLatest(saveConfigAction.TRIGGER, saveConfig),
+    takeLatest(loadConfigAction.TRIGGER, loadConfig),
+    takeLatest(setAsConfigAction.TRIGGER, setAsConfig),
+  ]);
 }
 
 // ███████╗████████╗ ██████╗ ██████╗ ███████╗
@@ -132,9 +150,10 @@ export function configReducer(
   action: ActionType,
 ): Map<ConfigInitialStateType> {
   switch (action.type) {
+    case setAsConfigAction.SUCCESS:
     case loadConfigAction.SUCCESS:
     case saveConfigAction.SUCCESS: {
-      const { config, id }: { config: Object, id: string } = action.payload;
+      const { config, id }: { config: Config, id: string } = action.payload;
       return state.set('config', state.get('config').merge(fromJS(config))).set('configID', id);
     }
     default:
