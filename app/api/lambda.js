@@ -24,7 +24,7 @@ export default async function runLambda(req, res) {
     }
     let stdout: any = '';
     const client = new ApolloClient({
-      link: new HttpLink({ uri: 'http://localhost:3000/graphql' }),
+      link: new HttpLink({ uri: 'http://localhost:6012/graphql' }),
       cache: new InMemoryCache(),
     });
     const asyncCode = `'use strict';

@@ -10,7 +10,7 @@ import './app.global.css';
 sagas.forEach(sagaMiddleware.run);
 
 
-const PORT = 3000;
+const PORT = 6012;
 APIServer.listen(PORT, () => {
   console.log(`GraphQL API server running on port ${PORT}.`);
 });
