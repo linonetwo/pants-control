@@ -8,6 +8,8 @@ import { remote } from 'electron';
 import path from 'path';
 import fs from 'fs-extra';
 
+import type { IOEffect } from 'redux-saga/effects';
+
 import { getPropertyByRuleMatchingAction } from './nlp';
 
 type ActionType = {
@@ -95,7 +97,7 @@ function* addNewCard() {
   yield put(addNewCardAction.request({ id }));
 }
 
-export default function* cardSaga() {
+export default function* cardSaga(): Generator<IOEffect, void, any> {
   yield all([
     takeLatest(addNewCardAction.TRIGGER, addNewCard),
     takeLatest(saveCardToMemoryAction.TRIGGER, saveCard),

@@ -11,6 +11,8 @@ import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { remote } from 'electron';
 
+import type { IOEffect } from 'redux-saga/effects';
+
 //  █████╗ ██████╗ ██╗
 // ██╔══██╗██╔══██╗██║
 // ███████║██████╔╝██║
@@ -54,6 +56,6 @@ function* executeCode(action) {
   }
 }
 
-export default function* NLPSaga() {
+export default function* NLPSaga(): Generator<IOEffect, void, any> {
   yield all([takeLatest(executeCodeAction.TRIGGER, executeCode)]);
 }
