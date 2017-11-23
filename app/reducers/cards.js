@@ -47,13 +47,20 @@ function* saveCardToFs(id: string) {
   if (!card) {
     return;
   }
-  const saverID: ?string = yield select(state => state.config.get('config').get('saver'));
-  if (!saverID) {
+  const noteSaverID: string = yield select(
+    // eslint-disable-next-line no-confusing-arrow
+    state =>
+      state.config.hasIn(['config', 'noteLoader', 'noteSaverID'])
+        ? state.config.getIn(['config', 'noteSaver', 'noteSaverID'])
+        : '',
+  );
+  if (!noteSaverID) {
     // use default saver
     const notePath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes', id, `${id}.json`);
     yield call(fs.outputJson, notePath, card.toJS());
   } else {
-    fetch(`http://localhost:3000/lambdav1/${saverID}/aaa`, {
+    fetch(`http://localhost:6012/lambdav1/${noteSaverID}/aaa`, {
+      method: 'POST',
       body: JSON.stringify({
         card: card.toJS(),
         id,
@@ -74,8 +81,12 @@ function* loadCardFromFs() {
   let cards: Array<Card> = [];
 
   const [noteLoaderID, criticalNotes]: [string, string[]] = yield select(state => [
-    state.config.hasIn(['config', 'noteLoader', 'noteLoaderID']) ? state.config.getIn(['config', 'noteLoader', 'noteLoaderID']) : '',
-    state.config.hasIn(['config', 'noteLoader', 'criticalNotes']) ? state.config.getIn(['config', 'noteLoader', 'criticalNotes']).toArray() : [],
+    state.config.hasIn(['config', 'noteLoader', 'noteLoaderID'])
+      ? state.config.getIn(['config', 'noteLoader', 'noteLoaderID'])
+      : '',
+    state.config.hasIn(['config', 'noteLoader', 'criticalNotes'])
+      ? state.config.getIn(['config', 'noteLoader', 'criticalNotes']).toArray()
+      : [],
   ]);
   if (!noteLoaderID) {
     // use default loader
