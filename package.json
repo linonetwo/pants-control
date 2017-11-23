@@ -183,6 +183,7 @@
     "@manaflair/redux-batch": "^0.1.0",
     "apollo-client-preset": "^1.0.3",
     "apollo-server-express": "^1.2.0",
+    "async-get-json": "^4.0.0",
     "body-parser": "^1.18.2",
     "devtron": "^1.4.0",
     "draft-js": "^0.10.4",
