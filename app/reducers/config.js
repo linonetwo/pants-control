@@ -18,8 +18,13 @@ type ActionType = {
 };
 
 type Config = {
-  noteLoaderID?: string,
-  noteSaveerID?: string,
+  noteLoader?: {
+    noteLoaderID?: string,
+    criticalNotes?: string[],
+  },
+  noteSaver?: {
+    noteSaverID?: string,
+  },
 };
 
 //  █████╗ ██████╗ ██╗
