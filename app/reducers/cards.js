@@ -7,6 +7,7 @@ import uuidv4 from 'uuid/v4';
 import { remote } from 'electron';
 import path from 'path';
 import fs from 'fs-extra';
+import getJSON from 'async-get-json';
 
 import type { IOEffect } from 'redux-saga/effects';
 
@@ -68,12 +69,16 @@ function* saveCard(action) {
 
 export const loadCardFromFsAction = createRoutine('loadCardFromFs');
 function* loadCardFromFs() {
-  const loaderID: ?string = yield select(state => state.config.get('config').get('loader'));
+  const noteRootPath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes');
+  yield call(fs.ensureDir, noteRootPath);
   let cards: Array<Card> = [];
-  if (!loaderID) {
+
+  const [noteLoaderID, criticalNotes]: [string, string[]] = yield select(state => [
+    state.config.hasIn(['config', 'noteLoader', 'noteLoaderID']) ? state.config.getIn(['config', 'noteLoader', 'noteLoaderID']) : '',
+    state.config.hasIn(['config', 'noteLoader', 'criticalNotes']) ? state.config.getIn(['config', 'noteLoader', 'criticalNotes']).toArray() : [],
+  ]);
+  if (!noteLoaderID) {
     // use default loader
-    const noteRootPath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes');
-    yield call(fs.ensureDir, noteRootPath);
     const noteDirNames: string[] = yield call(fs.readdir, noteRootPath);
     // eslint-disable-next-line no-restricted-syntax
     for (const noteID of noteDirNames) {
@@ -85,8 +90,22 @@ function* loadCardFromFs() {
       }
     }
   } else {
-    const result = yield call(fetch, `http://localhost:3000/lambdav1/${loaderID}/aaa`);
-    cards = result.data;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const noteID of criticalNotes) {
+      try {
+        const cardJSON = yield call(fs.readJson, path.join(noteRootPath, noteID, `${noteID}.json`));
+        cards.push(cardJSON);
+      } catch (error) {
+        console.error(`${noteID} doesn't exist?`);
+      }
+    }
+    yield put(loadCardFromFsAction.success(cards));
+    try {
+      console.log(`Using loader note ${noteLoaderID}`);
+      cards = yield call(getJSON, `http://localhost:6012/lambdav1/${noteLoaderID}/aaa`);
+    } catch (error) {
+      console.error(error);
+    }
   }
   yield put(loadCardFromFsAction.success(cards));
 }
