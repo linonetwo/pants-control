@@ -50,7 +50,7 @@ function* saveCardToFs(id: string) {
   const noteSaverID: string = yield select(
     // eslint-disable-next-line no-confusing-arrow
     state =>
-      state.config.hasIn(['config', 'noteLoader', 'noteSaverID'])
+      state.config.hasIn(['config', 'noteSaver', 'noteSaverID'])
         ? state.config.getIn(['config', 'noteSaver', 'noteSaverID'])
         : '',
   );
@@ -59,8 +59,13 @@ function* saveCardToFs(id: string) {
     const notePath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes', id, `${id}.json`);
     yield call(fs.outputJson, notePath, card.toJS());
   } else {
+    console.log(`Using saver ${noteSaverID}`);
     fetch(`http://localhost:6012/lambdav1/${noteSaverID}/aaa`, {
       method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         card: card.toJS(),
         id,
