@@ -15,7 +15,7 @@ import Actor from '../components/Actor';
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   display: flex;
   flex-direction: row;
@@ -24,6 +24,8 @@ const Container = styled.div`
 const ActorFlow = styled.div`
   max-width: 1000px;
   min-width: 45vw;
+  height: 100%;
+  overflow-y: scroll;
   margin: 0 auto;
 
   display: flex;

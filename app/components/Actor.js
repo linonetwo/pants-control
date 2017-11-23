@@ -12,6 +12,9 @@ const ActorContainer = styled.div`
   min-height: 70px;
   padding: 10px;
 
+  display: flex;
+  flex-direction: column;
+
   background-color: white;
   box-shadow: inset 0 0 0 1px #dee1e3, 0 0 4px #dee1e3;
   border-radius: 4px;

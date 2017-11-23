@@ -8,6 +8,7 @@ body {
   background-color: #F1E7EA;
   font-family: Arial, Helvetica, Helvetica Neue, serif;
   overflow-y: hidden;
+  margin: 0;
 }
 
 h2 {
