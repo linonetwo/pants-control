@@ -16,6 +16,6 @@ app.use(
   }),
 );
 
-app.post('/lambdav1/:noteID/:sectionID', runLambda);
+app.get('/lambdav1/:noteID/:sectionID', runLambda);
 
 export default app;
