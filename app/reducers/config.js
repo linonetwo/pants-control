@@ -2,9 +2,10 @@
 import { createRoutine } from 'redux-saga-routines';
 import { takeLatest, call, all, put, select } from 'redux-saga/effects';
 import { Map, fromJS } from 'immutable';
+import { remote } from 'electron';
 import storage from 'electron-json-storage';
 import fixPath from 'fix-path';
-import os from 'os';
+import path from 'path';
 import uuidv4 from 'uuid/v4';
 
 import type { IOEffect } from 'redux-saga/effects';
@@ -28,7 +29,7 @@ type Config = {
 // ██║  ██║██║     ██║
 // ╚═╝  ╚═╝╚═╝     ╚═╝
 
-storage.setDataPath(os.tmpdir());
+storage.setDataPath(path.join(remote.app.getPath('appData'), 'PantsControl', 'config'));
 fixPath();
 function saveConfigToFs(config: Config): Promise<void> {
   return new Promise((resolve, reject) =>
