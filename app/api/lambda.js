@@ -12,13 +12,9 @@ import { store } from '../store';
 
 export default async function runLambda(req, res) {
   const { noteID, sectionID } = req.params;
-  const matchedCard = store
-    .getState()
-    .cards.get('cards')
-    .find(card => card.get('id') === noteID);
-  if (matchedCard && matchedCard.get('content')) {
+  if (store.getState().cards.hasIn(['entities', 'notes', 'byID', noteID])) {
     let code: string = '';
-    const contentJSON = JSON.parse(matchedCard.get('content'));
+    const contentJSON = JSON.parse(store.getState().cards.getIn(['entities', 'notes', 'byID', noteID, 'content']));
     if (contentJSON.blocks) {
       code = contentJSON.blocks.map(block => block.text).join('\n');
     }

@@ -9,7 +9,7 @@ import { textInputAction } from '../reducers/nlp';
 import { addNewCardAction, saveCardToMemoryAction } from '../reducers/cards';
 import { executeCodeAction } from '../reducers/execute';
 import { setAsConfigAction } from '../reducers/config';
-import type { Card } from '../reducers/cards';
+import type { Notes } from '../reducers/cards';
 
 import Actor from '../components/Actor';
 
@@ -34,7 +34,7 @@ const ActorFlow = styled.div`
 
 function mapStateToProps(state) {
   return {
-    cards: state.cards.get('cards'),
+    notes: state.cards.getIn(['entities', 'notes']),
   };
 }
 
@@ -59,7 +59,7 @@ export default class HomePage extends Component {
     saveCardToMemoryAction: Function,
     executeCodeAction: Function,
     setAsConfigAction: Function,
-    cards: List<Map<Card>>,
+    notes: Map<Notes>,
   };
 
   render() {
@@ -67,20 +67,24 @@ export default class HomePage extends Component {
       <Container>
         <ActorFlow>
           <button onClick={() => this.props.addNewCardAction()}>+</button>
-          {this.props.cards
+          {this.props.notes
+            .get('allIDs')
             .toArray()
-            .map(aCard => (
-              <Actor
-                key={aCard.get('id')}
-                id={aCard.get('id')}
-                textInputAction={this.props.textInputAction}
-                saveCardToMemoryAction={this.props.saveCardToMemoryAction}
-                setAsConfigAction={this.props.setAsConfigAction}
-                tags={aCard.get('tags')}
-                initialContent={aCard.get('content')}
-                executeCodeAction={this.props.executeCodeAction}
-              />
-            ))}
+            .map(aNoteID => {
+              const aNote = this.props.notes.getIn(['byID', aNoteID]);
+              return (
+                <Actor
+                  key={aNote.get('id')}
+                  id={aNote.get('id')}
+                  textInputAction={this.props.textInputAction}
+                  saveCardToMemoryAction={this.props.saveCardToMemoryAction}
+                  setAsConfigAction={this.props.setAsConfigAction}
+                  tags={aNote.get('tags')}
+                  initialContent={aNote.get('content')}
+                  executeCodeAction={this.props.executeCodeAction}
+                />
+              );
+            })}
         </ActorFlow>
       </Container>
     );

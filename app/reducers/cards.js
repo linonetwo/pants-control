@@ -18,12 +18,11 @@ type ActionType = {
   payload: any,
 };
 
-export type Card = {
+export type Note = {
   id: string,
   type: string, // mime type
   tags: string[][], // [[key, value], ...]
   content: string, // stringified EditorState
-  focused: boolean, // focused card will parse stringified EditorState then you can edit it
 };
 
 //  █████╗ ██████╗ ██╗
@@ -43,7 +42,7 @@ export type Card = {
 export const saveCardToMemoryAction = createRoutine('saveCardToMemory');
 export const saveCardToFsAction = createRoutine('saveCardToFs');
 function* saveCardToFs(id: string) {
-  const card: ?Map<Card> = yield select(state => state.cards.get('cards').find(aCard => aCard.get('id') === id));
+  const card: ?Map<Note> = yield select(state => state.cards.getIn(['entities', 'notes', 'byID', id]));
   if (!card) {
     return;
   }
@@ -56,6 +55,7 @@ function* saveCardToFs(id: string) {
   );
   if (!noteSaverID) {
     // use default saver
+    console.log('use default saver');
     const notePath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes', id, `${id}.json`);
     yield call(fs.outputJson, notePath, card.toJS());
   } else {
@@ -83,7 +83,8 @@ export const loadCardFromFsAction = createRoutine('loadCardFromFs');
 function* loadCardFromFs() {
   const noteRootPath = path.join(remote.app.getPath('appData'), 'PantsControl', 'notes');
   yield call(fs.ensureDir, noteRootPath);
-  let cards: Array<Card> = [];
+  let notes: Array<Note> = [];
+  let noteIDs: string[] = [];
 
   const [noteLoaderID, criticalNotes]: [string, string[]] = yield select(state => [
     state.config.hasIn(['config', 'noteLoader', 'noteLoaderID'])
@@ -95,12 +96,12 @@ function* loadCardFromFs() {
   ]);
   if (!noteLoaderID) {
     // use default loader
-    const noteDirNames: string[] = yield call(fs.readdir, noteRootPath);
+    noteIDs = yield call(fs.readdir, noteRootPath);
     // eslint-disable-next-line no-restricted-syntax
-    for (const noteID of noteDirNames) {
+    for (const noteID of noteIDs) {
       try {
         const cardJSON = yield call(fs.readJson, path.join(noteRootPath, noteID, `${noteID}.json`));
-        cards.push(cardJSON);
+        notes.push(cardJSON);
       } catch (error) {
         console.error(`${noteID} doesn't exist?`);
       }
@@ -110,20 +111,21 @@ function* loadCardFromFs() {
     for (const noteID of criticalNotes) {
       try {
         const cardJSON = yield call(fs.readJson, path.join(noteRootPath, noteID, `${noteID}.json`));
-        cards.push(cardJSON);
+        notes.push(cardJSON);
       } catch (error) {
         console.error(`${noteID} doesn't exist?`);
       }
     }
-    yield put(loadCardFromFsAction.success(cards));
+    yield put(loadCardFromFsAction.success({ notes, noteIDs: criticalNotes }));
     try {
       console.log(`Using loader note ${noteLoaderID}`);
-      cards = yield call(getJSON, `http://localhost:6012/lambdav1/${noteLoaderID}/aaa`);
+      notes = yield call(getJSON, `http://localhost:6012/lambdav1/${noteLoaderID}/aaa`);
+      noteIDs = notes.map(c => c.id);
     } catch (error) {
       console.error(error);
     }
   }
-  yield put(loadCardFromFsAction.success(cards));
+  yield put(loadCardFromFsAction.success({ notes, noteIDs }));
 }
 
 export const addNewCardAction = createRoutine('addNewCard');
@@ -147,12 +149,23 @@ export default function* cardSaga(): Generator<IOEffect, void, any> {
 // ███████║   ██║   ╚██████╔╝██║  ██║███████╗
 // ╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
 
+type NoteByID = {
+  [id: string]: Note,
+};
+export type Notes = {
+  byID: NoteByID,
+  allIDs: Array<string>,
+};
 export type CardsInitialStateType = {
-  cards: Array<Card>,
+  entities: {
+    notes: Notes,
+  },
 };
 
 const cardsInitialState: Map<CardsInitialStateType> = fromJS({
-  cards: [],
+  entities: {
+    notes: { byID: {}, allIDs: [] },
+  },
 });
 
 export function cardsReducer(
@@ -162,32 +175,40 @@ export function cardsReducer(
   switch (action.type) {
     case addNewCardAction.REQUEST: {
       const { id, content } = action.payload;
-      return state.set(
-        'cards',
-        // add a new card
-        state.get('cards').unshift(
+      return state
+        .setIn(
+          ['entities', 'notes', 'byID', id],
           fromJS({
             id,
             type: 'text/plain',
             tags: [],
             content: content || '',
-            focused: true,
           }),
-        ),
-      );
+        )
+        .updateIn(['entities', 'notes', 'allIDs'], allIDs => allIDs.unshift(id));
     }
     case saveCardToMemoryAction.REQUEST: {
-      const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);
-      return state.setIn(['cards', thisCardIndex, 'content'], JSON.stringify(action.payload.content));
+      return state.setIn(
+        ['entities', 'notes', 'byID', action.payload.id, 'content'],
+        JSON.stringify(action.payload.content),
+      );
     }
     case loadCardFromFsAction.SUCCESS: {
-      const cards: Array<Card> = action.payload;
-      return state.set('cards', fromJS(cards));
+      const { notes, noteIDs }: { notes: Array<Note>, noteIDs: string[] } = action.payload;
+      const noteByID: NoteByID = notes.reduce(
+        (noteObject: NoteByID, aNote) => ({ ...noteObject, [aNote.id]: aNote }),
+        {},
+      );
+      return state
+        .setIn(['entities', 'notes', 'byID'], fromJS(noteByID))
+        .setIn(['entities', 'notes', 'allIDs'], fromJS(noteIDs));
     }
-    case getPropertyByRuleMatchingAction.SUCCESS: {
-      const thisCardIndex = state.get('cards').findIndex(aCard => aCard.get('id') === action.payload.id);
-      return state.setIn(['cards', thisCardIndex, 'tags'], fromJS(toPairs(action.payload.tags)));
-    }
+    case getPropertyByRuleMatchingAction.SUCCESS:
+      return state.setIn(
+        ['entities', 'notes', 'byID', action.payload.id, 'tags'],
+        fromJS(toPairs(action.payload.tags)),
+      );
+
     default:
       return state;
   }
