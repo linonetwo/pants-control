@@ -16,6 +16,6 @@ app.use(
   }),
 );
 
-app.post('/lambdav1/:noteID/:sectionID', runLambda);
+app.all('/lambdav1/:noteID/:sectionID', bodyParser.json(), runLambda);
 
 export default app;

@@ -183,11 +183,15 @@
     "@manaflair/redux-batch": "^0.1.0",
     "apollo-client-preset": "^1.0.3",
     "apollo-server-express": "^1.2.0",
+    "async-get-json": "^4.0.0",
     "body-parser": "^1.18.2",
     "devtron": "^1.4.0",
     "draft-js": "^0.10.4",
     "electron-debug": "^1.2.0",
+    "electron-json-storage": "^4.0.2",
+    "fix-path": "^2.1.0",
     "font-awesome": "^4.7.0",
+    "fs-extra": "^4.0.2",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.5.0",
     "graphql-tools": "^2.7.2",
@@ -212,7 +216,8 @@
     "source-map-support": "^0.4.15",
     "styled-components": "^2.2.1",
     "styled-props": "^1.1.1",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "devEngines": {
     "node": ">=8.x",

@@ -12,6 +12,9 @@ const ActorContainer = styled.div`
   min-height: 70px;
   padding: 10px;
 
+  display: flex;
+  flex-direction: column;
+
   background-color: white;
   box-shadow: inset 0 0 0 1px #dee1e3, 0 0 4px #dee1e3;
   border-radius: 4px;
@@ -45,15 +48,26 @@ const SignalCreatorStandard = styled.button`
   border: 0;
 `;
 
+type ActorProps = {
+  tags: List<List<string>>,
+  id: string,
+  initialContent: string,
+  textInputAction: Function,
+  executeCodeAction: Function,
+  saveCardToMemoryAction: Function,
+  setAsConfigAction: Function,
+};
+type ActorState = {
+  editorState: Object,
+};
 export default class Actor extends Component {
-  props: {
-    tags: List<List<string>>,
-    id: string,
-    textInputAction: Function,
-    executeCodeAction: Function,
-    saveCardContentAction: Function,
-  };
-  state = { editorState: editorStateFromRaw(null) };
+  props: ActorProps;
+  state: ActorState;
+
+  constructor(props: ActorProps) {
+    super(props);
+    this.state = { editorState: editorStateFromRaw(props.initialContent && JSON.parse(props.initialContent)) };
+  }
 
   onEditorChange = (editorState: Object) => {
     this.setState({ editorState });
@@ -66,8 +80,8 @@ export default class Actor extends Component {
 
   saveContent = () => {
     const content = convertToRaw(this.state.editorState.getCurrentContent());
-    this.props.saveCardContentAction({ content, id: this.props.id });
-  }
+    this.props.saveCardToMemoryAction({ content, id: this.props.id });
+  };
 
   getContent(joinBy: string): string {
     if (this.state.editorState) {
@@ -119,6 +133,11 @@ export default class Actor extends Component {
         <MetaInfoContainer>
           <Tooltip text="插件">
             <SignalCreatorStandard>库存管理</SignalCreatorStandard>
+            <SignalCreatorStandard
+              onClick={() => this.props.setAsConfigAction({ content: this.getContent('\n'), id: this.props.id })}
+            >
+              用于更新设置
+            </SignalCreatorStandard>
           </Tooltip>
           {this.props.tags.toJS().map(([type, value]) => (
             <Tooltip key={type} text={type}>
