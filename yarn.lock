@@ -2344,7 +2344,7 @@ electron-download@^3.0.1:
 
 electron-is-dev@^0.3.0:
   version "0.3.0"
-  resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-0.3.0.tgz#14e6fda5c68e9e4ecbeff9ccf037cbd7c05c5afe"
+  resolved "http://registry.npm.taobao.org/electron-is-dev/download/electron-is-dev-0.3.0.tgz#14e6fda5c68e9e4ecbeff9ccf037cbd7c05c5afe"
 
 electron-json-storage@^4.0.2:
   version "4.0.2"
@@ -6346,6 +6346,10 @@ redux-actions@^2.2.1:
     lodash-es "^4.17.4"
     reduce-reducers "^0.1.0"
 
+redux-observable@^0.17.0:
+  version "0.17.0"
+  resolved "http://registry.npm.taobao.org/redux-observable/download/redux-observable-0.17.0.tgz#23e29e3f3c39204b7ed6a14b67a29e317c03106b"
+
 redux-saga-routines@^2.2.2:
   version "2.2.2"
   resolved "http://registry.npm.taobao.org/redux-saga-routines/download/redux-saga-routines-2.2.2.tgz#3fd77713919c0a03fd69673c8878a6eb085b13e1"
@@ -6661,6 +6665,10 @@ schema-utils@^0.3.0:
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-0.3.0.tgz#f5877222ce3e931edae039f17eb3716e7137f8cf"
   dependencies:
     ajv "^5.0.0"
+
+seamless-immutable@^7.1.2:
+  version "7.1.2"
+  resolved "http://registry.npm.taobao.org/seamless-immutable/download/seamless-immutable-7.1.2.tgz#c87a1eba6767a32455311d76600ac5eddeafbb69"
 
 segmentit@^1.1.4:
   version "1.1.4"
