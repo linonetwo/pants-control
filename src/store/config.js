@@ -41,8 +41,7 @@ function saveConfigToFs(config: Config): Promise<void> {
     storage.set('config', JSON.stringify(config), error => {
       if (error) return reject(error);
       return resolve();
-    }),
-  );
+    }));
 }
 
 function loadConfigFromFs(): Promise<Config> {
@@ -51,8 +50,7 @@ function loadConfigFromFs(): Promise<Config> {
       if (error) return reject(error);
       if (!data || typeof data !== 'string') return resolve({});
       return resolve(JSON.parse(data));
-    }),
-  );
+    }));
 }
 
 function saveKeyToFs(key: string, value: string): Promise<void> {
@@ -60,8 +58,7 @@ function saveKeyToFs(key: string, value: string): Promise<void> {
     storage.set(key, value, error => {
       if (error) return reject(error);
       return resolve();
-    }),
-  );
+    }));
 }
 
 function loadKeyFromFs(key: string): Promise<string> {
@@ -70,8 +67,7 @@ function loadKeyFromFs(key: string): Promise<string> {
       if (error) return reject(error);
       if (!data || typeof data !== 'string') return resolve('');
       return resolve(data);
-    }),
-  );
+    }));
 }
 
 // ████████╗ █████╗ ███████╗██╗  ██╗

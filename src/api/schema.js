@@ -15,7 +15,11 @@ const typeDefs = `
 
 const resolvers = {
   Query: {
-    allCards: () => store.getState().cards.get('cards').toJS(),
+    allCards: () =>
+      store
+        .getState()
+        .cards.get('cards')
+        .toJS(),
   },
 };
 

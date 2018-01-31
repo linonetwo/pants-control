@@ -3,7 +3,7 @@ import { shell } from 'electron';
 
 const linkUtils = {
   open(url: string) {
-    shell.openExternal(url)
-  }
-}
+    shell.openExternal(url);
+  },
+};
 export default linkUtils;

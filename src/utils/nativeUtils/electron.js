@@ -32,19 +32,17 @@ const nativeUtils = {
   },
   saveStorage(key: string, value: string): Promise<void> {
     return new Promise((resolve, reject) =>
-      storage.set(key, value, (error) => {
+      storage.set(key, value, error => {
         if (error) return reject(error);
         return resolve();
-      }),
-    );
+      }));
   },
   loadStorage(key: string): Promise<string> {
     return new Promise((resolve, reject) =>
       storage.get(key, (error, data) => {
         if (error || !data || typeof data !== 'string') return reject(error);
         return resolve(data);
-      }),
-    );
+      }));
   },
 };
 export default nativeUtils;

@@ -22,7 +22,6 @@ export const rootReducer = combineReducers({
   // config: configReducer,
 });
 
-
 export const history = createHistory();
 
 export const configureStore = () => {
@@ -48,7 +47,7 @@ export const configureStore = () => {
   /* eslint-disable no-underscore-dangle */
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
+      // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
       actionCreators,
     })
     : compose;

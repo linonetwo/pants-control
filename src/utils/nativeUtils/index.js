@@ -5,13 +5,13 @@ type NativeUtils = {
   copy(content: any): void,
   notif(message: string): Notification,
   exec(
-    script: string
+    script: string,
   ): Promise<{
     stdout: string[],
-    stderr: string[]
+    stderr: string[],
   }>,
   saveStorage(key: string, value: string): Promise<void>,
-  loadStorage(key: string): Promise<void>
+  loadStorage(key: string): Promise<void>,
 };
 if (isElectron()) {
   const nativeUtils: NativeUtils = require('./electron'); // eslint-disable-line global-require

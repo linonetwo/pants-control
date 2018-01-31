@@ -20,7 +20,7 @@ const fileUtils = {
   getMostRecentFileName(dir: string, type: string): string {
     const files = fs.readdirSync(dir).filter(name => name.match(`.${type}`));
 
-    const fileName = maxBy(files, (f) => {
+    const fileName = maxBy(files, f => {
       const fullpath = path.join(dir, f);
 
       // ctime = creation time is used

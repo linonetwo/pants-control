@@ -69,7 +69,7 @@ export default {
       return myNotification;
     } else if (Notification.permission !== 'denied') {
       // Otherwise, we need to ask the user for permission
-      Notification.requestPermission((permission) => {
+      Notification.requestPermission(permission => {
         // If the user accepts, let's create a notification
         if (permission === 'granted') {
           const myNotification = new Notification('MemectExtractor', {

@@ -32,7 +32,9 @@ export default async function runLambda(req, res) {
       }
     };
     runInVM()`;
-    stdout = await vm.runInNewContext(asyncCode, { req, client, gql, console, fs, path, getPath: remote.app.getPath });
+    stdout = await vm.runInNewContext(asyncCode, {
+      req, client, gql, console, fs, path, getPath: remote.app.getPath,
+    });
     res.send(stdout);
   } else {
     res.send(req.params);

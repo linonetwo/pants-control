@@ -51,8 +51,7 @@ function* saveCardToFs(id: string) {
     state =>
       state.config.hasIn(['config', 'noteSaver', 'noteSaverID'])
         ? state.config.getIn(['config', 'noteSaver', 'noteSaverID'])
-        : '',
-  );
+        : '');
   if (!noteSaverID) {
     // use default saver
     console.log('use default saver');

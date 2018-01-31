@@ -46,7 +46,9 @@ function* executeCode(action) {
           }
         };
         runInVM()`;
-      stdout = yield vm.runInNewContext(asyncCode, { client, gql, console, fs, path, getPath: remote.app.getPath });
+      stdout = yield vm.runInNewContext(asyncCode, {
+        client, gql, console, fs, path, getPath: remote.app.getPath,
+      });
     }
     console.log(stdout);
     yield put(executeCodeAction.success({ id, stdout }));
