@@ -8,6 +8,8 @@ import registerServiceWorker from './registerServiceWorker';
 import { store, history } from './store';
 import Editors from './editors';
 
+import './bodyStyle';
+
 class App extends Component {
   render() {
     return (
