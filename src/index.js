@@ -1,13 +1,10 @@
-import isRenderer from 'is-electron-renderer';
-
+// @flow
 const initRenderer = async () => {
-  if (!isRenderer) return import('./App');
-  const { parseArgs } = await import('electron-window');
-  parseArgs();
-  // eslint-disable-next-line no-underscore-dangle
-  console.log(window.__args__)
+  // If not started in electron, just open App
+  if (!window.__args__) return import('./App');
   const { task } = window.__args__;
   switch (task) {
+    // If it's in renderer process, and task is API, open server
     case 'api':
       return import('./api');
     case 'app':

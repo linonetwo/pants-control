@@ -30,7 +30,6 @@ module.exports = (task, startUrl, hidden = false, windowStateOpts = {}, browserW
       console.log(`${task} is now visible!`);
     });
   } else {
-    // eslint-disable-next-line no-underscore-dangle
     window._loadURLWithArgs(startUrl, { task }, () => {
       console.log(`${task} is running in the background!`);
     });
