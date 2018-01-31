@@ -7,7 +7,6 @@ import { reduxBatch } from '@manaflair/redux-batch';
 
 // import workerMiddleware from '../workers';
 
-import NLPSaga from './nlp';
 // import executeSaga from './execute';
 // import configSaga, { configReducer } from './config';
 // import cardSaga, { cardsReducer } from './cards';
@@ -33,8 +32,7 @@ export const configureStore = () => {
   // middleware.push(workerMiddleware);
 
   // Router Middleware
-  const router = routerMiddleware(history);
-  middleware.push(router);
+  middleware.push(routerMiddleware(history));
 
   // redux-saga
   middleware.push(sagaMiddleware);

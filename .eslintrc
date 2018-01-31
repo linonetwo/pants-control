@@ -11,7 +11,7 @@
   },
   "rules": {
     "arrow-parens": ["off"],
-    "compat/compat": "error",
+    "compat/compat": "off",
     "consistent-return": "off",
     "no-underscore-dangle": "off",
     "no-unused-expressions": "off",
