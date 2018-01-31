@@ -7,6 +7,9 @@
     "start": "concurrently \"yarn react\" \"wait-on http://localhost:3000/ && yarn electron-dev\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "pm2": "pm2 delete 0 && pm2 start yarn -- start",
+    "clear:babel-cache": "rimraf -rf ./node_modules/.cache/babel-loader/*",
+    "flow-typed": "rimraf flow-typed/npm && flow-typed install --overwrite || true",
     "eject": "react-scripts eject"
   },
   "private": true,
