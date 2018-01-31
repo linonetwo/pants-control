@@ -1,8 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import isRenderer from 'is-electron-renderer';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+const initRenderer = async () => {
+  if (!isRenderer) return import('./App');
+  const { parseArgs } = await import('electron-window');
+  parseArgs();
+  // eslint-disable-next-line no-underscore-dangle
+  console.log(window.__args__)
+  const { task } = window.__args__;
+  switch (task) {
+    case 'api':
+      return import('./api');
+    case 'app':
+    default:
+      return import('./App');
+  }
+};
+
+initRenderer();

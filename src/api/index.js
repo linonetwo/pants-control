@@ -18,4 +18,4 @@ app.use(
 
 app.all('/lambdav1/:noteID/:sectionID', bodyParser.json(), runLambda);
 
-export default app;
+app.listen(6006)

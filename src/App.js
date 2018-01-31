@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { Route } from 'react-router';
 
+import registerServiceWorker from './registerServiceWorker';
 import { store, history } from './store';
-
 import Editors from './editors';
 
 class App extends Component {
@@ -24,4 +25,5 @@ class App extends Component {
   }
 }
 
-export default App;
+ReactDOM.render(<App />, document.getElementById('root'));
+registerServiceWorker();
