@@ -5,13 +5,13 @@ import getJSON from 'async-get-json';
 
 import type { ActionType, KeyValue } from './types';
 
-async function saveNoteToFs(id: string, note: any, noteSaverID: string) {
+async function saveNoteToFs(id: string, note: any, noteSaverID: string, noteHash: string) {
   if (!noteSaverID) {
     // should use default saver
     console.log('No saver note found.');
   } else {
     console.log(`Using saver ${noteSaverID}`);
-    await fetch(`http://localhost:6012/lambdav1/${noteSaverID}/aaa`, {
+    await fetch(`http://localhost:6012/lambdav1/${noteSaverID}?noteHash=${noteHash}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
@@ -25,15 +25,38 @@ async function saveNoteToFs(id: string, note: any, noteSaverID: string) {
   }
 }
 
-async function loadNoteFromFs(id: string, noteLoaderID: string) {
+async function loadNoteFromFs(id: string, noteLoaderID: string, noteHash: string) {
   if (!noteLoaderID) {
     // use default loader
     console.log('No loader note found.');
   } else {
     try {
       console.log(`Using loader note ${noteLoaderID}`);
-      const note = await getJSON(`http://localhost:6012/lambdav1/${noteLoaderID}?id=${id}`);
+      const note = await getJSON(`http://localhost:6012/lambdav1/${noteLoaderID}?id=${id}&noteHash=${noteHash}`);
       return note;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+async function executeNote(id: string, noteLoaderID: string) {
+  if (!noteLoaderID) {
+    // use default loader
+    console.log('No loader note found.');
+  } else {
+    try {
+      await fetch(`http://localhost:6012/lambdav1/${noteSaverID}/aaa`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          note,
+          id,
+        }),
+      });
     } catch (error) {
       console.error(error);
     }

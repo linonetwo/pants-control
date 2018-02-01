@@ -12,6 +12,7 @@ type ViewerInitialStateType = {
 
 const viewerInitialState: ImmutableType<ViewerInitialStateType> = Immutable({
   profile: {},
+  viewerID: '',
 });
 
 export function viewerReducer(

@@ -11,14 +11,14 @@ import sha512 from 'hash.js/lib/hash/sha/512';
 
 export default async function runLambda(req, res) {
   const { note } = req.params;
-  const { hashOfNote } = req.query;
+  const { noteHash } = req.query;
   const signature = window.__args__;
   if (note && window.__args__ && signature) {
     // naive checking, check signature, window.__args__ are passed in when app started
     const myHashOfNote = sha512()
       .update(note + signature)
       .digest('hex');
-    if (hashOfNote !== myHashOfNote) {
+    if (noteHash !== myHashOfNote) {
       res.send({ ...req.params, reason: 'hash mismatch' });
     }
 
