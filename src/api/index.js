@@ -16,6 +16,6 @@ app.use(
   }),
 );
 
-app.all('/lambdav1/:noteID/:sectionID', bodyParser.json(), runLambda);
+app.all('/lambdav1/:noteID', bodyParser.json(), runLambda);
 
 app.listen(6006)

@@ -2,7 +2,7 @@ const { createWindow } = require('electron-window');
 const windowStateKeeper = require('electron-window-state');
 const isDev = require('electron-is-dev');
 
-module.exports = (task, startUrl, hidden = false, windowStateOpts = {}, browserWindowOpts = {}) => {
+module.exports = (task, startUrl, signature, hidden = false, windowStateOpts = {}, browserWindowOpts = {}) => {
   const windowState = windowStateKeeper(Object.assign(
     {
       defaultWidth: 1000,
@@ -26,11 +26,11 @@ module.exports = (task, startUrl, hidden = false, windowStateOpts = {}, browserW
   windowState.manage(window);
 
   if (!hidden || isDev) {
-    window.showUrl(startUrl, { task }, () => {
+    window.showUrl(startUrl, { task, signature }, () => {
       console.log(`${task} is now visible!`);
     });
   } else {
-    window._loadURLWithArgs(startUrl, { task }, () => {
+    window._loadURLWithArgs(startUrl, { task, signature }, () => {
       console.log(`${task} is running in the background!`);
     });
   }

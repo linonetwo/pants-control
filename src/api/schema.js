@@ -1,25 +1,56 @@
 import { makeExecutableSchema } from 'graphql-tools';
-import { store } from '../store';
+import fs from 'fs-extra';
+
+const _profiles = {};
 
 // Define your types here.
 const typeDefs = `
-  type Card {
+  type Note {
     id: ID!
-    tags: [[String]]!
+    content: string
   }
 
   type Query {
-    allCards: [Card]!
+    viewer(viewerID: ID!) {
+      allNotes: [Note]!,
+      note(noteID: ID!): Note!
+    }
+  }
+
+  type Mutation {
+    setProfile (
+      viewerID: ID!,
+      profile: String!
+    )
   }
 `;
 
+function getProfile(viewerID) {
+  const profile = _profiles[viewerID];
+  return profile;
+}
+
 const resolvers = {
   Query: {
-    allCards: () =>
-      store
-        .getState()
-        .cards.get('cards')
-        .toJS(),
+    allNotes: async ({ viewerID }) => {
+      const profile = getProfile(viewerID);
+      const storagePath = profile['@core/storagePath'];
+      return (await fs.readdir(storagePath)).map(fileName => ({ id: fileName }));
+    },
+    note: async ({ viewerID }, { noteID }) => {
+      const profile = getProfile(viewerID);
+      const storagePath = profile['@core/storagePath'];
+      const content = await fs.readFile(`${storagePath}/${noteID}`, 'utf-8');
+      return {
+        id: noteID,
+        content,
+      };
+    },
+  },
+  Mutation: {
+    setProfile: (_, { viewerID, profile }) => {
+      _profiles[viewerID] = profile;
+    },
   },
 };
 

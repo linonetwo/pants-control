@@ -7,17 +7,22 @@ import gql from 'graphql-tag';
 import { HttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { remote } from 'electron';
-
-import { store } from '../store';
+import sha512 from 'hash.js/lib/hash/sha/512';
 
 export default async function runLambda(req, res) {
-  const { noteID, sectionID } = req.params;
-  if (store.getState().cards.hasIn(['entities', 'notes', 'byID', noteID])) {
-    let code: string = '';
-    const contentJSON = JSON.parse(store.getState().cards.getIn(['entities', 'notes', 'byID', noteID, 'content']));
-    if (contentJSON.blocks) {
-      code = contentJSON.blocks.map(block => block.text).join('\n');
+  const { note } = req.params;
+  const { hashOfNote } = req.query;
+  const signature = window.__args__;
+  if (note && window.__args__ && signature) {
+    // naive checking, check signature, window.__args__ are passed in when app started
+    const myHashOfNote = sha512()
+      .update(note + signature)
+      .digest('hex');
+    if (hashOfNote !== myHashOfNote) {
+      res.send({ ...req.params, reason: 'hash mismatch' });
     }
+
+    // RUnning note
     let stdout: any = '';
     const client = new ApolloClient({
       link: new HttpLink({ uri: 'http://localhost:6012/graphql' }),
@@ -26,14 +31,20 @@ export default async function runLambda(req, res) {
     const asyncCode = `'use strict';
     async function runInVM() {
       try {
-        ${code};
+        ${note};
       } catch(error) {
         console.error(error);
       }
     };
     runInVM()`;
     stdout = await vm.runInNewContext(asyncCode, {
-      req, client, gql, console, fs, path, getPath: remote.app.getPath,
+      req,
+      client,
+      gql,
+      console,
+      fs,
+      path,
+      getPath: remote.app.getPath,
     });
     res.send(stdout);
   } else {
