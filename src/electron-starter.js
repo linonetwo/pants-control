@@ -7,7 +7,7 @@ const url = require('url');
 const createWindow = require('./createWindow');
 const sha512 = require('hash.js/lib/hash/sha/512');
 
-const initIPFS = require('./ipfs')
+const { initIPFS, killIPFSD } = require('./ipfs');
 
 /* Keep a global reference of the window object, if you don't, the window will be closed automatically when the JavaScript object is garbage collected. */
 let appWindow;
@@ -25,6 +25,7 @@ const startUrl =
   });
 
 app.on('ready', () => {
+  initIPFS();
   appWindow = createWindow('app', startUrl, signature);
   apiWindow = createWindow('api', startUrl, signature, true);
   if (isDev) {
@@ -37,6 +38,7 @@ app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
+    killIPFSD();
     app.quit();
   }
 });
