@@ -11,7 +11,8 @@
     "pm2": "pm2 delete 0 && pm2 start yarn -- start",
     "clear:babel-cache": "rimraf -rf ./node_modules/.cache/babel-loader/*",
     "flow-typed": "rimraf flow-typed/npm && flow-typed install --overwrite || true",
-    "postinstall": "cd ./src && yarn",
+    "postinstall":
+      "cd ./src && cross-env npm_config_target=1.7.12 npm_config_arch=x64 npm_config_target_arch=x64 npm_config_disturl=https://atom.io/download/electron npm_config_runtime=electron npm_config_build_from_source=true HOME=~/.electron-gyp yarn",
     "eject": "react-scripts eject"
   },
   "private": true,
@@ -63,7 +64,7 @@
     "babel-plugin-macros": "^2.1.0",
     "concurrently": "^3.5.1",
     "cross-env": "^5.1.3",
-    "electron": "^1.7.11",
+    "electron": "^1.7.12",
     "electron-is-dev": "^0.3.0",
     "eslint": "^4.16.0",
     "eslint-config-airbnb": "^16.1.0",

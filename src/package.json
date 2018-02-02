@@ -1,6 +1,7 @@
 {
   "name": "pants-control-native-modules",
   "version": "0.1.0",
+  "scripts": {},
   "dependencies": {
     "electron-remote": "^1.2.0",
     "go-ipfs-dep": "^0.4.13",
