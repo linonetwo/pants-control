@@ -7,6 +7,8 @@ const url = require('url');
 const createWindow = require('./createWindow');
 const sha512 = require('hash.js/lib/hash/sha/512');
 
+const initIPFS = require('./ipfs')
+
 /* Keep a global reference of the window object, if you don't, the window will be closed automatically when the JavaScript object is garbage collected. */
 let appWindow;
 let apiWindow;
