@@ -10,7 +10,9 @@ const sha512 = require('hash.js/lib/hash/sha/512');
 /* Keep a global reference of the window object, if you don't, the window will be closed automatically when the JavaScript object is garbage collected. */
 let appWindow;
 let apiWindow;
-const signature = sha512().update(String(new Date())).digest('hex');
+const signature = sha512()
+  .update(String(new Date()))
+  .digest('hex');
 
 const startUrl =
   process.env.ELECTRON_START_URL ||
@@ -22,8 +24,11 @@ const startUrl =
 
 app.on('ready', () => {
   appWindow = createWindow('app', startUrl, signature);
-  if (isDev) appWindow.webContents.openDevTools();
   apiWindow = createWindow('api', startUrl, signature, true);
+  if (isDev) {
+    appWindow.webContents.openDevTools();
+    apiWindow.webContents.openDevTools();
+  }
 });
 
 app.on('window-all-closed', () => {

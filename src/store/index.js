@@ -13,7 +13,7 @@ import { reduxBatch } from '@manaflair/redux-batch';
 // import startupSaga from './startup';
 
 export const sagaMiddleware = createSagaMiddleware();
-export const sagas = [NLPSaga];
+export const sagas = [];
 
 export const rootReducer = combineReducers({
   router,

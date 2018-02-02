@@ -6,22 +6,24 @@ const _profiles = {};
 // Define your types here.
 const typeDefs = `
   type Note {
-    id: ID!
-    content: string
+    id: ID!,
+    content: String,
+  }
+
+  type Viewer {
+    allNotes: [Note]!,
+    note(noteID: ID!): Note!,
   }
 
   type Query {
-    viewer(viewerID: ID!) {
-      allNotes: [Note]!,
-      note(noteID: ID!): Note!
-    }
+    viewer(viewerID: ID!): Viewer,
   }
 
   type Mutation {
     setProfile (
       viewerID: ID!,
-      profile: String!
-    )
+      profile: String!,
+    ): String
   }
 `;
 
@@ -31,7 +33,7 @@ function getProfile(viewerID) {
 }
 
 const resolvers = {
-  Query: {
+  Viewer: {
     allNotes: async ({ viewerID }) => {
       const profile = getProfile(viewerID);
       const storagePath = profile['@core/storagePath'];
