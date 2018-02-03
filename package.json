@@ -11,8 +11,7 @@
     "pm2": "pm2 delete 0 && pm2 start yarn -- start",
     "clear:babel-cache": "rimraf -rf ./node_modules/.cache/babel-loader/*",
     "flow-typed": "rimraf flow-typed/npm && flow-typed install --overwrite || true",
-    "postinstall":
-      "cd ./src && cross-env npm_config_target=1.7.12 npm_config_arch=x64 npm_config_target_arch=x64 npm_config_disturl=https://atom.io/download/electron npm_config_runtime=electron npm_config_build_from_source=true HOME=~/.electron-gyp yarn",
+    "postinstall": "cd ./src && cross-env npm_config_target=1.7.12 npm_config_arch=x64 npm_config_target_arch=x64 npm_config_disturl=https://atom.io/download/electron npm_config_runtime=electron npm_config_build_from_source=true HOME=~/.electron-gyp yarn",
     "eject": "react-scripts eject"
   },
   "private": true,
@@ -37,6 +36,7 @@
     "graphql-tools": "^2.19.0",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
+    "ipfs-api": "^17.5.0",
     "is-electron-renderer": "^2.0.1",
     "lodash": "^4.17.4",
     "react": "^16.2.0",

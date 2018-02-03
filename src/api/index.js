@@ -10,7 +10,7 @@ import { initIPFS } from './ipfs';
 const { address } = window.__args__;
 if (address) {
   console.log(`Init IPFS node using swarm address ${address}`);
-  initIPFS(address);
+  const ipfs = initIPFS(address);
 } else {
   console.error(`No swarm address passed from window.__args__: ${window.__args__}`);
 }

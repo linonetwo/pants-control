@@ -1,13 +1,23 @@
 // @flow
 const path = require('path');
+const { getBabelLoader } = require('react-app-rewired')
 
-const ignorePath = function (exclude = [], config) {
-  const rule = config.module.rules[0];
-  if (!rule) {
-    console.log('js related rule not found');
+const removeEslint = function (config) {
+  const rules = config.module.rules;
+  if (!rules[1] || !rules[0]) {
+    console.log('eslint rule not found');
     return config;
   }
-  rule.exclude = exclude.concat(rule.exclude || []);
+  config.module.rules = [rules[1]];
+  return config;
+};
+const babelIgnorePath = function (exclude = [], config) {
+  const loader = getBabelLoader(config.module.rules);
+  if (!loader) {
+    console.log('babel-loader not found');
+    return config;
+  }
+  loader.exclude =  exclude.concat(loader.exclude || []);
   return config;
 };
 
@@ -19,7 +29,10 @@ module.exports = function override(config, env) {
     config.target = 'electron-renderer';
   }
 
-  config = ignorePath([path.resolve(__dirname, 'src/node_modules'), path.resolve(__dirname, 'src/~')], config);
+  config = removeEslint(config);
+
+  const nativeModulesPath = [path.resolve(__dirname, 'src/node_modules'), path.resolve(__dirname, 'src/~')];
+  config = babelIgnorePath(nativeModulesPath, config);
 
   if (env === 'production') {
     console.log('⚡ Production build with Optimization.');
