@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "app": "cross-env BROWSER=none react-app-rewired start",
-    "web": "react-scripts start",
+    "web": "react-app-rewired start",
     "electron": "cross-env ELECTRON_START_URL=http://localhost:3000 ELECTRON_DEV=1 electron .",
     "start": "concurrently \"yarn app\" \"wait-on http://localhost:3000/ && yarn electron\"",
     "build": "react-app-rewired build",

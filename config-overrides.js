@@ -1,13 +1,30 @@
 // @flow
+const { getBabelLoader } = require('react-app-rewired');
+const path = require('path');
+
+const ignorePath = function (exclude = [], config) {
+  const rule = config.module.rules[0];
+  if (!rule) {
+    console.log('js related rule not found');
+    return config;
+  }
+  rule.exclude = exclude.concat(rule.exclude || []);
+  return config;
+};
+
 module.exports = function override(config, env) {
   // Make it run in electron renderer process
-  delete config.node
-  config.target = 'electron-renderer';
+  // If we want electron start, we will set cross-env BROWSER=none
+  if (process.env.BROWSER === 'none') {
+    delete config.node;
+    config.target = 'electron-renderer';
+  }
 
-  // use the Preact rewire
-  if (env === "production") {
-    console.log("⚡ Production build with Optimization.");
+  config = ignorePath([path.resolve(__dirname, 'src/node_modules'), path.resolve(__dirname, 'src/~')], config);
+
+  if (env === 'production') {
+    console.log('⚡ Production build with Optimization.');
   }
 
   return config;
-}
+};
