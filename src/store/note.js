@@ -3,7 +3,17 @@ import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
 import { createRoutine } from 'redux-saga-routines';
 import getJSON from 'async-get-json';
 
+import { initIPFS } from '../ipfs/ipfs';
+
 import type { ActionType, KeyValue } from './types';
+
+const hasSwarmAddress = window.__args__ && window.__args__.addresses && window.__args__.addresses[0];
+if (!hasSwarmAddress) {
+  console.error(`No swarm addresses passed from window.__args__: ${JSON.stringify(window.__args__)}`);
+} else {
+  console.log(`Init IPFS node using swarm addresses ${window.__args__.addresses[0]}`);
+}
+const ipfs = initIPFS(hasSwarmAddress ? window.__args__.addresses : undefined);
 
 async function saveNoteToFs(id: string, note: any, noteSaverID: string, noteHash: string) {
   if (!noteSaverID) {

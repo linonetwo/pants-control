@@ -5,7 +5,7 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 
 import schema from './schema';
 import runLambda from './lambda';
-import { initIPFS } from './ipfs';
+import { initIPFS } from '../ipfs/ipfs';
 
 const { addresses } = window.__args__;
 if (!addresses || !addresses[0]) {

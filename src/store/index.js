@@ -5,12 +5,7 @@ import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware, routerActions, routerReducer as router } from 'react-router-redux';
 import { reduxBatch } from '@manaflair/redux-batch';
 
-// import workerMiddleware from '../workers';
-
-// import executeSaga from './execute';
-// import configSaga, { configReducer } from './config';
-// import cardSaga, { cardsReducer } from './cards';
-// import startupSaga from './startup';
+import { noteReducer } from './note'
 
 export const sagaMiddleware = createSagaMiddleware();
 export const sagas = [];
