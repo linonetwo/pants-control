@@ -1,5 +1,4 @@
 // @flow
-const { getBabelLoader } = require('react-app-rewired');
 const path = require('path');
 
 const ignorePath = function (exclude = [], config) {
