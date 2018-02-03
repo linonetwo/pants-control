@@ -24,13 +24,17 @@ const startUrl =
     slashes: true,
   });
 
-app.on('ready', () => {
-  initIPFS();
-  appWindow = createWindow('app', startUrl, signature);
-  apiWindow = createWindow('api', startUrl, signature, true);
-  if (isDev) {
-    appWindow.webContents.openDevTools();
-    apiWindow.webContents.openDevTools();
+app.on('ready', async () => {
+  try {
+    const { addresses } = await initIPFS();
+    appWindow = createWindow('app', startUrl, { signature, addresses });
+    apiWindow = createWindow('api', startUrl, { signature, addresses }, true);
+    if (isDev) {
+      appWindow.webContents.openDevTools();
+      apiWindow.webContents.openDevTools();
+    }
+  } catch (error) {
+    console.error(error);
   }
 });
 
@@ -47,12 +51,12 @@ app.on('activate', () => {
   console.log(appWindow);
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (appWindow === null) {
-    appWindow = createWindow('app', startUrl, signature);
+  if (!appWindow) {
+    appWindow = createWindow('app', startUrl, { signature });
   } else {
     appWindow.showURL(startUrl);
   }
   if (apiWindow === null) {
-    apiWindow = createWindow('api', startUrl, signature, true);
+    apiWindow = createWindow('api', startUrl, { signature }, true);
   }
 });

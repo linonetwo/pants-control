@@ -2,7 +2,8 @@ const { createWindow } = require('electron-window');
 const windowStateKeeper = require('electron-window-state');
 const isDev = require('electron-is-dev');
 
-module.exports = (task, startUrl, signature, hidden = false, windowStateOpts = {}, browserWindowOpts = {}) => {
+/** @param {Object} title - 在 renderer 进程里能取到的参数 */
+module.exports = (task, startUrl, args, hidden = false, windowStateOpts = {}, browserWindowOpts = {}) => {
   const windowState = windowStateKeeper(Object.assign(
     {
       defaultWidth: 1000,
@@ -26,11 +27,11 @@ module.exports = (task, startUrl, signature, hidden = false, windowStateOpts = {
   windowState.manage(window);
 
   if (!hidden || isDev) {
-    window.showUrl(startUrl, { task, signature }, () => {
+    window.showUrl(startUrl, Object.assign({ task }, args), () => {
       console.log(`${task} is now visible!`);
     });
   } else {
-    window._loadURLWithArgs(startUrl, { task, signature }, () => {
+    window._loadURLWithArgs(startUrl, Object.assign({ task }, args), () => {
       console.log(`${task} is running in the background!`);
     });
   }
