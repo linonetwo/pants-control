@@ -5,15 +5,25 @@ import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware, routerActions, routerReducer as router } from 'react-router-redux';
 import { reduxBatch } from '@manaflair/redux-batch';
 
-import { noteReducer } from './note'
+import { BehaviorSubject } from 'rxjs';
+import { createEpicMiddleware, combineEpics } from 'redux-observable';
+
+import { noteReducer } from './note';
+import { appStart } from './actions/core';
 
 export const sagaMiddleware = createSagaMiddleware();
 export const sagas = [];
 
+const rootEpic = new BehaviorSubject(combineEpics());
+const epicMiddleware = createEpicMiddleware((action, store) => rootEpic.mergeMap(epic => epic(action, store)));
+const context = require.context('./epics', true, /\.js$/);
+context.keys().forEach(key => {
+  const epicToLoad = context(key).default;
+  rootEpic.next(epicToLoad);
+});
+
 export const rootReducer = combineReducers({
   router,
-  // cards: cardsReducer,
-  // config: configReducer,
 });
 
 export const history = createHistory();
@@ -31,6 +41,9 @@ export const configureStore = () => {
 
   // redux-saga
   middleware.push(sagaMiddleware);
+
+  // empty redux-observable
+  middleware.push(epicMiddleware);
 
   // Redux DevTools Configuration
   const actionCreators = {
@@ -57,3 +70,5 @@ export const configureStore = () => {
 };
 
 export const store = configureStore();
+
+store.dispatch(appStart());
