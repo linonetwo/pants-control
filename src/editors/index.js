@@ -1,10 +1,10 @@
 // @flow
 import React, { Component } from 'react';
 
-import EditorSlate from './Slate';
+import SlateEditor from './Slate';
 
 export default class Editors extends Component {
   render() {
-    return <EditorSlate />;
+    return <SlateEditor />;
   }
 }

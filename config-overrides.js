@@ -1,6 +1,6 @@
 // @flow
 const path = require('path');
-const { getBabelLoader } = require('react-app-rewired')
+const { getBabelLoader, injectBabelPlugin } = require('react-app-rewired');
 
 const removeEslint = function (config) {
   const rules = config.module.rules;
@@ -17,7 +17,7 @@ const babelIgnorePath = function (exclude = [], config) {
     console.log('babel-loader not found');
     return config;
   }
-  loader.exclude =  exclude.concat(loader.exclude || []);
+  loader.exclude = exclude.concat(loader.exclude || []);
   return config;
 };
 
@@ -28,6 +28,8 @@ module.exports = function override(config, env) {
     delete config.node;
     config.target = 'electron-renderer';
   }
+
+  config = injectBabelPlugin('macros', config);
 
   config = removeEslint(config);
 

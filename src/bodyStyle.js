@@ -7,25 +7,17 @@ injectGlobal`
     outline: none;
   }
   body {
-    position: relative;
     -webkit-font-smoothing: antialiased;
     color: #333333;
     height: 100vh;
     background-color: white;
     font-family: Arial, Helvetica, Helvetica Neue, serif;
     overflow: hidden;
+    margin: 0;
   }
 
   #root {
     height: 100%;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: 2.25rem;
-    font-weight: bold;
-    letter-spacing: -0.025em;
-    color: #fff;
   }
 
   p {
