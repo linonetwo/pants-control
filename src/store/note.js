@@ -78,6 +78,7 @@ type NoteInitialStateType = {
 const noteInitialState: ImmutableType<NoteInitialStateType> = Immutable({
   notes: {},
   ids: [],
+  currentNoteID: ''
 });
 
 export function noteReducer(
