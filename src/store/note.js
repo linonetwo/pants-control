@@ -5,6 +5,8 @@ import getJSON from 'async-get-json';
 
 import type { ActionType, KeyValue } from './types';
 
+import { loadNote, saveNote, focusNote } from './actions/core';
+
 async function saveNoteToFs(id: string, note: any, noteSaverID: string, noteHash: string) {
   if (!noteSaverID) {
     // should use default saver
@@ -63,9 +65,6 @@ async function executeNote(id: string, noteLoaderID: string) {
   }
 }
 
-export const loadNote = createRoutine('@core/loadNote');
-export const saveNote = createRoutine('@core/saveNote');
-
 type NoteInitialStateType = {
   notes: { [id: string]: KeyValue },
   ids: string[],
@@ -74,7 +73,7 @@ type NoteInitialStateType = {
 const noteInitialState: ImmutableType<NoteInitialStateType> = Immutable({
   notes: {},
   ids: [],
-  currentNoteID: ''
+  currentNoteID: '',
 });
 
 export function noteReducer(
@@ -88,6 +87,8 @@ export function noteReducer(
       const { note, id } = action.payload;
       return state.setIn(['notes', id], note).set('ids', state.ids.concat([id]));
     }
+    case focusNote.TRIGGER:
+      return state.set('currentNoteID', action.payload);
 
     default:
       return state;

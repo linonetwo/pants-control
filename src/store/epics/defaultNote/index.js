@@ -1,9 +1,11 @@
 // @flow
 import { Observable } from 'rxjs';
-import { delay, mapTo } from 'rxjs/operators';
+import { delay, mapTo, flatMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 
-import { appStart } from '../../actions/core';
+import { appStart, loadNote, focusNote } from '../../actions/core';
+
+import defaultProfile from './defaultProfile.json';
 
 /** defaultNoteOnStartUp
  * if no note exist
@@ -15,5 +17,14 @@ export default (action, store, { ipfs }) => {
     console.error('No ipfs passed from dependency.');
     return Observable.empty();
   }
-  return action.pipe(ofType(appStart.TRIGGER), delay(1000), mapTo({ type: 'PONG' }));
+  const profileHash = 'aaa';
+  return action.pipe(
+    ofType(appStart.TRIGGER),
+    delay(1000),
+    flatMap(action =>
+      Observable.concat(
+        Observable.of(loadNote.success({ id: profileHash, note: defaultProfile })),
+        Observable.of(focusNote(profileHash)),
+      )),
+  );
 };
