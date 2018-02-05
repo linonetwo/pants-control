@@ -3,11 +3,7 @@ import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
 import { createRoutine } from 'redux-saga-routines';
 import getJSON from 'async-get-json';
 
-import { initIPFS } from '../ipfs/ipfs';
-
 import type { ActionType, KeyValue } from './types';
-
-const ipfs = initIPFS();
 
 async function saveNoteToFs(id: string, note: any, noteSaverID: string, noteHash: string) {
   if (!noteSaverID) {

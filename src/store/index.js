@@ -8,14 +8,22 @@ import { reduxBatch } from '@manaflair/redux-batch';
 import { BehaviorSubject } from 'rxjs';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 
+import { initIPFS } from '../ipfs/ipfs';
 import { noteReducer } from './note';
+import { viewerReducer } from './viewer';
 import { appStart } from './actions/core';
+
+// create node using ipfs-api
+const ipfs = initIPFS();
 
 export const sagaMiddleware = createSagaMiddleware();
 export const sagas = [];
 
+// create root epic that can asynchronously loading new epic
 const rootEpic = new BehaviorSubject(combineEpics());
-const epicMiddleware = createEpicMiddleware((action, store) => rootEpic.mergeMap(epic => epic(action, store)));
+const epicMiddleware = createEpicMiddleware((action, store, dependencies) => rootEpic.mergeMap(epic => epic(action, store, dependencies)), {
+  dependencies: { ipfs },
+});
 const context = require.context('./epics', true, /\.js$/);
 context.keys().forEach(key => {
   const epicToLoad = context(key).default;
@@ -24,6 +32,8 @@ context.keys().forEach(key => {
 
 export const rootReducer = combineReducers({
   router,
+  note: noteReducer,
+  viewer: viewerReducer,
 });
 
 export const history = createHistory();
