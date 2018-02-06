@@ -4,12 +4,13 @@
     "sourceType": "module",
     "allowImportExportEverywhere": true
   },
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier"],
   "env": {
     "browser": true,
     "node": true
   },
   "rules": {
+    "comma-dangle": 1,
     "arrow-parens": ["off"],
     "compat/compat": "off",
     "consistent-return": "off",
@@ -24,22 +25,18 @@
     "no-console": "off",
     "promise/param-names": "error",
     "promise/no-native": "off",
-    "react/sort-comp": ["error", {
-      "order": ["type-annotations", "static-methods", "lifecycle", "everything-else", "render"]
-    }],
+    "react/sort-comp": [
+      "error",
+      {
+        "order": ["type-annotations", "static-methods", "lifecycle", "everything-else", "render"]
+      }
+    ],
     "max-len": "off",
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
     "react/prefer-stateless-function": "off"
   },
-  "plugins": [
-    "flowtype",
-    "flowtype-errors",
-    "import",
-    "promise",
-    "compat",
-    "react"
-  ],
+  "plugins": ["flowtype", "flowtype-errors", "import", "promise", "compat", "react"],
   "settings": {
     "import/resolver": {
       "webpack": {
