@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Plain from 'slate-plain-serializer';
 import styled from 'react-emotion/macro';
 import { Editor } from 'slate-react';
+import { Value } from 'slate';
 
 import HoverMenu from './HoverMenu';
 
@@ -30,9 +31,8 @@ export default class SlateEditor extends Component<Props, State> {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.currentNote);
     if (nextProps.noteID !== this.props.noteID) {
-      // this.setState({ value: nextProps.currentNote });
+      this.setState({ value: Value.fromJSON(JSON.parse(nextProps.currentNote)) });
     }
   }
 
@@ -45,8 +45,7 @@ export default class SlateEditor extends Component<Props, State> {
    */
   updateMenu = () => {
     const { value } = this.state;
-    const menu = this.menu;
-    if (!menu) return;
+    if (!this.menu) return;
 
     if (value.isBlurred || value.isEmpty) {
       return {};
@@ -56,8 +55,8 @@ export default class SlateEditor extends Component<Props, State> {
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
-    const top = `${rect.top + window.scrollY - menu.offsetHeight}px`;
-    const left = `${rect.left + window.scrollX - menu.offsetWidth / 2 + rect.width / 2}px`;
+    const top = `${rect.top + window.scrollY - this.menu.offsetHeight}px`;
+    const left = `${rect.left + window.scrollX - this.menu.offsetWidth / 2 + rect.width / 2}px`;
     return {
       opacity: 1,
       top,

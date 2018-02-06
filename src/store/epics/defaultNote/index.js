@@ -23,7 +23,7 @@ export default (action, store, { ipfs }) => {
     delay(1000),
     flatMap(() =>
       Observable.concat(
-        Observable.of(loadNote.success({ id: profileHash, note: defaultProfile })),
+        Observable.of(loadNote.success({ id: profileHash, note: JSON.stringify(defaultProfile) })),
         Observable.of(focusNote(profileHash)),
       )),
   );
