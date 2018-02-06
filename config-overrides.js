@@ -30,6 +30,7 @@ module.exports = function override(config, env) {
   }
 
   config = injectBabelPlugin('macros', config);
+  config = injectBabelPlugin('transform-decorators-legacy', config);
 
   config = removeEslint(config);
 

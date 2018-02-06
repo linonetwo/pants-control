@@ -1,6 +1,6 @@
 // @flow
 import { Observable } from 'rxjs';
-import { delay, mapTo, flatMap } from 'rxjs/operators';
+import { delay, flatMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 
 import { appStart, loadNote, focusNote } from '../../actions/core';
@@ -21,7 +21,7 @@ export default (action, store, { ipfs }) => {
   return action.pipe(
     ofType(appStart.TRIGGER),
     delay(1000),
-    flatMap(action =>
+    flatMap(() =>
       Observable.concat(
         Observable.of(loadNote.success({ id: profileHash, note: defaultProfile })),
         Observable.of(focusNote(profileHash)),

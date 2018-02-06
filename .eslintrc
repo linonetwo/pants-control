@@ -16,6 +16,8 @@
     "no-underscore-dangle": "off",
     "no-unused-expressions": "off",
     "flowtype-errors/show-errors": "error",
+    "flowtype/define-flow-type": 1,
+    "flowtype/use-flow-type": 1,
     "generator-star-spacing": "off",
     "import/no-unresolved": "error",
     "import/no-extraneous-dependencies": "off",
