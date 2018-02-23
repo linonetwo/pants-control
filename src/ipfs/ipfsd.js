@@ -2,10 +2,10 @@
 const DaemonFactory = require('ipfsd-ctl');
 
 let _ipfsd = null;
-const ipfsDaemon = DaemonFactory.create();
+const ipfsDaemon = DaemonFactory.create({ type: 'js' });
 
-function initIPFS(repoPath = '/Users/dongwu/Desktop/ipfsRepo') {
-  console.log(repoPath)
+function initIPFSD(repoPath = '/Users/dongwu/Desktop/ipfsRepo') {
+  console.log(repoPath);
   return new Promise((resolve, reject) => {
     ipfsDaemon.spawn({ repoPath }, (err, ipfsd) => {
       if (err) {
@@ -28,9 +28,7 @@ function initIPFS(repoPath = '/Users/dongwu/Desktop/ipfsRepo') {
             agentVersion: 'go-ipfs/0.4.13/',
             protocolVersion: 'ipfs/0.1.0' }
         */
-        const {
-          id, publicKey, addresses, agentVersion, protocolVersion,
-        } = ipfsdID;
+        const { id, publicKey, addresses, agentVersion, protocolVersion } = ipfsdID;
         console.log(`IPFS Daemon Started, agentVersion: ${agentVersion}, protocolVersion: ${protocolVersion}`);
         resolve({
           ipfsd,
@@ -51,4 +49,4 @@ function killIPFSD() {
   }
 }
 
-module.exports = { initIPFS, killIPFSD };
+module.exports = { initIPFSD, killIPFSD };

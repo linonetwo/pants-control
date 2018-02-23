@@ -7,7 +7,7 @@ const url = require('url');
 const createWindow = require('./createWindow');
 const sha512 = require('hash.js/lib/hash/sha/512');
 
-const { initIPFS, killIPFSD } = require('./ipfs/ipfsd');
+const { initIPFSD, killIPFSD } = require('./ipfs/ipfsd');
 
 /* Keep a global reference of the window object, if you don't, the window will be closed automatically when the JavaScript object is garbage collected. */
 let appWindow;
@@ -26,7 +26,7 @@ const startUrl =
 
 app.on('ready', async () => {
   try {
-    const { addresses } = await initIPFS();
+    const { addresses } = await initIPFSD();
     appWindow = createWindow('app', startUrl, { signature, addresses });
     apiWindow = createWindow('api', startUrl, { signature, addresses }, true);
     if (isDev) {
