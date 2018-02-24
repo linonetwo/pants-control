@@ -2,7 +2,7 @@
 const DaemonFactory = require('ipfsd-ctl');
 
 let _ipfsd = null;
-const ipfsDaemon = DaemonFactory.create({ type: 'js' });
+const ipfsDaemon = DaemonFactory.create({ type: 'proc', exec: require('ipfs') });
 
 function initIPFSD(repoPath = '/Users/dongwu/Desktop/ipfsRepo') {
   console.log(repoPath);
