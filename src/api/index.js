@@ -5,9 +5,6 @@ import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 
 import schema from './schema';
 import runLambda from './lambda';
-import { initIPFS } from '../ipfs/ipfs';
-
-const ipfs = initIPFS();
 
 const app = express();
 app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));

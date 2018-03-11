@@ -8,13 +8,10 @@ import { reduxBatch } from '@manaflair/redux-batch';
 import { BehaviorSubject } from 'rxjs';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 
-import { initIPFS } from '../ipfs/ipfs';
+import ipfs from '../ipfs/ipfs';
 import { noteReducer } from './note';
 import { viewerReducer } from './viewer';
 import { appStart } from './actions/core';
-
-// create node using ipfs-api
-const ipfs = initIPFS();
 
 export const sagaMiddleware = createSagaMiddleware();
 export const sagas = [];

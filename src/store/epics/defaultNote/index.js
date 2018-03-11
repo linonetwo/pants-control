@@ -2,9 +2,10 @@
 import { Observable } from 'rxjs';
 import { delay, flatMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
-import { Buffer } from 'buffer';
+import str2arr from 'string-to-arraybuffer';
 
 import { appStart, loadNote, focusNote } from '../../actions/core';
+import type { ActionType, IPFSFileUploader } from '../../types';
 
 import defaultProfile from './defaultProfile.json';
 
@@ -13,24 +14,14 @@ import defaultProfile from './defaultProfile.json';
  * load default notes, add them to ipfs, add multihash to notes store cache
  * set current note to one of default note.
  * */
-export default (action, store, { ipfs }) => {
+export default (action: ActionType, store: any, { ipfs }: { ipfs: IPFSFileUploader }) => {
   if (!ipfs) {
     console.error('No ipfs passed from dependency.');
     return Observable.empty();
   }
-  const fileString = JSON.stringify(defaultProfile)
-  ipfs.files.add(Buffer.from(fileString), (err, res) => {
-    if (err || !res) {
-      return console.error('ipfs add error', err, res)
-    }
-
-    res.forEach((file) => {
-      if (file && file.hash) {
-        console.log('successfully stored', file.hash)
-        display(file.hash)
-      }
-    })
-  })
+  const fileString = JSON.stringify(defaultProfile);
+  const fileBuffer = str2arr(fileString).then(console.log);
+  ipfs.uploadArrayBuffer(fileBuffer);
   const profileHash = 'aaa';
   return action.pipe(
     ofType(appStart.TRIGGER),
@@ -39,6 +30,7 @@ export default (action, store, { ipfs }) => {
       Observable.concat(
         Observable.of(loadNote.success({ id: profileHash, note: fileString })),
         Observable.of(focusNote(profileHash)),
-      )),
+      ),
+    ),
   );
 };
