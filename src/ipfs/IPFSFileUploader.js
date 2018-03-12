@@ -3,12 +3,12 @@ import streamBuffers from 'stream-buffers';
 
 // const IPFS = require('electron').remote.require('ipfs');
 
-export class IPFSFileUploader {
+export default class IPFSFileUploader {
   node: any;
   stream: any;
   isOnline: boolean = false;
 
-  constructor() {
+  constructor(onReady: Function = () => {}) {
     // 用随机的仓库地址（IPFS 在本地缓存数据的地方）来初始化 IPFS 节点
     const repoPath = `ipfs-${Math.random()}`;
     this.node = new IPFS({ repo: repoPath });
@@ -18,6 +18,7 @@ export class IPFSFileUploader {
       console.log('Online status: ', this.node.isOnline() ? 'online' : 'offline');
       if (this.node.isOnline()) {
         this.isOnline = true;
+        onReady();
       }
     });
   }
@@ -62,5 +63,3 @@ export class IPFSFileUploader {
     });
   }
 }
-
-export default new IPFSFileUploader();
