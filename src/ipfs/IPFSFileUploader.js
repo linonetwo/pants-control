@@ -1,7 +1,7 @@
 import { Buffer } from 'buffer';
 import streamBuffers from 'stream-buffers';
 
-// const IPFS = require('electron').remote.require('ipfs');
+const IPFS = require('electron').remote.require('ipfs');
 
 export default class IPFSFileUploader {
   node: any;
