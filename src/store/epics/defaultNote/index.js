@@ -20,8 +20,8 @@ export default (action: ActionType, store: any, { ipfs }: { ipfs: IPFSFileUpload
     return Observable.empty();
   }
   const fileString = JSON.stringify(defaultProfile);
-  const fileBuffer = str2arr(fileString).then(console.log);
-  ipfs.uploadArrayBuffer(fileBuffer);
+  const fileBuffer = str2arr(fileString);
+  ipfs.uploadArrayBuffer(fileBuffer).then(console.log);
   const profileHash = 'aaa';
   return action.pipe(
     ofType(appStart.TRIGGER),

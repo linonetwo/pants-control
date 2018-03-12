@@ -1,11 +1,12 @@
 import { Buffer } from 'buffer';
 import streamBuffers from 'stream-buffers';
 
-const IPFS = require('electron').remote.require('ipfs');
+// const IPFS = require('electron').remote.require('ipfs');
 
 export class IPFSFileUploader {
   node: any;
   stream: any;
+  isOnline: boolean = false;
 
   constructor() {
     // 用随机的仓库地址（IPFS 在本地缓存数据的地方）来初始化 IPFS 节点
@@ -13,12 +14,20 @@ export class IPFSFileUploader {
     this.node = new IPFS({ repo: repoPath });
 
     // 节点完成初始化并开始连接其他节点后会触发 ready 事件
-    this.node.on('ready', () => console.log('Online status: ', this.node.isOnline() ? 'online' : 'offline'));
+    this.node.on('ready', () => {
+      console.log('Online status: ', this.node.isOnline() ? 'online' : 'offline');
+      if (this.node.isOnline()) {
+        this.isOnline = true;
+      }
+    });
   }
 
   /** 2.把文件丢进 IPFS 里 */
   uploadArrayBuffer = (fileArrayBuffer: ArrayBuffer): Promise<Buffer> =>
-    new Promise(resolve => {
+    new Promise((resolve, reject) => {
+      if (!this.isOnline) {
+        return reject('IPFS node is not online, please wait.');
+      }
       const myReadableStreamBuffer = new streamBuffers.ReadableStreamBuffer({
         chunkSize: 25000, // 决定了传输速率
       });
@@ -43,6 +52,9 @@ export class IPFSFileUploader {
   /** 1.中转文件，准备丢进 IPFS */
   uploadFile(file: File) {
     return new Promise((resolve, reject) => {
+      if (!this.isOnline) {
+        return reject('IPFS node is not online, please wait.');
+      }
       const fileReader = new FileReader();
       fileReader.onload = event => resolve(this.uploadArrayBuffer(event.target.result));
       fileReader.onerror = reject;
