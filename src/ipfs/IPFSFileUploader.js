@@ -1,6 +1,5 @@
 import { Buffer } from 'buffer';
 import streamBuffers from 'stream-buffers';
-import IPFS from 'ipfs';
 
 export default class IPFSFileUploader {
   node: any;
@@ -10,7 +9,7 @@ export default class IPFSFileUploader {
   constructor(onReady: Function = () => {}) {
     // 用随机的仓库地址（IPFS 在本地缓存数据的地方）来初始化 IPFS 节点
     const repoPath = `ipfs-${Math.random()}`;
-    this.node = new IPFS({
+    this.node = new Ipfs({
       repo: repoPath,
       config: {
         Addresses: {
