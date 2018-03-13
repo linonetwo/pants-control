@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import styled from 'react-emotion/macro';
+import styled from 'styled-components';
 
 import ReactDOM from 'react-dom';
 

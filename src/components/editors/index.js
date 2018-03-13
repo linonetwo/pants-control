@@ -1,6 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react';
-import styled from 'react-emotion/macro';
+import styled from 'styled-components';
 
 import SlateEditor from './Slate';
 

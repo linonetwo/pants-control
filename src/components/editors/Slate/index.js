@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Plain from 'slate-plain-serializer';
-import styled from 'react-emotion/macro';
+import styled from 'styled-components';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
 
