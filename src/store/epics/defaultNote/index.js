@@ -1,6 +1,6 @@
 // @flow
 import { Observable } from 'rxjs';
-import { delay, map, mergeMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import str2arr from 'string-to-arraybuffer';
 
