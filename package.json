@@ -17,6 +17,7 @@
   "private": true,
   "dependencies": {
     "@manaflair/redux-batch": "^0.1.0",
+    "aes-js": "^3.1.0",
     "apollo-cache-inmemory": "^1.1.10",
     "apollo-client": "^2.2.6",
     "apollo-link-http": "^1.5.3",
@@ -39,6 +40,7 @@
     "immutable": "^3.8.2",
     "ipfs-api": "^18.1.2",
     "is-electron-renderer": "^2.0.1",
+    "keypair": "^1.0.1",
     "lodash": "^4.17.5",
     "react": "^16.2.0",
     "react-app-rewired": "^1.5.0",

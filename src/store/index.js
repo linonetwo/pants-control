@@ -1,5 +1,7 @@
 // @flow
 import createSagaMiddleware from 'redux-saga';
+import { all } from 'redux-saga/effects';
+
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import createHistory from 'history/createBrowserHistory';
 import { routerMiddleware, routerActions, routerReducer as router } from 'react-router-redux';
@@ -10,17 +12,23 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable';
 
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 import { noteReducer } from './note';
-import { viewerReducer } from './viewer';
+import { viewerReducer, viewerSagas } from './viewer';
 import { appStart, ipfsNodeStart } from './actions/core';
 
 export const sagaMiddleware = createSagaMiddleware();
-export const sagas = [];
+export const sagas = [...viewerSagas];
+export function* rootSaga() {
+  yield all(sagas);
+}
 
 // create root epic that can asynchronously loading new epic
 const rootEpic = new BehaviorSubject(combineEpics());
-const epicMiddleware = createEpicMiddleware((action, store, dependencies) => rootEpic.mergeMap(epic => epic(action, store, dependencies)), {
-  dependencies: { ipfs: new IPFSFileUploader(() => store.dispatch(ipfsNodeStart())) },
-});
+const epicMiddleware = createEpicMiddleware(
+  (action, store, dependencies) => rootEpic.mergeMap(epic => epic(action, store, dependencies)),
+  {
+    dependencies: { ipfs: new IPFSFileUploader(() => store.dispatch(ipfsNodeStart())) },
+  },
+);
 const context = require.context('./epics', true, /\.js$/);
 context.keys().forEach(key => {
   const epicToLoad = context(key).default;
@@ -59,9 +67,9 @@ export const configureStore = () => {
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-      // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
-      actionCreators,
-    })
+        // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
+        actionCreators,
+      })
     : compose;
 
   // Apply Middleware & Compose Enhancers

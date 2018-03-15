@@ -8,10 +8,15 @@ import registerServiceWorker from './registerServiceWorker';
 import { store, history } from './store';
 import Editors from './components/editors';
 import Login from './components/Login';
+import { sagaMiddleware, rootSaga } from './store';
 
 import './bodyStyle';
 
 class App extends Component {
+  componentDidMount() {
+    sagaMiddleware.run(rootSaga);
+  }
+
   render() {
     return (
       <Provider store={store}>

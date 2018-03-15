@@ -146,6 +146,10 @@ address@1.0.3, address@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/address/-/address-1.0.3.tgz#b5f50631f8d6cec8bd20c963963afb55e06cbce9"
 
+aes-js@^3.1.0:
+  version "3.1.0"
+  resolved "http://registry.npm.taobao.org/aes-js/download/aes-js-3.1.0.tgz#f5f7588494526997cc635cc334c8bb8e967a5d82"
+
 ajv-keywords@^2.0.0, ajv-keywords@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-2.1.1.tgz#617997fc5f60576894c435f940d819e135b80762"
@@ -4939,7 +4943,7 @@ keycode@^2.1.2:
 
 keypair@^1.0.1:
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/keypair/-/keypair-1.0.1.tgz#7603719270afb6564ed38a22087a06fc9aa4ea1b"
+  resolved "http://registry.npm.taobao.org/keypair/download/keypair-1.0.1.tgz#7603719270afb6564ed38a22087a06fc9aa4ea1b"
 
 killable@^1.0.0:
   version "1.0.0"
