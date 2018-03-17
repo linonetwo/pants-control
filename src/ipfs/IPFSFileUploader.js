@@ -30,6 +30,16 @@ export default class IPFSFileUploader {
     });
   }
 
+  ready() {
+    return new Promise(resolve => {
+      this.node.on('ready', () => {
+        if (this.node.isOnline()) {
+          resolve();
+        }
+      });
+    })
+  }
+
   /** 2.把文件丢进 IPFS 里 */
   uploadArrayBuffer = (fileArrayBuffer: ArrayBuffer): Promise<Buffer> =>
     new Promise((resolve, reject) => {
