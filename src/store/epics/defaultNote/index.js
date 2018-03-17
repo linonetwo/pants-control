@@ -2,9 +2,8 @@
 import { Observable } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
-import str2arr from 'string-to-arraybuffer';
 
-import { ipfsNodeStart, loadNote, focusNote } from '../../actions/core';
+import { viewerRegister, loadNote, focusNote } from '../../actions/core';
 import type { ActionType, IPFSFileUploader } from '../../types';
 
 import defaultMenuNote from './defaultMenuNote.json';
@@ -16,7 +15,7 @@ import defaultMenuNote from './defaultMenuNote.json';
  * */
 export default (action: ActionType, store: any, { ipfs }: { ipfs: IPFSFileUploader }) =>
   action.pipe(
-    ofType(ipfsNodeStart.TRIGGER),
+    ofType(viewerRegister.TRIGGER),
     mergeMap(() => {
       if (!ipfs) {
         console.error('In epic defaultNote: No ipfs passed from dependency.');
