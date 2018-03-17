@@ -4,8 +4,9 @@ import { exec as execCommand } from 'child_process';
 import storage from 'electron-json-storage';
 import fixPath from 'fix-path';
 import os from 'os';
+import path from 'path';
 
-storage.setDataPath(os.tmpdir());
+storage.setDataPath(path.join(os.homedir(), '.pants-control'));
 fixPath();
 
 const nativeUtils = {
@@ -35,14 +36,16 @@ const nativeUtils = {
       storage.set(key, value, error => {
         if (error) return reject(error);
         return resolve();
-      }));
+      }),
+    );
   },
   loadStorage(key: string): Promise<string> {
     return new Promise((resolve, reject) =>
       storage.get(key, (error, data) => {
         if (error || !data || typeof data !== 'string') return reject(error);
         return resolve(data);
-      }));
+      }),
+    );
   },
 };
 export default nativeUtils;
