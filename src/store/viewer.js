@@ -1,7 +1,6 @@
 // @flow
 import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
 import keypair from 'keypair';
-import { createRoutine } from 'redux-saga-routines';
 import { put, takeLatest, call } from 'redux-saga/effects';
 import str2arr from 'string-to-arraybuffer';
 
@@ -11,9 +10,7 @@ import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
 
-export const loadProfile = createRoutine('@core/loadProfile');
-
-const getPrivateKeyStoreKey = (profileHash: string) => `${hash}-private`;
+const getPrivateKeyStoreKey = (profileHash: string) => `${profileHash}-private`;
 
 /** 创建用户公私钥和 profile，公钥放在 profile 里，私钥用密码加密后放在 localStorage 或者本地 */
 export function* viewerRegisterSaga(action: ActionType) {
@@ -63,7 +60,10 @@ export function* loadViewerSecret(action: ActionType) {
   }
 }
 
-export const viewerSagas = [takeLatest(viewerRegister.TRIGGER, viewerRegisterSaga)];
+export const viewerSagas = [
+  takeLatest(viewerRegister.TRIGGER, viewerRegisterSaga),
+  takeLatest(viewerLogin.TRIGGER, loadViewerSecret),
+];
 
 type ViewerInitialStateType = {
   profile: KeyValue,
@@ -82,9 +82,6 @@ export function viewerReducer(
   action: ActionType,
 ): ImmutableType<ViewerInitialStateType> {
   switch (action.type) {
-    case loadProfile.SUCCESS:
-      (action.payload: KeyValue);
-      return state.setIn('profile', action.payload);
     case viewerRegister.SUCCESS:
     case viewerLogin.SUCCESS:
       return state
