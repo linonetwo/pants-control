@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer';
 import streamBuffers from 'stream-buffers';
+import str2arr from 'string-to-arraybuffer';
 
 export default class IPFSFileUploader {
   node: any;
@@ -37,8 +38,22 @@ export default class IPFSFileUploader {
           resolve();
         }
       });
-    })
+    });
   }
+
+  uploadObject = someStringifiableObject => {
+    try {
+      const fileString = JSON.stringify(someStringifiableObject);
+      this.uploadString(fileString);
+    } catch (error) {
+      throw new Error('Receiving Object that is not able to JSON.stringify');
+    }
+  };
+
+  uploadString = (fileString: string) => {
+    const fileBuffer = str2arr(fileString);
+    return this.uploadArrayBuffer(fileBuffer);
+  };
 
   /** 2.把文件丢进 IPFS 里 */
   uploadArrayBuffer = (fileArrayBuffer: ArrayBuffer): Promise<Buffer> =>

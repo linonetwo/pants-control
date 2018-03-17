@@ -2,7 +2,6 @@
 import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
 import keypair from 'keypair';
 import { put, takeLatest, call } from 'redux-saga/effects';
-import str2arr from 'string-to-arraybuffer';
 
 import type { ActionType, KeyValue } from './types';
 import { viewerRegister, viewerLogin } from './actions/core';
@@ -29,12 +28,10 @@ export function* viewerRegisterSaga(action: ActionType) {
       description: 'Lead Engineer on Uport',
       publicKey,
     };
-    const fileString = JSON.stringify(newProfile);
-    const fileBuffer = str2arr(fileString);
     // wait for node to be set up
     yield call(ipfs.ready);
     // Put profile to IPFS
-    const { hash: profileHash } = yield call(ipfs.uploadArrayBuffer, fileBuffer);
+    const { hash: profileHash } = yield call(ipfs.uploadObject, newProfile);
     if (profileHash) {
       // Put private key to localStorage
       yield call(saveStorage, getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
