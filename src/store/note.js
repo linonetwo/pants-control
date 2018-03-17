@@ -1,46 +1,11 @@
 // @flow
 import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
-import { createRoutine } from 'redux-saga-routines';
-import getJSON from 'async-get-json';
+import { put, takeLatest, call } from 'redux-saga/effects';
 
 import type { ActionType, KeyValue } from './types';
 
 import { loadNote, saveNote, focusNote } from './actions/core';
-
-async function saveNoteToFs(id: string, note: any, noteSaverID: string, noteHash: string) {
-  if (!noteSaverID) {
-    // should use default saver
-    console.log('No saver note found.');
-  } else {
-    console.log(`Using saver ${noteSaverID}`);
-    await fetch(`http://localhost:6012/lambdav1/${noteSaverID}?noteHash=${noteHash}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        note,
-        id,
-      }),
-    });
-  }
-}
-
-async function loadNoteFromFs(id: string, noteLoaderID: string, noteHash: string) {
-  if (!noteLoaderID) {
-    // use default loader
-    console.log('No loader note found.');
-  } else {
-    try {
-      console.log(`Using loader note ${noteLoaderID}`);
-      const note = await getJSON(`http://localhost:6012/lambdav1/${noteLoaderID}?id=${id}&noteHash=${noteHash}`);
-      return note;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-}
+import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 
 async function executeNote(id: string, noteLoaderID: string) {
   if (!noteLoaderID) {
@@ -65,14 +30,44 @@ async function executeNote(id: string, noteLoaderID: string) {
   }
 }
 
+function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
+  try {
+    const { note, id } = action.payload;
+    const ipfs = new IPFSFileUploader();
+    yield call(ipfs.ready);
+    const { hash } = yield call(ipfs.uploadObject, note);
+    yield put(saveNote.success({ id, hash }));
+  } catch (error) {
+    yield put(saveNote.failure({ message: error.message }));
+  }
+}
+
+function* loadNoteFromIpfsSaga(action: ActionType) {
+  try {
+    const { hash } = action.payload;
+    yield put(loadNote.success({ id: hash }));
+  } catch (error) {
+    yield put(loadNote.failure({ message: error.message }));
+  }
+}
+
+export const noteSagas = [
+  takeLatest(saveNote.TRIGGER, saveNoteToMemoryAndIpfsSaga),
+  takeLatest(loadNote.TRIGGER, loadNoteFromIpfsSaga),
+];
+
+/** 内存中的笔记使用 ID 来追踪，IPFS 上的笔记用 hash 来追踪，当笔记被修改保存后 hash 会改变，而 ID 通过内存中的一个字典对应到 hash */
 type NoteInitialStateType = {
   notes: { [id: string]: KeyValue },
+  hashes: { [id: string]: string },
   ids: string[],
+  currentNoteID: string,
 };
 
 const noteInitialState: ImmutableType<NoteInitialStateType> = Immutable({
   notes: {},
   ids: [],
+  hashes: {},
   currentNoteID: '',
 });
 
@@ -87,6 +82,9 @@ export function noteReducer(
       const { note, id } = action.payload;
       return state.setIn(['notes', id], note).set('ids', state.ids.concat([id]));
     }
+    //  保存到 IPFS 成功后，更新某个本地 id 对应的 hash
+    case saveNote.SUCCESS:
+      return state.setIn(['hashes', action.payload.id], action.payload.hash);
     case focusNote.TRIGGER:
       return state.set('currentNoteID', action.payload);
 
