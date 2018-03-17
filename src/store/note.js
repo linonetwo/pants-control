@@ -45,7 +45,7 @@ function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
 function* loadNoteFromIpfsSaga(action: ActionType) {
   try {
     const { hash } = action.payload;
-    yield put(loadNote.success({ id: hash }));
+    yield put(loadNote.success({ id: hash, note: '' }));
   } catch (error) {
     yield put(loadNote.failure({ message: error.message }));
   }
