@@ -30,6 +30,7 @@ async function executeNote(id: string, noteLoaderID: string) {
   }
 }
 
+/** 把一篇笔记 JS 对象保存到本地缓存和 IPFS 上，返回 id 和拿到的 hash */
 function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
   try {
     const { note, id } = action.payload;

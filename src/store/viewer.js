@@ -44,6 +44,7 @@ export function* viewerRegisterSaga(action: ActionType) {
   }
 }
 
+/** 用户用密码登录之后，从本地加载用户的私钥和 profile */
 export function* loadViewerSecret(action: ActionType) {
   try {
     const { password } = action.payload;
