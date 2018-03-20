@@ -6,6 +6,7 @@ import { put, takeLatest, call } from 'redux-saga/effects';
 import type { ActionType, KeyValue } from './types';
 import { viewerRegister, viewerLogin } from './actions/core';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
+import IPFSFileGetter from '../ipfs/IPFSFileGetter';
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
 
@@ -48,11 +49,17 @@ export function* viewerRegisterSaga(action: ActionType) {
 export function* loadViewerSecret(action: ActionType) {
   try {
     const { password } = action.payload;
+    const ipfs = new IPFSFileGetter();
+
 
     const profileHash = yield call(loadStorage, 'profileHash');
     const encryptedPrivateKeyHex = yield call(loadStorage, getPrivateKeyStoreKey(profileHash));
     const privateKey = decrypt(password, encryptedPrivateKeyHex);
-    yield put(viewerLogin.success({ privateKey, profileHash }));
+    // get profile from IPFS
+    yield call(ipfs.ready);
+    const profile = yield call(ipfs.getFile, profileHash)
+    console.log('loadViewerSecret', profile)
+    yield put(viewerLogin.success({ privateKey, profileHash, profile: profile[0] }));
   } catch (error) {
     yield put(viewerLogin.failure({ message: error.message }));
   }

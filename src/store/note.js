@@ -6,6 +6,7 @@ import type { ActionType, KeyValue } from './types';
 
 import { loadNote, saveNote, focusNote } from './actions/core';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
+import IPFSFileGetter from '../ipfs/IPFSFileGetter';
 
 async function executeNote(id: string, noteLoaderID: string) {
   if (!noteLoaderID) {
@@ -46,7 +47,11 @@ function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
 function* loadNoteFromIpfsSaga(action: ActionType) {
   try {
     const { hash } = action.payload;
-    yield put(loadNote.success({ id: hash, note: '' }));
+    const ipfs = new IPFSFileGetter();
+    yield call(ipfs.ready);
+    const files = yield call(ipfs.getFile, hash);
+    console.log('loadNoteFromIpfsSaga', files);
+    yield put(loadNote.success({ id: hash, note: files[0] }));
   } catch (error) {
     yield put(loadNote.failure({ message: error.message }));
   }
