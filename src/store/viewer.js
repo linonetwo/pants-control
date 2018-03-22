@@ -1,16 +1,28 @@
 // @flow
 import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
 import keypair from 'keypair';
-import { put, takeLatest, call } from 'redux-saga/effects';
+import { put, takeLatest, call, all } from 'redux-saga/effects';
 
 import type { ActionType, KeyValue } from './types';
 import { viewerRegister, viewerLogin } from './actions/core';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 import IPFSFileGetter from '../ipfs/IPFSFileGetter';
-import { saveStorage, loadStorage } from '../utils/nativeUtils';
+import nativeUtils from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
 
+const { saveStorage, loadStorage } = nativeUtils;
+
 const getPrivateKeyStoreKey = (profileHash: string) => `${profileHash}-private`;
+
+async function getAvailableUsers() {
+  const users = await loadStorage('users');
+  return users;
+}
+async function pushAvailableUsers(newUserName: string) {
+  const users = (await loadStorage('users')) || [];
+  const newUsers = [...users, newUserName];
+  await saveStorage('users', newUsers);
+}
 
 /** 创建用户公私钥和 profile，公钥放在 profile 里，私钥用密码加密后放在 localStorage 或者本地 */
 export function* viewerRegisterSaga(action: ActionType) {
@@ -36,6 +48,9 @@ export function* viewerRegisterSaga(action: ActionType) {
     if (profileHash) {
       // Put private key to localStorage
       yield call(saveStorage, getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
+      // Remember username in localStorage for later login
+      yield all([call(saveStorage, name, profileHash), call(pushAvailableUsers, name)]);
+      // inform UI that register succeed
       yield put(viewerRegister.success({ profileHash, privateKey, profile: newProfile }));
     } else {
       throw new Error('Profile 创建失败');
@@ -51,14 +66,13 @@ export function* loadViewerSecret(action: ActionType) {
     const { password } = action.payload;
     const ipfs = new IPFSFileGetter();
 
-
     const profileHash = yield call(loadStorage, 'profileHash');
     const encryptedPrivateKeyHex = yield call(loadStorage, getPrivateKeyStoreKey(profileHash));
     const privateKey = decrypt(password, encryptedPrivateKeyHex);
     // get profile from IPFS
     yield call(ipfs.ready);
-    const profile = yield call(ipfs.getFile, profileHash)
-    console.log('loadViewerSecret', profile)
+    const profile = yield call(ipfs.getFile, profileHash);
+    console.log('loadViewerSecret', profile);
     yield put(viewerLogin.success({ privateKey, profileHash, profile: profile[0] }));
   } catch (error) {
     yield put(viewerLogin.failure({ message: error.message }));

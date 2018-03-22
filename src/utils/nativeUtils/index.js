@@ -13,10 +13,7 @@ type NativeUtils = {
   saveStorage(key: string, value: string): Promise<void>,
   loadStorage(key: string): Promise<void>,
 };
-if (isElectron()) {
-  const nativeUtils: NativeUtils = require('./electron'); // eslint-disable-line global-require
-  module.exports = nativeUtils;
-} else {
-  const nativeUtils: NativeUtils = require('./web'); // eslint-disable-line global-require
-  module.exports = nativeUtils;
-}
+
+// eslint-disable-next-line
+const nativeUtils: NativeUtils = isElectron() ? require('./electron') : require('./web');
+export default nativeUtils;

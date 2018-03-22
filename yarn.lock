@@ -4249,6 +4249,10 @@ is-electron-renderer@^2.0.0, is-electron-renderer@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/is-electron-renderer/-/is-electron-renderer-2.0.1.tgz#a469d056f975697c58c98c6023eb0aa79af895a2"
 
+is-electron@^2.1.0:
+  version "2.1.0"
+  resolved "http://registry.npm.taobao.org/is-electron/download/is-electron-2.1.0.tgz#37dd2e9e7167efa8bafce86c0c25762bc4b851fa"
+
 is-empty@^1.0.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/is-empty/download/is-empty-1.2.0.tgz#de9bb5b278738a05a0b09a57e1fb4d4a341a9f6b"
