@@ -53,7 +53,7 @@ export function* viewerRegisterSaga(action: ActionType) {
       // Put private key to localStorage
       yield call(saveStorage, getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
       // Remember username in localStorage for later login
-      yield all([call(saveStorage, name, profileHash), call(pushAvailableUsers, name)]);
+      yield all([call(saveStorage, getLocalProfileHashStoreKey(name), profileHash), call(pushAvailableUsers, name)]);
       // inform UI that register succeed
       yield put(viewerRegister.success({ profileHash, privateKey, profile: newProfile }));
     } else {
