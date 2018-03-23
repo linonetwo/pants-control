@@ -8,7 +8,7 @@ import './bodyStyle';
 import registerServiceWorker from './registerServiceWorker';
 import { store, history, sagaMiddleware, rootSaga } from './store';
 import { appStart } from './store/actions/core';
-import Editors from './components/editors';
+import Editors from './components/Editors';
 import Login from './components/Login';
 
 class App extends Component {
