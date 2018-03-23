@@ -29,6 +29,7 @@ module.exports = function override(config, env) {
     config.target = 'electron-renderer';
   }
 
+  config = injectBabelPlugin('flow-runtime', config);
   config = injectBabelPlugin('macros', config);
   config = injectBabelPlugin('transform-decorators-legacy', config);
   config = injectBabelPlugin('styled-components', config);
