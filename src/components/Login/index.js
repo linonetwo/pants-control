@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Flex from 'styled-flex-component';
-import { Toolbar, Close } from 'rebass';
 
 import { viewerRegister, viewerLogin } from '../../store/actions/core';
 
@@ -25,16 +24,7 @@ export default class Editors extends Component {
   state = {
     name: '',
     password: '',
-    error: null,
-    errorInfo: null,
   };
-
-  componentDidCatch(error, errorInfo) {
-    this.setState({
-      error,
-      errorInfo,
-    });
-  }
 
   checkInput = () => {
     if (!this.state.name) {
@@ -48,12 +38,6 @@ export default class Editors extends Component {
     return (
       <LoginContainer column center>
         <Title>输入你的昵称</Title>
-        {this.state.errorInfo && (
-          <Toolbar>
-            {this.state.errorInfo}
-            <Close ml="auto" />
-          </Toolbar>
-        )}
         <RegisterInput
           type="text"
           value={this.state.name}
