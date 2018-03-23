@@ -10,10 +10,7 @@ type FileUtils = {
   readTextFile(filePath: string): Promise<string[]>,
   openFile(filePath: string): void,
 };
-if (isElectron()) {
-  const fileUtils: FileUtils = require('./electron'); // eslint-disable-line global-require
-  module.exports = fileUtils;
-} else {
-  const fileUtils: FileUtils = require('./web'); // eslint-disable-line global-require
-  module.exports = fileUtils;
-}
+
+// eslint-disable-next-line global-require
+const fileUtils: FileUtils = isElectron() ? require('./electron') : require('./web');
+export default fileUtils;

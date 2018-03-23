@@ -14,6 +14,6 @@ type NativeUtils = {
   loadStorage(key: string): Promise<void>,
 };
 
-// eslint-disable-next-line
+// eslint-disable-next-line global-require
 const nativeUtils: NativeUtils = isElectron() ? require('./electron') : require('./web');
 export default nativeUtils;
