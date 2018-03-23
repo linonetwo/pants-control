@@ -41,6 +41,7 @@ const Button = styled(ButtonA)`
   opacity: 0.3;
   ${is('active')`
     opacity: 1;
+    background-color: rgba(255,255,255,0.8);
   `};
 `;
 

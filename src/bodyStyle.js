@@ -64,7 +64,7 @@ injectGlobal`
   }
 
   ::selection {
-    background:rgba(255, 255, 125, 0.99);
-    color:#032764;
+    background: rgba(255,125,210,0.85);
+    color: white;
   }
 `;
