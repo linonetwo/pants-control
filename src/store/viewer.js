@@ -33,7 +33,7 @@ export function* viewerRegisterSaga(action: ActionType) {
     const ipfs = new IPFSFileUploader();
 
     const { public: publicKey, private: privateKey } = keypair();
-    const encryptedPrivateKeyHex = encrypt(password, privateKey);
+    const encryptedPrivateKeyHex = yield call(encrypt, name, password, privateKey);
 
     // prepare profile
     const newProfile = {
@@ -71,7 +71,7 @@ export function* loadViewerSecret(action: ActionType) {
 
     const profileHash = yield call(loadStorage, getLocalProfileHashStoreKey(name));
     const encryptedPrivateKeyHex = yield call(loadStorage, getPrivateKeyStoreKey(profileHash));
-    const privateKey = decrypt(password, encryptedPrivateKeyHex);
+    const privateKey = yield call(decrypt, name, password, encryptedPrivateKeyHex);
     // get profile from IPFS
     yield call(ipfs.ready);
     const profile = yield call(ipfs.getFile, profileHash);
