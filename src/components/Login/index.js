@@ -1,6 +1,6 @@
 // @flow
 import { includes } from 'lodash';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
@@ -10,12 +10,15 @@ import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
 import { viewerRegister, viewerLogin } from '../../store/actions/core';
 import BackgroundAnimation from './BackgroundAnimation';
 
+const loginWidth = 350;
 const LoginContainer = styled(Flex)`
-  width: 100%;
-  height: 100%;
+  width: ${loginWidth + 150}px;
+  padding: 0;
+  margin: auto;
+  background-color: rgba(255,255,255,0.8);
+  box-shadow: 0 0 25px white;
 `;
 
-const loginWidth = 350;
 const Title = styled.h2``;
 const UserNameAutoComplete = styled(AutoComplete)`
   width: ${loginWidth}px;
@@ -80,41 +83,43 @@ export default class Editors extends Component<Props, State> {
 
   render() {
     return (
-      <LoginContainer column center>
+      <Fragment>
         <BackgroundAnimation />
-        <Title>{this.getTitle()}</Title>
-        <UserNameAutoComplete
-          dataSource={this.props.viewers}
-          onSelect={this.setName}
-          onChange={this.setName}
-          handleSearch={this.setName}
-        >
-          <Input placeholder="请输入您的网名（昵称）或 profile multihash" prefix={<Icon type="user" />} />
-        </UserNameAutoComplete>
-        <RegisterInput
-          type="password"
-          prefix={<Icon type="lock" />}
-          placeholder="请输入用于加密私人内容的密码"
-          value={this.state.password}
-          onChange={event => this.setState({ password: event.target.value })}
-        />
-        <Buttons justifyAround>
-          <Button
-            active={this.state.name && this.state.password}
-            onClick={() => {
-              if (this.checkInput()) {
-                if (this.hasUser()) {
-                  this.props.viewerLogin({ name: this.state.name, password: this.state.password });
-                } else {
-                  this.props.viewerRegister({ name: this.state.name, password: this.state.password });
-                }
-              }
-            }}
+        <LoginContainer column center>
+          <Title>{this.getTitle()}</Title>
+          <UserNameAutoComplete
+            dataSource={this.props.viewers}
+            onSelect={this.setName}
+            onChange={this.setName}
+            handleSearch={this.setName}
           >
-            进入
-          </Button>
-        </Buttons>
-      </LoginContainer>
+            <Input placeholder="请输入您的网名（昵称）或 profile multihash" prefix={<Icon type="user" />} />
+          </UserNameAutoComplete>
+          <RegisterInput
+            type="password"
+            prefix={<Icon type="lock" />}
+            placeholder="请输入用于加密私人内容的密码"
+            value={this.state.password}
+            onChange={event => this.setState({ password: event.target.value })}
+          />
+          <Buttons justifyAround>
+            <Button
+              active={this.state.name && this.state.password}
+              onClick={() => {
+                if (this.checkInput()) {
+                  if (this.hasUser()) {
+                    this.props.viewerLogin({ name: this.state.name, password: this.state.password });
+                  } else {
+                    this.props.viewerRegister({ name: this.state.name, password: this.state.password });
+                  }
+                }
+              }}
+            >
+              进入
+            </Button>
+          </Buttons>
+        </LoginContainer>
+      </Fragment>
     );
   }
 }

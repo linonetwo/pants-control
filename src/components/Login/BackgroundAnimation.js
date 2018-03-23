@@ -17,6 +17,7 @@ const IFrame = styled.iframe`
   left: 0;
   top: 0;
   border: none;
+  z-index: -1;
 `;
 
 export default class BackgroundAnimation extends Component {
