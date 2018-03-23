@@ -8034,6 +8034,10 @@ styled-is@1.1.2:
   version "1.1.2"
   resolved "http://registry.npm.taobao.org/styled-is/download/styled-is-1.1.2.tgz#f23a43249ba52ac9136c166aac1da30a5711593e"
 
+styled-normalize@^4.0.0:
+  version "4.0.0"
+  resolved "http://registry.npm.taobao.org/styled-normalize/download/styled-normalize-4.0.0.tgz#18437c655bc0c42a18f8b5345f1c310cce775c18"
+
 styled-system@^1.1.1:
   version "1.1.7"
   resolved "http://registry.npm.taobao.org/styled-system/download/styled-system-1.1.7.tgz#b9b6906aaec41b9c79f40780e07dc39b81fe93fb"

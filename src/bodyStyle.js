@@ -1,6 +1,9 @@
 import { injectGlobal } from 'styled-components';
+import styledNormalize from 'styled-normalize'
 
 injectGlobal`
+  ${styledNormalize};
+
   * {
     box-sizing: border-box;
     transition: all .35s;
