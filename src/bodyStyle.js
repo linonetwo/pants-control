@@ -1,5 +1,5 @@
 import { injectGlobal } from 'styled-components';
-import styledNormalize from 'styled-normalize'
+import styledNormalize from 'styled-normalize';
 import 'antd/dist/antd.css';
 
 injectGlobal`
@@ -7,37 +7,56 @@ injectGlobal`
 
   * {
     box-sizing: border-box;
-    transition: all .35s;
     outline: none;
+    font-family: Arial, Helvetica, Helvetica Neue, "Microsoft Yahei", STXihei, "华文细黑", "PingFang SC", serif;
+    color: #333;
   }
   body {
+    position: relative;
     -webkit-font-smoothing: antialiased;
-    color: #333333;
     height: 100vh;
-    width: 100vw;
-    background-color: white;
-    font-family: Arial, Helvetica, Helvetica Neue, serif;
-    overflow: hidden;
     margin: 0;
+    padding: 0;
+    background-color: white;
+    overflow: auto;
+  }
+
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  }
+
+  select::-ms-expand {
+    display: none;
+  }
+  [placeholder]{
+    text-overflow:ellipsis;
+  }
+  ::placeholder{
+    text-overflow:ellipsis;
+  }
+  input[type=search] {
+    appearance: none;
   }
 
   #root {
     height: 100%;
+    & > div {
+      height: 100%;
+    }
   }
 
   p {
-    font-size: 24px;
+    margin: 0;
   }
-
+  
   li {
     list-style: none;
   }
-
+  
   a {
-    color: #666666;
     text-decoration: none;
   }
-
+  
   a:hover {
     opacity: 1;
     text-decoration: none;
@@ -45,7 +64,7 @@ injectGlobal`
   }
 
   ::selection {
-    background:rgba(255, 255, 125, 0.99)
+    background:rgba(255, 255, 125, 0.99);
     color:#032764;
   }
 `;
