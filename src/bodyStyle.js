@@ -10,6 +10,7 @@ injectGlobal`
     -webkit-font-smoothing: antialiased;
     color: #333333;
     height: 100vh;
+    width: 100vw;
     background-color: white;
     font-family: Arial, Helvetica, Helvetica Neue, serif;
     overflow: hidden;
