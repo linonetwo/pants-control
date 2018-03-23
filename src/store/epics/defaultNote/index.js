@@ -15,7 +15,7 @@ import defaultMenuNote from './defaultMenuNote.json';
  * */
 export default (action: ActionType, store: any, { ipfs }: { ipfs: IPFSFileUploader }) =>
   action.pipe(
-    ofType(viewerRegister.TRIGGER),
+    ofType(viewerRegister.SUCCESS),
     mergeMap(() => {
       if (!ipfs) {
         console.error('In epic defaultNote: No ipfs passed from dependency.');
