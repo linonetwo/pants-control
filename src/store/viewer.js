@@ -13,6 +13,7 @@ import { encrypt, decrypt } from '../utils/crypto';
 const { saveStorage, loadStorage } = nativeUtils.default;
 
 const getPrivateKeyStoreKey = (profileHash: string) => `${profileHash}-private`;
+const getLocalProfileHashStoreKey = (name: string) => `${name}-profileHash`;
 
 /** 用户注册成功后把他注册的用户名保存到本地可登录的用户名列表里 */
 async function pushAvailableUsers(newUserName: string) {
@@ -66,10 +67,10 @@ export function* viewerRegisterSaga(action: ActionType) {
 /** 用户用密码登录之后，从本地加载用户的私钥和 profile */
 export function* loadViewerSecret(action: ActionType) {
   try {
-    const { password } = action.payload;
+    const { name, password } = action.payload;
     const ipfs = new IPFSFileGetter();
 
-    const profileHash = yield call(loadStorage, 'profileHash');
+    const profileHash = yield call(loadStorage, getLocalProfileHashStoreKey(name));
     const encryptedPrivateKeyHex = yield call(loadStorage, getPrivateKeyStoreKey(profileHash));
     const privateKey = decrypt(password, encryptedPrivateKeyHex);
     // get profile from IPFS

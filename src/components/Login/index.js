@@ -1,4 +1,5 @@
 // @flow
+import { includes } from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -27,6 +28,8 @@ const Button = styled(ButtonA)``;
 
 type Props = {
   viewers: string[],
+  viewerLogin: ({ name: string, password: string }) => void,
+  viewerRegister: ({ name: string, password: string }) => void,
 };
 type State = {
   name: string,
@@ -50,16 +53,30 @@ export default class Editors extends Component<Props, State> {
     }
     return true;
   };
+
+  hasUser(): boolean {
+    return includes(this.props.viewers, this.state.name);
+  }
+  getTitle(): string {
+    if (this.hasUser()) {
+      return `用${this.state.name}身份登录`;
+    } else if (this.state.name) {
+      return `注册新身份${this.state.name}`;
+    }
+    return '用名称和密码来登录或注册';
+  }
+  setName = value => this.setState({ name: value });
+
   render() {
     return (
       <LoginContainer column center>
-        <Title>输入你的昵称</Title>
+        <Title>{this.getTitle()}</Title>
         <UserNameAutoComplete
           dataSource={this.props.viewers}
-          onSelect={value => this.setState({ name: value })}
+          onSelect={this.setName}
           placeholder="请输入您的网名（昵称）或 profile multihash"
-          value={this.state.name}
-          handleSearch={value => this.setState({ name: value })}
+          onChange={this.setName}
+          handleSearch={this.setName}
         />
         <RegisterInput
           type="password"
@@ -70,7 +87,13 @@ export default class Editors extends Component<Props, State> {
         <Buttons justifyAround>
           <Button
             onClick={() => {
-              this.checkInput();
+              if (this.checkInput()) {
+                if (this.hasUser()) {
+                  this.props.viewerLogin({ name: this.state.name, password: this.state.password });
+                } else {
+                  this.props.viewerRegister({ name: this.state.name, password: this.state.password });
+                }
+              }
             }}
           >
             进入
