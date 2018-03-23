@@ -13,16 +13,21 @@ import { encrypt, decrypt } from '../utils/crypto';
 const getPrivateKeyStoreKey = (profileHash: string) => `${profileHash}-private`;
 const getLocalProfileHashStoreKey = (name: string) => `${name}-profileHash`;
 
+async function getAvailableUsers(): string[] {
+  const usersString = await loadStorage('users');
+  const users = usersString ? JSON.parse(usersString) : [];
+  return users;
+}
 /** 用户注册成功后把他注册的用户名保存到本地可登录的用户名列表里 */
 async function pushAvailableUsers(newUserName: string) {
-  const users = (await loadStorage('users')) || [];
+  const users = await getAvailableUsers();
   const newUsers = [...users, newUserName];
-  await saveStorage('users', newUsers);
+  await saveStorage('users', JSON.stringify(newUsers));
 }
 
 /** 加载本地可登录的用户名列表，用于登录时自动补全用户输入 */
 function* getAvailableUsersSaga() {
-  const users = (yield call(loadStorage, 'users')) || [];
+  const users = yield call(getAvailableUsers);
   yield put(loadAvailableViewers.success({ viewers: users }));
 }
 
