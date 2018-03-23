@@ -4,13 +4,12 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { Route, Switch } from 'react-router';
 
+import './bodyStyle';
 import registerServiceWorker from './registerServiceWorker';
-import { store, history } from './store';
+import { store, history, sagaMiddleware, rootSaga } from './store';
 import Editors from './components/editors';
 import Login from './components/Login';
-import { sagaMiddleware, rootSaga } from './store';
 
-import './bodyStyle';
 
 class App extends Component {
   componentDidMount() {
