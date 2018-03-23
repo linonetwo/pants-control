@@ -8,6 +8,7 @@ import Flex from 'styled-flex-component';
 import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
 
 import { viewerRegister, viewerLogin } from '../../store/actions/core';
+import BackgroundAnimation from './BackgroundAnimation';
 
 const LoginContainer = styled(Flex)`
   width: 100%;
@@ -80,6 +81,7 @@ export default class Editors extends Component<Props, State> {
   render() {
     return (
       <LoginContainer column center>
+        <BackgroundAnimation />
         <Title>{this.getTitle()}</Title>
         <UserNameAutoComplete
           dataSource={this.props.viewers}
