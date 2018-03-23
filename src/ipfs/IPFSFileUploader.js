@@ -4,6 +4,7 @@ import streamBuffers from 'stream-buffers';
 import str2arr from 'string-to-arraybuffer';
 
 import IPFSNode from './IPFSNode';
+import { IpfsFile } from './IPFSFileGetter';
 
 export default class IPFSFileUploader extends IPFSNode {
   stream: any;
@@ -11,7 +12,7 @@ export default class IPFSFileUploader extends IPFSNode {
   uploadObject = someStringifiableObject => {
     try {
       const fileString = JSON.stringify(someStringifiableObject);
-      this.uploadString(fileString);
+      return this.uploadString(fileString);
     } catch (error) {
       throw new Error('Receiving Object that is not able to JSON.stringify');
     }
@@ -23,7 +24,7 @@ export default class IPFSFileUploader extends IPFSNode {
   };
 
   /** 2.把文件丢进 IPFS 里 */
-  uploadArrayBuffer = (fileArrayBuffer: ArrayBuffer): Promise<Buffer> =>
+  uploadArrayBuffer = (fileArrayBuffer: ArrayBuffer): Promise<IpfsFile> =>
     new Promise((resolve, reject) => {
       if (!this.isOnline) {
         return reject('IPFS node is not online, please wait.');
@@ -38,7 +39,7 @@ export default class IPFSFileUploader extends IPFSNode {
       // 创建 IPFS 读写文件的流，这是一个 Duplex 流，可读可写
       this.stream = this.node.files.addReadableStream();
       // 文件上传完毕后 resolve 这个 Promise
-      this.stream.on('data', (file: Buffer) => resolve(file));
+      this.stream.on('data', (file: IpfsFile) => resolve(file));
 
       // 对接好两个流，并开始上传
       this.stream.write(myReadableStreamBuffer);

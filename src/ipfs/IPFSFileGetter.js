@@ -3,12 +3,12 @@ import IPFSNode from './IPFSNode';
 
 export type IpfsFile = {
   content?: Uint8Array,
-  hash: Uint8Array,
-  depth: number,
-  name: string,
+  hash: Uint8Array | string,
+  depth?: number,
+  name?: string,
   path: string,
   size: number,
-  type: 'dir' | 'file'
+  type?: 'dir' | 'file'
 }
 export default class IPFSFileGetter extends IPFSNode {
   getFile(hash: string): Promise<IpfsFile[]> {
