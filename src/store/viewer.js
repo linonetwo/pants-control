@@ -61,6 +61,7 @@ export function* viewerRegisterSaga(action: ActionType) {
     }
   } catch (error) {
     yield put(viewerRegister.failure({ message: error.message }));
+    console.error(error);
   }
 }
 
@@ -80,6 +81,7 @@ export function* loadViewerSecret(action: ActionType) {
     yield put(viewerLogin.success({ privateKey, profileHash, profile: profile[0] }));
   } catch (error) {
     yield put(viewerLogin.failure({ message: error.message }));
+    console.error(error);
   }
 }
 

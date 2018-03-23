@@ -41,6 +41,7 @@ function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
     yield put(saveNote.success({ id, hash }));
   } catch (error) {
     yield put(saveNote.failure({ message: error.message }));
+    console.error(error);
   }
 }
 
@@ -54,6 +55,7 @@ function* loadNoteFromIpfsSaga(action: ActionType) {
     yield put(loadNote.success({ id: hash, note: files[0] }));
   } catch (error) {
     yield put(loadNote.failure({ message: error.message }));
+    console.error(error);
   }
 }
 
