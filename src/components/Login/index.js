@@ -17,6 +17,10 @@ const LoginContainer = styled(Flex)`
   margin: auto;
   background-color: rgba(255,255,255,0.8);
   box-shadow: 0 0 25px white;
+
+  & i {
+    color: #d9d9d9;
+  }
 `;
 
 const Title = styled.h2``;
