@@ -3,8 +3,9 @@ import { includes } from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import is from 'styled-is';
 import Flex from 'styled-flex-component';
-import { message, Button as ButtonA, Input, AutoComplete } from 'antd';
+import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
 
 import { viewerRegister, viewerLogin } from '../../store/actions/core';
 
@@ -12,19 +13,28 @@ const LoginContainer = styled(Flex)`
   width: 100%;
   height: 100%;
 `;
+
+const loginWidth = 350;
 const Title = styled.h2``;
 const UserNameAutoComplete = styled(AutoComplete)`
-  width: 250px;
+  width: ${loginWidth}px;
   margin-bottom: 10px;
 `;
 const RegisterInput = styled(Input)`
-  width: 250px;
+  width: ${loginWidth}px;
   margin-bottom: 10px;
 `;
 const Buttons = styled(Flex)`
-  width: 250px;
+  width: ${loginWidth}px;
 `;
-const Button = styled(ButtonA)``;
+const Button = styled(ButtonA)`
+  width: ${loginWidth}px;
+  border-color: transparent;
+  opacity: 0.3;
+  ${is('active')`
+    opacity: 1;
+  `};
+`;
 
 type Props = {
   viewers: string[],
@@ -74,18 +84,21 @@ export default class Editors extends Component<Props, State> {
         <UserNameAutoComplete
           dataSource={this.props.viewers}
           onSelect={this.setName}
-          placeholder="请输入您的网名（昵称）或 profile multihash"
           onChange={this.setName}
           handleSearch={this.setName}
-        />
+        >
+          <Input placeholder="请输入您的网名（昵称）或 profile multihash" prefix={<Icon type="user" />} />
+        </UserNameAutoComplete>
         <RegisterInput
           type="password"
+          prefix={<Icon type="lock" />}
           placeholder="请输入用于加密私人内容的密码"
           value={this.state.password}
           onChange={event => this.setState({ password: event.target.value })}
         />
         <Buttons justifyAround>
           <Button
+            active={this.state.name && this.state.password}
             onClick={() => {
               if (this.checkInput()) {
                 if (this.hasUser()) {

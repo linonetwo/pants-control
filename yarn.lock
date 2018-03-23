@@ -8590,7 +8590,7 @@ styled-flex-component@^2.2.2:
   dependencies:
     styled-is "1.1.2"
 
-styled-is@1.1.2:
+styled-is@1.1.2, styled-is@^1.1.2:
   version "1.1.2"
   resolved "http://registry.npm.taobao.org/styled-is/download/styled-is-1.1.2.tgz#f23a43249ba52ac9136c166aac1da30a5711593e"
 
