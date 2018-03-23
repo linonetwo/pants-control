@@ -27,7 +27,7 @@ export default class IPFSNode {
     });
   }
 
-  ready() {
+  ready = () => {
     return new Promise(resolve => {
       this.node.on('ready', () => {
         if (this.node.isOnline()) {
