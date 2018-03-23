@@ -310,7 +310,7 @@ boom@5.x.x, boom@^5.2.0:
   dependencies:
     hoek "4.x.x"
 
-boom@^7.1.1:
+boom@^7.1.1, boom@^7.2.0:
   version "7.2.0"
   resolved "http://registry.npm.taobao.org/boom/download/boom-7.2.0.tgz#2bff24a55565767fde869ec808317eb10c48e966"
   dependencies:
@@ -554,7 +554,7 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "http://registry.npm.taobao.org/concat-map/download/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
-concat-stream@^1.6.0, concat-stream@^1.6.1:
+concat-stream@^1.6.1:
   version "1.6.1"
   resolved "http://registry.npm.taobao.org/concat-stream/download/concat-stream-1.6.1.tgz#261b8f518301f1d834e36342b9fea095d2620a26"
   dependencies:
@@ -1451,40 +1451,6 @@ ip@^1.1.0, ip@^1.1.5:
   version "1.1.5"
   resolved "http://registry.npm.taobao.org/ip/download/ip-1.1.5.tgz#bdded70114290828c0a039e72ef25f5aaec4354a"
 
-ipfs-api@^17.3.0:
-  version "17.5.0"
-  resolved "http://registry.npm.taobao.org/ipfs-api/download/ipfs-api-17.5.0.tgz#43d3e1876bff5dadf55009b73f6d0b20be814646"
-  dependencies:
-    async "^2.6.0"
-    bs58 "^4.0.1"
-    cids "~0.5.2"
-    concat-stream "^1.6.0"
-    detect-node "^2.0.3"
-    flatmap "0.0.3"
-    glob "^7.1.2"
-    ipfs-block "~0.6.1"
-    ipfs-unixfs "~0.1.14"
-    ipld-dag-pb "~0.11.4"
-    is-ipfs "^0.3.2"
-    is-stream "^1.1.0"
-    lru-cache "^4.1.1"
-    multiaddr "^3.0.2"
-    multihashes "~0.4.13"
-    ndjson "^1.5.0"
-    once "^1.4.0"
-    peer-id "~0.10.4"
-    peer-info "~0.11.4"
-    promisify-es6 "^1.0.3"
-    pull-defer "^0.2.2"
-    pull-pushable "^2.1.2"
-    pump "^2.0.0"
-    qs "^6.5.1"
-    readable-stream "^2.3.3"
-    stream-http "^2.7.2"
-    stream-to-pull-stream "^1.7.2"
-    streamifier "^0.1.1"
-    tar-stream "^1.5.5"
-
 ipfs-api@^18.1.2:
   version "18.1.2"
   resolved "http://registry.npm.taobao.org/ipfs-api/download/ipfs-api-18.1.2.tgz#0928e17a2ab232d50b08ff89997325a126a09731"
@@ -1566,7 +1532,7 @@ ipfs-multipart@~0.1.0:
     content "^3.0.0"
     dicer "^0.2.5"
 
-ipfs-repo@^0.18.5, ipfs-repo@~0.18.5, ipfs-repo@~0.18.7:
+ipfs-repo@^0.18.7, ipfs-repo@~0.18.5, ipfs-repo@~0.18.7:
   version "0.18.7"
   resolved "http://registry.npm.taobao.org/ipfs-repo/download/ipfs-repo-0.18.7.tgz#a25b00d5f03437f313f10085bd181b1182a76502"
   dependencies:
@@ -1622,9 +1588,9 @@ ipfs-unixfs@~0.1.14:
   dependencies:
     protons "^1.0.0"
 
-ipfs@^0.28.1:
-  version "0.28.1"
-  resolved "http://registry.npm.taobao.org/ipfs/download/ipfs-0.28.1.tgz#a13018087e90f98cf496d84ceed2f6095236e3dc"
+ipfs@^0.28.2:
+  version "0.28.2"
+  resolved "http://registry.npm.taobao.org/ipfs/download/ipfs-0.28.2.tgz#1e9806354fdeecd773ffa612c28953c9a1ac64a0"
   dependencies:
     async "^2.6.0"
     big.js "^5.0.3"
@@ -1656,6 +1622,8 @@ ipfs@^0.28.1:
     is-ipfs "^0.3.2"
     is-stream "^1.1.0"
     joi "^13.1.2"
+    joi-browser "^13.0.1"
+    joi-multiaddr "^1.0.1"
     libp2p "~0.18.0"
     libp2p-circuit "~0.1.4"
     libp2p-floodsub "~0.14.1"
@@ -1709,27 +1677,30 @@ ipfs@^0.28.1:
     prom-client "^10.2.2"
     prometheus-gc-stats "^0.5.0"
 
-ipfsd-ctl@^0.27.3:
-  version "0.27.3"
-  resolved "http://registry.npm.taobao.org/ipfsd-ctl/download/ipfsd-ctl-0.27.3.tgz#f86c5c79bc955852f30ec0058eb799490a801a69"
+ipfsd-ctl@^0.30.4:
+  version "0.30.4"
+  resolved "http://registry.npm.taobao.org/ipfsd-ctl/download/ipfsd-ctl-0.30.4.tgz#2c821f21cec1ecd213ce20880eb33141cd119903"
   dependencies:
     async "^2.6.0"
-    boom "^7.1.1"
+    boom "^7.2.0"
+    debug "^3.1.0"
     detect-node "^2.0.3"
     hapi "^16.6.2"
     hat "0.0.3"
-    ipfs-api "^17.3.0"
-    ipfs-repo "^0.18.5"
-    joi "^13.0.2"
+    ipfs-api "^18.1.2"
+    ipfs-repo "^0.18.7"
+    joi "^13.1.2"
     lodash.clone "^4.5.0"
+    lodash.defaults "^4.2.0"
     lodash.defaultsdeep "^4.6.0"
     multiaddr "^3.0.2"
     once "^1.4.0"
-    readable-stream "^2.3.3"
+    readable-stream "^2.3.5"
     rimraf "^2.6.2"
     safe-json-parse "^4.0.0"
+    safe-json-stringify "^1.1.0"
     shutdown "^0.3.0"
-    stream-http "^2.7.2"
+    stream-http "^2.8.0"
     subcomandante "^1.0.5"
     superagent "^3.8.2"
     truthy "0.0.1"
@@ -1756,23 +1727,6 @@ ipld-dag-cbor@~0.12.0:
     multihashes "~0.4.12"
     multihashing-async "~0.4.7"
     traverse "^0.6.6"
-
-ipld-dag-pb@~0.11.4:
-  version "0.11.4"
-  resolved "http://registry.npm.taobao.org/ipld-dag-pb/download/ipld-dag-pb-0.11.4.tgz#b0fae5681fad5697132e325d6c2ff17b5f0cb6a8"
-  dependencies:
-    async "^2.6.0"
-    bs58 "^4.0.1"
-    buffer-loader "0.0.1"
-    cids "~0.5.2"
-    ipfs-block "~0.6.1"
-    is-ipfs "~0.3.2"
-    multihashes "~0.4.12"
-    multihashing-async "~0.4.7"
-    protons "^1.0.0"
-    pull-stream "^3.6.1"
-    pull-traverse "^1.0.3"
-    stable "^0.1.6"
 
 ipld-dag-pb@~0.13.0, ipld-dag-pb@~0.13.1:
   version "0.13.1"
@@ -1989,6 +1943,17 @@ items@2.x.x, items@^2.1.1:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/items/download/items-2.1.1.tgz#8bd16d9c83b19529de5aea321acaada78364a198"
 
+joi-browser@^13.0.1:
+  version "13.0.1"
+  resolved "http://registry.npm.taobao.org/joi-browser/download/joi-browser-13.0.1.tgz#06a7b782d94bca6fa0f107138846ea16588b2e7b"
+
+joi-multiaddr@^1.0.1:
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/joi-multiaddr/download/joi-multiaddr-1.0.1.tgz#9392f0b2b85b1110663639c67266342283c1b91c"
+  dependencies:
+    mafmt "^4.0.0"
+    multiaddr "^3.0.2"
+
 joi@10.x.x:
   version "10.6.0"
   resolved "http://registry.npm.taobao.org/joi/download/joi-10.6.0.tgz#52587f02d52b8b75cdb0c74f0b164a191a0e1fc2"
@@ -2006,7 +1971,7 @@ joi@^11.1.0:
     isemail "3.x.x"
     topo "2.x.x"
 
-joi@^13.0.2, joi@^13.1.2:
+joi@^13.1.2:
   version "13.1.2"
   resolved "http://registry.npm.taobao.org/joi/download/joi-13.1.2.tgz#b2db260323cc7f919fafa51e09e2275bd089a97e"
   dependencies:
@@ -2154,7 +2119,7 @@ level-js@^2.2.4:
     typedarray-to-buffer "~1.0.0"
     xtend "~2.1.2"
 
-"level-js@github:timkuijsten/level.js#idbunwrapper":
+level-js@timkuijsten/level.js#idbunwrapper:
   version "2.2.3"
   resolved "https://codeload.github.com/timkuijsten/level.js/tar.gz/18e03adab34c49523be7d3d58fafb0c632f61303"
   dependencies:
@@ -2506,6 +2471,10 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "http://registry.npm.taobao.org/lodash.debounce/download/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
+lodash.defaults@^4.2.0:
+  version "4.2.0"
+  resolved "http://registry.npm.taobao.org/lodash.defaults/download/lodash.defaults-4.2.0.tgz#d09178716ffea4dde9e5fb7b37f6f0802274580c"
+
 lodash.defaultsdeep@^4.6.0:
   version "4.6.0"
   resolved "http://registry.npm.taobao.org/lodash.defaultsdeep/download/lodash.defaultsdeep-4.6.0.tgz#bec1024f85b1bd96cbea405b23c14ad6443a6f81"
@@ -2626,7 +2595,7 @@ lowercase-keys@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/lowercase-keys/download/lowercase-keys-1.0.0.tgz#4e3366b39e7f5457e35f1324bdf6f88d0bfc7306"
 
-lru-cache@4.1.x, lru-cache@^4.0.1, lru-cache@^4.1.1, lru-cache@^4.1.2:
+lru-cache@4.1.x, lru-cache@^4.0.1, lru-cache@^4.1.2:
   version "4.1.2"
   resolved "http://registry.npm.taobao.org/lru-cache/download/lru-cache-4.1.2.tgz#45234b2e6e2f2b33da125624c4664929a0224c3f"
   dependencies:
@@ -2829,7 +2798,7 @@ multihashing-async@~0.4.6, multihashing-async@~0.4.7, multihashing-async@~0.4.8:
     murmurhash3js "^3.0.1"
     nodeify "^1.0.1"
 
-"multiplex@github:dignifiedquire/multiplex":
+multiplex@dignifiedquire/multiplex:
   version "6.7.0"
   resolved "https://codeload.github.com/dignifiedquire/multiplex/tar.gz/b5d5edd30454e2c978ee8c52df86f5f4840d2eab"
   dependencies:
@@ -3099,7 +3068,7 @@ peer-book@~0.5.4:
     peer-id "^0.10.5"
     peer-info "^0.11.6"
 
-peer-id@^0.10.2, peer-id@^0.10.5, peer-id@^0.10.6, peer-id@~0.10.0, peer-id@~0.10.1, peer-id@~0.10.4, peer-id@~0.10.5, peer-id@~0.10.6:
+peer-id@^0.10.2, peer-id@^0.10.5, peer-id@^0.10.6, peer-id@~0.10.0, peer-id@~0.10.1, peer-id@~0.10.5, peer-id@~0.10.6:
   version "0.10.6"
   resolved "http://registry.npm.taobao.org/peer-id/download/peer-id-0.10.6.tgz#cb552e35d2625cf3e4aeb4de45ddb3ee96bb3e8b"
   dependencies:
@@ -3108,7 +3077,7 @@ peer-id@^0.10.2, peer-id@^0.10.5, peer-id@^0.10.6, peer-id@~0.10.0, peer-id@~0.1
     lodash "^4.17.5"
     multihashes "~0.4.13"
 
-peer-info@^0.11.0, peer-info@^0.11.6, peer-info@~0.11.0, peer-info@~0.11.4, peer-info@~0.11.6:
+peer-info@^0.11.0, peer-info@^0.11.6, peer-info@~0.11.0, peer-info@~0.11.6:
   version "0.11.6"
   resolved "http://registry.npm.taobao.org/peer-info/download/peer-info-0.11.6.tgz#0480b0030d2df8fd4f09879b269a715b2bd2ba12"
   dependencies:
@@ -3603,6 +3572,10 @@ safe-json-parse@^4.0.0:
   dependencies:
     rust-result "^1.0.0"
 
+safe-json-stringify@^1.1.0:
+  version "1.1.0"
+  resolved "http://registry.npm.taobao.org/safe-json-stringify/download/safe-json-stringify-1.1.0.tgz#bd2b6dad1ebafab3c24672a395527f01804b7e19"
+
 sanitize-filename@^1.6.1:
   version "1.6.1"
   resolved "http://registry.npm.taobao.org/sanitize-filename/download/sanitize-filename-1.6.1.tgz#612da1c96473fa02dccda92dcd5b4ab164a6772a"
@@ -3848,7 +3821,7 @@ statehood@^5.0.3:
     items "2.x.x"
     joi "10.x.x"
 
-stream-http@^2.7.2, stream-http@^2.8.0:
+stream-http@^2.8.0:
   version "2.8.0"
   resolved "http://registry.npm.taobao.org/stream-http/download/stream-http-2.8.0.tgz#fd86546dac9b1c91aff8fc5d287b98fafb41bc10"
   dependencies:
