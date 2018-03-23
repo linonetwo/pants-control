@@ -2,15 +2,12 @@
 import isElectron from 'is-electron';
 
 type FileUtils = {
-  openFileUploadWindow(): Promise<{
-    file: File,
-    companyCode: string,
-  }>,
+  openFileUploadWindow(): Promise<File>,
   getMostRecentFileName(dir: string, type: string): string,
   readTextFile(filePath: string): Promise<string[]>,
   openFile(filePath: string): void,
 };
 
-// eslint-disable-next-line global-require
+// eslint-disable-next-line
 const fileUtils: FileUtils = isElectron() ? require('./electron') : require('./web');
-export default fileUtils;
+export const { openFileUploadWindow, readTextFile, getMostRecentFileName, openFile } = fileUtils;

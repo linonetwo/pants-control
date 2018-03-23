@@ -7,10 +7,8 @@ import type { ActionType, KeyValue } from './types';
 import { viewerRegister, viewerLogin, appStart, loadAvailableViewers } from './actions/core';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 import IPFSFileGetter from '../ipfs/IPFSFileGetter';
-import nativeUtils from '../utils/nativeUtils';
+import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
-
-const { saveStorage, loadStorage } = nativeUtils.default;
 
 const getPrivateKeyStoreKey = (profileHash: string) => `${profileHash}-private`;
 const getLocalProfileHashStoreKey = (name: string) => `${name}-profileHash`;

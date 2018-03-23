@@ -9,43 +9,43 @@ import path from 'path';
 storage.setDataPath(path.join(os.homedir(), '.pants-control'));
 fixPath();
 
-const nativeUtils = {
-  copy(content: any) {
-    clipboard.writeText(String(content));
-  },
+export function copy(content: any) {
+  clipboard.writeText(String(content));
+}
 
-  notif(message: string) {
-    const myNotification = new Notification('MemectExtractor', {
-      body: message,
+export function notif(message: string) {
+  const myNotification = new Notification('MemectExtractor', {
+    body: message,
+  });
+  return myNotification;
+}
+
+export function exec(script: string): Promise<{ stdout: string[], stderr: string[] }> {
+  return new Promise((resolve, reject) => {
+    execCommand(script, { maxBuffer: 1024 * 1024 * 10 }, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve({ stdout: stdout.toString().split('\n'), stderr: stderr.toString().split('\n') });
+      }
     });
-    return myNotification;
-  },
-  exec(script: string): Promise<{ stdout: string[], stderr: string[] }> {
-    return new Promise((resolve, reject) => {
-      execCommand(script, { maxBuffer: 1024 * 1024 * 10 }, (error, stdout, stderr) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve({ stdout: stdout.toString().split('\n'), stderr: stderr.toString().split('\n') });
-        }
-      });
-    });
-  },
-  saveStorage(key: string, value: string): Promise<void> {
-    return new Promise((resolve, reject) =>
-      storage.set(key, value, error => {
-        if (error) return reject(error);
-        return resolve();
-      }),
-    );
-  },
-  loadStorage(key: string): Promise<string> {
-    return new Promise((resolve, reject) =>
-      storage.get(key, (error, data) => {
-        if (error || !data || typeof data !== 'string') return reject(error);
-        return resolve(data);
-      }),
-    );
-  },
-};
-export default nativeUtils;
+  });
+}
+
+export function saveStorage(key: string, value: string): Promise<void> {
+  return new Promise((resolve, reject) =>
+    storage.set(key, value, error => {
+      if (error) return reject(error);
+      return resolve();
+    }),
+  );
+}
+
+export function loadStorage(key: string): Promise<string> {
+  return new Promise((resolve, reject) =>
+    storage.get(key, (error, data) => {
+      if (error || !data || typeof data !== 'string') return reject(error);
+      return resolve(data);
+    }),
+  );
+}

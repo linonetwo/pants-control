@@ -5,6 +5,6 @@ type LinkUtils = {
   open(url: string): void,
 };
 
-// eslint-disable-next-line global-require
+// eslint-disable-next-line
 const linkUtils: LinkUtils = isElectron() ? require('./electron') : require('./web');
-export default linkUtils;
+export const { open } = linkUtils;

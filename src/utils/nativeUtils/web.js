@@ -1,95 +1,97 @@
 // @flow
-export default {
-  copy(content: any) {
-    const textArea = document.createElement('textarea');
 
-    //
-    // *** This styling is an extra step which is likely not required. ***
-    //
-    // Why is it here? To ensure:
-    // 1. the element is able to have focus and selection.
-    // 2. if element was to flash render it has minimal visual impact.
-    // 3. less flakyness with selection and copying which **might** occur if
-    //    the textarea element is not visible.
-    //
-    // The likelihood is the element won't even render, not even a flash,
-    // so some of these are just precautions. However in IE the element
-    // is visible whilst the popup box asking the user for permission for
-    // the web page to copy to the clipboard.
-    //
+export function copy(content: any) {
+  const textArea = document.createElement('textarea');
 
-    // Place in top-left corner of screen regardless of scroll position.
-    textArea.style.position = 'fixed';
-    textArea.style.top = 0;
-    textArea.style.left = 0;
+  //
+  // *** This styling is an extra step which is likely not required. ***
+  //
+  // Why is it here? To ensure:
+  // 1. the element is able to have focus and selection.
+  // 2. if element was to flash render it has minimal visual impact.
+  // 3. less flakyness with selection and copying which **might** occur if
+  //    the textarea element is not visible.
+  //
+  // The likelihood is the element won't even render, not even a flash,
+  // so some of these are just precautions. However in IE the element
+  // is visible whilst the popup box asking the user for permission for
+  // the web page to copy to the clipboard.
+  //
 
-    // Ensure it has a small width and height. Setting to 1px / 1em
-    // doesn't work as this gives a negative w/h on some browsers.
-    textArea.style.width = '2em';
-    textArea.style.height = '2em';
+  // Place in top-left corner of screen regardless of scroll position.
+  textArea.style.position = 'fixed';
+  textArea.style.top = 0;
+  textArea.style.left = 0;
 
-    // We don't need padding, reducing the size if it does flash render.
-    textArea.style.padding = 0;
+  // Ensure it has a small width and height. Setting to 1px / 1em
+  // doesn't work as this gives a negative w/h on some browsers.
+  textArea.style.width = '2em';
+  textArea.style.height = '2em';
 
-    // Clean up any borders.
-    textArea.style.border = 'none';
-    textArea.style.outline = 'none';
-    textArea.style.boxShadow = 'none';
+  // We don't need padding, reducing the size if it does flash render.
+  textArea.style.padding = 0;
 
-    // Avoid flash of white box if rendered for any reason.
-    textArea.style.background = 'transparent';
+  // Clean up any borders.
+  textArea.style.border = 'none';
+  textArea.style.outline = 'none';
+  textArea.style.boxShadow = 'none';
 
-    textArea.value = String(content);
+  // Avoid flash of white box if rendered for any reason.
+  textArea.style.background = 'transparent';
 
-    document.body.appendChild(textArea);
+  textArea.value = String(content);
 
-    textArea.select();
+  document.body.appendChild(textArea);
 
-    try {
-      const successful = document.execCommand('copy');
-      const msg = successful ? 'successful' : 'unsuccessful';
-      console.log(`Copying text command was ${msg}`);
-    } catch (err) {
-      console.log('Oops, unable to copy');
-    }
+  textArea.select();
 
-    document.body.removeChild(textArea);
-  },
+  try {
+    const successful = document.execCommand('copy');
+    const msg = successful ? 'successful' : 'unsuccessful';
+    console.log(`Copying text command was ${msg}`);
+  } catch (err) {
+    console.log('Oops, unable to copy');
+  }
 
-  notif(message: string) {
-    // Let's check if the browser supports notifications
-    if (!('Notification' in window)) {
-      alert('This browser does not support desktop notification');
-    } else if (Notification.permission === 'granted') {
-      // Let's check whether notification permissions have already been granted
-      // If it's okay let's create a notification
-      const myNotification = new Notification('MemectExtractor', {
-        body: message,
-      });
-      return myNotification;
-    } else if (Notification.permission !== 'denied') {
-      // Otherwise, we need to ask the user for permission
-      Notification.requestPermission(permission => {
-        // If the user accepts, let's create a notification
-        if (permission === 'granted') {
-          const myNotification = new Notification('MemectExtractor', {
-            body: message,
-          });
-          return myNotification;
-        }
-        return null;
-      });
-    }
-    return null;
-  },
-  exec: () => {},
-  async saveStorage(key: string, value: string): Promise<void> {
-    localStorage[key] = value;
-  },
-  async loadStorage(key: string): Promise<string> {
-    if (localStorage[key] && typeof localStorage[key] === 'string') {
-      return localStorage[key];
-    }
-    return '';
-  },
-};
+  document.body.removeChild(textArea);
+}
+
+export function notif(message: string) {
+  // Let's check if the browser supports notifications
+  if (!('Notification' in window)) {
+    alert('This browser does not support desktop notification');
+  } else if (Notification.permission === 'granted') {
+    // Let's check whether notification permissions have already been granted
+    // If it's okay let's create a notification
+    const myNotification = new Notification('MemectExtractor', {
+      body: message,
+    });
+    return myNotification;
+  } else if (Notification.permission !== 'denied') {
+    // Otherwise, we need to ask the user for permission
+    Notification.requestPermission(permission => {
+      // If the user accepts, let's create a notification
+      if (permission === 'granted') {
+        const myNotification = new Notification('MemectExtractor', {
+          body: message,
+        });
+        return myNotification;
+      }
+      return null;
+    });
+  }
+  return null;
+}
+
+export function exec() {}
+
+export async function saveStorage(key: string, value: string): Promise<void> {
+  localStorage[key] = value;
+}
+
+export async function loadStorage(key: string): Promise<string> {
+  if (localStorage[key] && typeof localStorage[key] === 'string') {
+    return localStorage[key];
+  }
+  return '';
+}
