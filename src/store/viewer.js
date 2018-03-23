@@ -4,24 +4,27 @@ import keypair from 'keypair';
 import { put, takeLatest, call, all } from 'redux-saga/effects';
 
 import type { ActionType, KeyValue } from './types';
-import { viewerRegister, viewerLogin } from './actions/core';
+import { viewerRegister, viewerLogin, appStart, loadAvailableViewers } from './actions/core';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 import IPFSFileGetter from '../ipfs/IPFSFileGetter';
 import nativeUtils from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
 
-const { saveStorage, loadStorage } = nativeUtils;
+const { saveStorage, loadStorage } = nativeUtils.default;
 
 const getPrivateKeyStoreKey = (profileHash: string) => `${profileHash}-private`;
 
-async function getAvailableUsers() {
-  const users = await loadStorage('users');
-  return users;
-}
+/** 用户注册成功后把他注册的用户名保存到本地可登录的用户名列表里 */
 async function pushAvailableUsers(newUserName: string) {
   const users = (await loadStorage('users')) || [];
   const newUsers = [...users, newUserName];
   await saveStorage('users', newUsers);
+}
+
+/** 加载本地可登录的用户名列表，用于登录时自动补全用户输入 */
+function* getAvailableUsersSaga() {
+  const users = (yield call(loadStorage, 'users')) || [];
+  yield put(loadAvailableViewers.success({ viewers: users }));
 }
 
 /** 创建用户公私钥和 profile，公钥放在 profile 里，私钥用密码加密后放在 localStorage 或者本地 */
@@ -82,18 +85,25 @@ export function* loadViewerSecret(action: ActionType) {
 export const viewerSagas = [
   takeLatest(viewerRegister.TRIGGER, viewerRegisterSaga),
   takeLatest(viewerLogin.TRIGGER, loadViewerSecret),
+  takeLatest(appStart.TRIGGER, getAvailableUsersSaga),
 ];
 
 type ViewerInitialStateType = {
+  // 本机上可用的用户名列表
+  viewers: string[],
+  // 当前登录用户的档案
   profile: KeyValue,
-  privateKey: string,
+  // 当前登录用户的档案的 IPFS 散列值
   profileHash: string,
+  // 当前登录用户的私钥
+  privateKey: string,
 };
 
 const viewerInitialState: ImmutableType<ViewerInitialStateType> = Immutable({
+  viewers: [],
   profile: {},
-  privateKey: '',
   profileHash: '',
+  privateKey: '',
 });
 
 export function viewerReducer(
@@ -104,9 +114,12 @@ export function viewerReducer(
     case viewerRegister.SUCCESS:
     case viewerLogin.SUCCESS:
       return state
-        .setIn('profile', action.payload.profile)
-        .setIn('privateKey', action.payload.privateKey)
-        .setIn('profileHash', action.payload.profileHash);
+        .set('profile', action.payload.profile)
+        .set('privateKey', action.payload.privateKey)
+        .set('profileHash', action.payload.profileHash);
+
+    case loadAvailableViewers.SUCCESS:
+      return state.set('viewers', action.payload.viewers);
 
     default:
       return state;

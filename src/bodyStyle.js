@@ -1,5 +1,6 @@
 import { injectGlobal } from 'styled-components';
 import styledNormalize from 'styled-normalize'
+import 'antd/dist/antd.css';
 
 injectGlobal`
   ${styledNormalize};

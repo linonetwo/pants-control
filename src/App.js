@@ -7,13 +7,14 @@ import { Route, Switch } from 'react-router';
 import './bodyStyle';
 import registerServiceWorker from './registerServiceWorker';
 import { store, history, sagaMiddleware, rootSaga } from './store';
+import { appStart } from './store/actions/core';
 import Editors from './components/editors';
 import Login from './components/Login';
-
 
 class App extends Component {
   componentDidMount() {
     sagaMiddleware.run(rootSaga);
+    store.dispatch(appStart());
   }
 
   render() {

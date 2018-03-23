@@ -13,7 +13,7 @@ import { createEpicMiddleware, combineEpics } from 'redux-observable';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 import { noteReducer } from './note';
 import { viewerReducer, viewerSagas } from './viewer';
-import { appStart, ipfsNodeStart } from './actions/core';
+import { ipfsNodeStart } from './actions/core';
 
 export const sagaMiddleware = createSagaMiddleware();
 export const sagas = [...viewerSagas];
@@ -85,5 +85,3 @@ export const configureStore = () => {
 };
 
 export const store = configureStore();
-
-store.dispatch(appStart());

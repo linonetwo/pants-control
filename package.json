@@ -18,6 +18,7 @@
   "dependencies": {
     "@manaflair/redux-batch": "^0.1.0",
     "aes-js": "^3.1.0",
+    "antd": "^3.3.1",
     "apollo-cache-inmemory": "^1.1.11",
     "apollo-client": "^2.2.7",
     "apollo-link-http": "^1.5.3",
