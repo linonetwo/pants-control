@@ -35,7 +35,7 @@ function* getAvailableUsersSaga() {
 export function* viewerRegisterSaga(action: ActionType) {
   try {
     const { name, password } = action.payload;
-    const ipfs = new IPFSFileUploader();
+    const ipfs = yield IPFSFileUploader.create();
 
     const { public: publicKey, private: privateKey } = keypair();
     const encryptedPrivateKeyHex = yield call(encrypt, name, password, privateKey);
@@ -72,7 +72,7 @@ export function* viewerRegisterSaga(action: ActionType) {
 export function* loadViewerSecret(action: ActionType) {
   try {
     const { name, password } = action.payload;
-    const ipfs = new IPFSFileGetter();
+    const ipfs = yield IPFSFileGetter.create();
 
     const profileHash = yield call(loadStorage, getLocalProfileHashStoreKey(name));
     const encryptedPrivateKeyHex = yield call(loadStorage, getPrivateKeyStoreKey(profileHash));

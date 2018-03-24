@@ -35,7 +35,7 @@ async function executeNote(id: string, noteLoaderID: string) {
 function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
   try {
     const { note, id } = action.payload;
-    const ipfs = new IPFSFileUploader();
+    const ipfs = yield IPFSFileUploader.create();
     yield call(ipfs.ready);
     const { hash } = yield call(ipfs.uploadObject, note);
     yield put(saveNote.success({ id, hash }));
@@ -48,8 +48,7 @@ function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
 function* loadNoteFromIpfsSaga(action: ActionType) {
   try {
     const { hash } = action.payload;
-    const ipfs = new IPFSFileGetter();
-    yield call(ipfs.ready);
+    const ipfs = yield IPFSFileGetter.create();
     const files = yield call(ipfs.getFile, hash);
     console.log('loadNoteFromIpfsSaga', files);
     yield put(loadNote.success({ id: hash, note: files[0] }));
