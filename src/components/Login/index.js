@@ -76,7 +76,7 @@ export default class Editors extends Component<Props, State> {
   hasUser(): boolean {
     return includes(this.props.viewers, this.state.name);
   }
-  getTitle(): string {
+  get title(): string {
     if (this.hasUser()) {
       return `用${this.state.name}身份登录`;
     } else if (this.state.name) {
@@ -91,7 +91,7 @@ export default class Editors extends Component<Props, State> {
       <Fragment>
         <BackgroundAnimation />
         <LoginContainer column center>
-          <Title>{this.getTitle()}</Title>
+          <Title>{this.title}</Title>
           <UserNameAutoComplete
             dataSource={this.props.viewers}
             onSelect={this.setName}
