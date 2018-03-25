@@ -1,8 +1,9 @@
 // @flow
 import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
-import { put, takeLatest, call } from 'redux-saga/effects';
+import { put, takeLatest, call, select } from 'redux-saga/effects';
 
 import type { ActionType, KeyValue } from './types';
+import type { IpfsFile } from '../ipfs/types';
 
 import { loadNote, saveNote, focusNote } from './actions/core';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';

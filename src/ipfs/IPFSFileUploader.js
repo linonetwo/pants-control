@@ -4,7 +4,7 @@ import streamBuffers from 'stream-buffers';
 import str2arr from 'string-to-arraybuffer';
 
 import IPFSNode from './IPFSNode';
-import { IpfsFile } from './IPFSFileGetter';
+import type { IpfsFile } from './types';
 
 export default class IPFSFileUploader extends IPFSNode {
   stream: any;
