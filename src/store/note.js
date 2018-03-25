@@ -38,7 +38,7 @@ function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
   try {
     const { note, id } = action.payload;
     const ipfs = yield IPFSFileUploader.create();
-    const { hash } = yield call(ipfs.uploadObject, note);
+    const { hash } = yield ipfs.uploadObject(note);
     yield put(saveNote.success({ id, hash }));
   } catch (error) {
     yield put(saveNote.failure({ message: error.message }));
@@ -50,7 +50,7 @@ function* loadNoteFromIpfsSaga(action: ActionType) {
   try {
     const { hash } = action.payload;
     const ipfs = yield IPFSFileGetter.create();
-    const files = yield call(ipfs.getFile, hash);
+    const files = yield ipfs.getFile(hash);
     console.log('loadNoteFromIpfsSaga', files);
     yield put(loadNote.success({ id: hash, note: files[0] }));
   } catch (error) {
@@ -62,9 +62,9 @@ function* loadNoteFromIpfsSaga(action: ActionType) {
 function* openNoteOnLoginSaga() {
   try {
     const homepageHash = select(store => store.viewer.profile.homepage);
-    const homepageNote = yield call(ipfs.getFile, homepageHash);
+    const homepageNote = yield ipfs.getFile(homepageHash);
     yield put(loadNote.success({ id: homepageHash, note: homepageNote[0] }));
-    yield call(push, `/hash/${homepageHash}`);
+    yield push(`/hash/${homepageHash}`);
   } catch (error) {
     yield put(loadNote.failure({ message: error.message }));
     console.error(error);

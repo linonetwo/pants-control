@@ -27,7 +27,7 @@ async function pushAvailableUsers(newUserName: string) {
 
 /** 加载本地可登录的用户名列表，用于登录时自动补全用户输入 */
 function* getAvailableUsersSaga() {
-  const users = yield call(getAvailableUsers);
+  const users = yield getAvailableUsers();
   yield put(loadAvailableViewers.success({ viewers: users }));
 }
 
@@ -38,7 +38,7 @@ export function* viewerRegisterSaga(action: ActionType) {
     const ipfs = yield IPFSFileUploader.create();
 
     const { public: publicKey, private: privateKey } = keypair();
-    const encryptedPrivateKeyHex = yield call(encrypt, name, password, privateKey);
+    const encryptedPrivateKeyHex = yield encrypt(name, password, privateKey);
 
     // prepare profile
     const newProfile = {
@@ -49,13 +49,13 @@ export function* viewerRegisterSaga(action: ActionType) {
       publicKey,
     };
     // Put profile to IPFS
-    const { hash: profileHash } = yield call(ipfs.uploadObject, newProfile);
+    const { hash: profileHash } = yield ipfs.uploadObject(newProfile);
     console.log(`viewerRegisterSaga profile created at https://ipfs.io/ipfs/${profileHash}`)
     if (profileHash) {
       // Put private key to localStorage
-      yield call(saveStorage, getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
+      yield saveStorage(getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
       // Remember username in localStorage for later login
-      yield all([call(saveStorage, getLocalProfileHashStoreKey(name), profileHash), call(pushAvailableUsers, name)]);
+      yield all([saveStorage(getLocalProfileHashStoreKey(name), profileHash), pushAvailableUsers(name)]);
       // inform UI that register succeed
       yield put(viewerRegister.success({ profileHash, privateKey, profile: newProfile }));
     } else {
@@ -73,12 +73,12 @@ export function* loadViewerSecret(action: ActionType) {
     const { name, password } = action.payload;
     const ipfs = yield IPFSFileGetter.create();
 
-    const profileHash = yield call(loadStorage, getLocalProfileHashStoreKey(name));
-    const encryptedPrivateKeyHex = yield call(loadStorage, getPrivateKeyStoreKey(profileHash));
-    const privateKey = yield call(decrypt, name, password, encryptedPrivateKeyHex);
+    const profileHash = yield loadStorage(getLocalProfileHashStoreKey(name));
+    const encryptedPrivateKeyHex = yield loadStorage(getPrivateKeyStoreKey(profileHash));
+    const privateKey = yield decrypt(name, password, encryptedPrivateKeyHex);
     // get profile from IPFS
     console.log('loadViewerSecret start loading profile from IPFS.')
-    const profile = yield call(ipfs.getFile, profileHash);
+    const profile = yield ipfs.getFile(profileHash);
     console.log('loadViewerSecret', profile);
     yield put(viewerLogin.success({ privateKey, profileHash, profile: profile[0] }));
   } catch (error) {
