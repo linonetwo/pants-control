@@ -13,7 +13,7 @@ export type IpfsFile = {
 export default class IPFSFileGetter extends IPFSNode {
   getFile(hash: string): Promise<IpfsFile[]> {
     return new Promise((resolve, reject) => {
-      this.node.files.get(hash, (err, files) => {
+      IPFSFileGetter.prototype.node.files.get(hash, (err, files) => {
         if (err) {
           return reject(err)
         }

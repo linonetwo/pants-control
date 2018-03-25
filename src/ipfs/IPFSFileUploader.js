@@ -37,7 +37,7 @@ export default class IPFSFileUploader extends IPFSNode {
       });
 
       // 创建 IPFS 读写文件的流，这是一个 Duplex 流，可读可写
-      this.stream = this.node.files.addReadableStream();
+      this.stream = IPFSFileUploader.prototype.node.files.addReadableStream();
       // 文件上传完毕后 resolve 这个 Promise
       this.stream.on('data', (file: IpfsFile) => resolve(file));
 

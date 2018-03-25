@@ -36,7 +36,6 @@ function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
   try {
     const { note, id } = action.payload;
     const ipfs = yield IPFSFileUploader.create();
-    yield call(ipfs.ready);
     const { hash } = yield call(ipfs.uploadObject, note);
     yield put(saveNote.success({ id, hash }));
   } catch (error) {

@@ -48,8 +48,6 @@ export function* viewerRegisterSaga(action: ActionType) {
       description: '',
       publicKey,
     };
-    // wait for node to be set up
-    yield call(ipfs.ready);
     // Put profile to IPFS
     const { hash: profileHash } = yield call(ipfs.uploadObject, newProfile);
     if (profileHash) {
@@ -78,7 +76,6 @@ export function* loadViewerSecret(action: ActionType) {
     const encryptedPrivateKeyHex = yield call(loadStorage, getPrivateKeyStoreKey(profileHash));
     const privateKey = yield call(decrypt, name, password, encryptedPrivateKeyHex);
     // get profile from IPFS
-    yield call(ipfs.ready);
     const profile = yield call(ipfs.getFile, profileHash);
     console.log('loadViewerSecret', profile);
     yield put(viewerLogin.success({ privateKey, profileHash, profile: profile[0] }));
