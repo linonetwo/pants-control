@@ -1,11 +1,12 @@
 // @flow
 import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
 import { put, takeLatest, call, select } from 'redux-saga/effects';
+import { push } from 'react-router-redux';
 
 import type { ActionType, KeyValue } from './types';
 import type { IpfsFile } from '../ipfs/types';
 
-import { loadNote, saveNote, focusNote } from './actions/core';
+import { loadNote, saveNote, focusNote, viewerRegister, viewerLogin } from './actions/core';
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
 import IPFSFileGetter from '../ipfs/IPFSFileGetter';
 
@@ -58,9 +59,22 @@ function* loadNoteFromIpfsSaga(action: ActionType) {
   }
 }
 
+function* openNoteOnLoginSaga() {
+  try {
+    const homepageHash = select(store => store.viewer.profile.homepage);
+    const homepageNote = yield call(ipfs.getFile, homepageHash);
+    yield put(loadNote.success({ id: homepageHash, note: homepageNote[0] }));
+    yield call(push, `/hash/${homepageHash}`);
+  } catch (error) {
+    yield put(loadNote.failure({ message: error.message }));
+    console.error(error);
+  }
+}
+
 export const noteSagas = [
   takeLatest(saveNote.TRIGGER, saveNoteToMemoryAndIpfsSaga),
   takeLatest(loadNote.TRIGGER, loadNoteFromIpfsSaga),
+  takeLatest([viewerRegister.SUCCESS, viewerLogin.SUCCESS], openNoteOnLoginSaga),
 ];
 
 /** 内存中的笔记使用 ID 来追踪，IPFS 上的笔记用 hash 来追踪，当笔记被修改保存后 hash 会改变，而 ID 通过内存中的一个字典对应到 hash */
