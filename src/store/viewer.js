@@ -45,7 +45,7 @@ export function* viewerRegisterSaga(action: ActionType) {
       '@context': 'http://schema.org',
       '@type': 'Person',
       name,
-      description: 'Lead Engineer on Uport',
+      description: '',
       publicKey,
     };
     // wait for node to be set up
