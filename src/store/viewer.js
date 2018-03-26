@@ -56,7 +56,7 @@ export function* viewerRegisterSaga(action: ActionType) {
     };
     // Put profile to IPFS
     const { hash: profileHash } = yield ipfs.uploadObject(newProfile);
-    console.log(`viewerRegisterSaga profile created at https://ipfs.io/ipfs/${profileHash}`)
+    console.log(`viewerRegisterSaga profile created at https://ipfs.io/ipfs/${profileHash}`);
     if (profileHash) {
       // Put private key to localStorage
       yield saveStorage(getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
@@ -83,7 +83,7 @@ export function* loadViewerSecret(action: ActionType) {
     const encryptedPrivateKeyHex = yield loadStorage(getPrivateKeyStoreKey(profileHash));
     const privateKey = yield decrypt(name, password, encryptedPrivateKeyHex);
     // get profile from IPFS
-    console.log('loadViewerSecret start loading profile from IPFS.')
+    console.log('loadViewerSecret start loading profile from IPFS.');
     const profile = yield ipfs.getFile(profileHash);
     console.log('loadViewerSecret', profile);
     yield put(viewerLogin.success({ privateKey, profileHash, profile: profile[0] }));
