@@ -39,6 +39,7 @@
     "graphql-tag": "^2.8.0",
     "graphql-tools": "^2.23.1",
     "history": "^4.7.2",
+    "immer": "^1.2.0",
     "immutable": "^3.8.2",
     "ipfs-api": "^18.1.2",
     "is-electron": "^2.1.0",

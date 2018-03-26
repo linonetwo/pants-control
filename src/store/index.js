@@ -11,12 +11,13 @@ import { BehaviorSubject } from 'rxjs';
 import { createEpicMiddleware, combineEpics } from 'redux-observable';
 
 import IPFSFileUploader from '../ipfs/IPFSFileUploader';
+import { infoReducer, infoSagas } from './info';
 import { noteReducer, noteSagas } from './note';
 import { viewerReducer, viewerSagas } from './viewer';
 import { ipfsNodeStart } from './actions/core';
 
 export const sagaMiddleware = createSagaMiddleware();
-export const sagas = [...noteSagas, ...viewerSagas];
+export const sagas = [...infoSagas, ...noteSagas, ...viewerSagas];
 export function* rootSaga() {
   yield all(sagas);
 }
@@ -37,6 +38,7 @@ context.keys().forEach(key => {
 
 export const rootReducer = combineReducers({
   router,
+  info: infoReducer,
   note: noteReducer,
   viewer: viewerReducer,
 });
