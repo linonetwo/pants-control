@@ -48,7 +48,12 @@ function* saveNoteToMemoryAndIpfsSaga(action: ActionType) {
 
 function* loadNoteFromIpfsSaga(action: ActionType) {
   try {
-    const { hash } = action.payload;
+    let { hash } = action.payload;
+    const { ID } = action.payload;
+    // use IPNS to get hash behinds an ID
+    if (ID) {
+      hash = '';
+    }
     const ipfs = yield IPFSFileGetter.create();
     const files = yield ipfs.getFile(hash);
     console.log('loadNoteFromIpfsSaga', files);

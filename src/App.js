@@ -25,7 +25,7 @@ class App extends Component {
             {/* 登录和注册页 */}
             <Route exact path="/" component={Login} />
             {/* 通过 multihash 打开编辑器 */}
-            <Route exact path="/hash/:multihash" component={Editors} />
+            <Route exact path="/note/:ID" component={Editors} />
           </Switch>
         </ConnectedRouter>
       </Provider>

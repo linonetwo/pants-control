@@ -22,7 +22,11 @@ type Props = {
 type State = {
   value: Object,
 };
-const mapStateToProps = ({ note: { notes, currentNoteID } }) => ({ currentNote: notes[currentNoteID], currentNoteID });
+const mapStateToProps = ({ note: { notes, currentNoteID }, info: { loadingCounter } }) => ({
+  currentNote: notes[currentNoteID],
+  currentNoteID,
+  loadingCounter,
+});
 
 @connect(mapStateToProps, { loadNote })
 export default class SlateEditor extends Component<Props, State> {
@@ -49,7 +53,7 @@ export default class SlateEditor extends Component<Props, State> {
     }
   }
 
-  deserializeNote(noteContent: string | Object, hash: string) {
+  deserializeNote(noteContent: string | Object, ID: string) {
     switch (typeof noteContent) {
       case 'string':
         this.setState({ value: Plain.deserialize(noteContent), contentType: 'string' });
@@ -58,8 +62,6 @@ export default class SlateEditor extends Component<Props, State> {
         this.setState({ value: Value.fromJSON(noteContent), contentType: 'object' });
         break;
       default:
-        this.props.loadNote({ hash });
-        this.setState({ value: Plain.deserialize('Note loading...'), contentType: 'string' });
         break;
     }
   }
@@ -129,12 +131,16 @@ export default class SlateEditor extends Component<Props, State> {
           onChange={this.onChange}
         />
         <EditorContainer>
-          <Editor
-            placeholder="你可以用 @ 插入特殊块"
-            value={this.state.value}
-            onChange={this.onChange}
-            renderMark={this.renderMark}
-          />
+          {this.props.currentNote ? (
+            <Editor
+              placeholder="你可以用 @ 插入特殊块"
+              value={this.state.value}
+              onChange={this.onChange}
+              renderMark={this.renderMark}
+            />
+          ) : (
+            'Loading...'
+          )}
         </EditorContainer>
       </Fragment>
     );
