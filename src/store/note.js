@@ -62,7 +62,7 @@ function* loadNoteFromIpfsSaga(action: ActionType) {
 function* openNoteOnLoginSaga() {
   try {
     const ipfs = yield IPFSFileGetter.create();
-    const homepageHash = yield select(store => store.viewer.profile.homepage);
+    const homepageHash = yield select(store => store.viewer.profile['foaf:homepage']);
     const homepageNote = yield ipfs.getFile(homepageHash);
     yield put(loadNote.success({ id: homepageHash, note: homepageNote[0] }));
     yield push(`/hash/${homepageHash}`);

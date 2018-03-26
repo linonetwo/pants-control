@@ -42,11 +42,17 @@ export function* viewerRegisterSaga(action: ActionType) {
 
     // prepare profile
     const newProfile = {
-      '@context': 'http://schema.org',
+      '@context': {
+        '@vocab': 'http://schema.org',
+        foaf: 'http://xmlns.com/foaf/0.1/',
+      },
+      // @id could be a IPNS URI
+      '@id': '',
       '@type': 'Person',
       name,
       description: '',
       publicKey,
+      'foaf:homepage': '',
     };
     // Put profile to IPFS
     const { hash: profileHash } = yield ipfs.uploadObject(newProfile);
