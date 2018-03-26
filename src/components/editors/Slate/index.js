@@ -37,7 +37,7 @@ export default class SlateEditor extends Component<Props, State> {
    */
   componentWillMount() {
     const { currentNote, currentNoteID } = this.props;
-    this.loadNote(currentNote, currentNoteID);
+    this.deserializeNote(currentNote, currentNoteID);
   }
 
   /** Note switching: load new note from store
@@ -45,11 +45,11 @@ export default class SlateEditor extends Component<Props, State> {
    */
   componentWillReceiveProps(nextProps: Props) {
     if (nextProps.currentNoteID !== this.props.currentNoteID) {
-      this.loadNote(nextProps.currentNote, nextProps.currentNoteID);
+      this.deserializeNote(nextProps.currentNote, nextProps.currentNoteID);
     }
   }
 
-  loadNote(noteContent: string | Object, hash: string) {
+  deserializeNote(noteContent: string | Object, hash: string) {
     switch (typeof noteContent) {
       case 'string':
         this.setState({ value: Plain.deserialize(noteContent), contentType: 'string' });
@@ -66,7 +66,7 @@ export default class SlateEditor extends Component<Props, State> {
 
   onChange = ({ value }) => {
     if (value.document !== this.state.value.document) {
-      // save content to local cache in redux store
+      // save serialized content to local cache in redux store
       if (this.state.contentType === 'string') {
         const content = Plain.serialize(value);
       } else {
