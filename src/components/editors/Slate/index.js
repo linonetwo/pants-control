@@ -7,6 +7,7 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 
 import HoverMenu from './HoverMenu';
+import { loadNote } from '../../../store/actions/core';
 
 const EditorContainer = styled.div`
   /* providing margin */
@@ -16,25 +17,63 @@ const EditorContainer = styled.div`
 type Props = {
   currentNote: Object | string,
   currentNoteID: string,
+  loadNote: ({ hash: string }) => void,
 };
 type State = {
   value: Object,
 };
 const mapStateToProps = ({ note: { notes, currentNoteID } }) => ({ currentNote: notes[currentNoteID], currentNoteID });
-@connect(mapStateToProps)
+
+@connect(mapStateToProps, { loadNote })
 export default class SlateEditor extends Component<Props, State> {
   state = {
     value: Plain.deserialize('This is editable plain text.\nJust like a <textarea>!'),
+    contentType: 'object',
   };
 
-  /** 切换笔记的时候，或者保存之后 hash 出现变化之后，重新载入一下 */
-  componentWillReceiveProps(nextProps) {
+  /** Initialization: load note from store
+   * Some public data like profile should be a plain JSON-LD, so we load it as a string.
+   * Others are rich text, load it as standard Slate value.
+   */
+  componentWillMount() {
+    const { currentNote, currentNoteID } = this.props;
+    this.loadNote(currentNote, currentNoteID);
+  }
+
+  /** Note switching: load new note from store
+   * noteID is the content multihash in the IPFS.
+   */
+  componentWillReceiveProps(nextProps: Props) {
     if (nextProps.currentNoteID !== this.props.currentNoteID) {
-      this.setState({ value: Value.fromJSON(JSON.parse(nextProps.currentNote)) });
+      this.loadNote(nextProps.currentNote, nextProps.currentNoteID);
+    }
+  }
+
+  loadNote(noteContent: string | Object, hash: string) {
+    switch (typeof noteContent) {
+      case 'string':
+        this.setState({ value: Plain.deserialize(noteContent), contentType: 'string' });
+        break;
+      case 'object':
+        this.setState({ value: Value.fromJSON(noteContent), contentType: 'object' });
+        break;
+      default:
+        this.props.loadNote({ hash });
+        this.setState({ value: Plain.deserialize('Note loading...'), contentType: 'string' });
+        break;
     }
   }
 
   onChange = ({ value }) => {
+    if (value.document !== this.state.value.document) {
+      // save content to local cache in redux store
+      if (this.state.contentType === 'string') {
+        const content = Plain.serialize(value);
+      } else {
+        const content = JSON.stringify(value.toJSON());
+      }
+    }
+    // save content to fast local cache in react state
     this.setState({ value });
   };
 
