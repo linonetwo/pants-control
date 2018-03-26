@@ -15,7 +15,7 @@ const infoInitialState: ImmutableType<InfoInitialStateType> = {
 
 export const infoSagas = [];
 
-export function noteReducer(
+export function infoReducer(
   state: ImmutableType<InfoInitialStateType> = infoInitialState,
   action: ActionType,
 ): ImmutableType<InfoInitialStateType> {
