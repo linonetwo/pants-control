@@ -13,25 +13,23 @@ const EditorContainer = styled.div`
   margin: 10px 300px;
 `;
 
-const mapStateToProps = store => ({
-  currentNote: store.note.notes[store.note.currentNoteID],
-  noteID: store.note.currentNoteID,
-});
 type Props = {
-  currentNote?: Object,
-  noteID?: string,
+  currentNote: Object | string,
+  currentNoteID: string,
 };
 type State = {
   value: Object,
 };
+const mapStateToProps = ({ note: { notes, currentNoteID } }) => ({ currentNote: notes[currentNoteID], currentNoteID });
 @connect(mapStateToProps)
 export default class SlateEditor extends Component<Props, State> {
   state = {
     value: Plain.deserialize('This is editable plain text.\nJust like a <textarea>!'),
   };
 
+  /** 切换笔记的时候，或者保存之后 hash 出现变化之后，重新载入一下 */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.noteID !== this.props.noteID) {
+    if (nextProps.currentNoteID !== this.props.currentNoteID) {
       this.setState({ value: Value.fromJSON(JSON.parse(nextProps.currentNote)) });
     }
   }
