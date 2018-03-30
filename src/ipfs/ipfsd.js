@@ -24,7 +24,7 @@ function initIPFSD(repoPath = '/Users/dongwu/Desktop/ipfsRepo') {
         _ipfsd = ipfsd;
 
         const repoExists = fs.existsSync(path.join(repoPath, 'config'));
-        if (true) {
+        if (!repoExists) {
           console.log("Repo don't exist, creating");
           ipfsd.init(
             {

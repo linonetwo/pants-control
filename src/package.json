@@ -5,7 +5,7 @@
   "dependencies": {
     "electron-remote": "^1.2.0",
     "ipfs": "^0.28.2",    
-    "ipfsd-ctl": "^0.30.4"
+    "ipfsd-ctl": "^0.31.0"
   },
   "devDependencies": {}
 }

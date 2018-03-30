@@ -1677,9 +1677,9 @@ ipfs@^0.28.2:
     prom-client "^10.2.2"
     prometheus-gc-stats "^0.5.0"
 
-ipfsd-ctl@^0.30.4:
-  version "0.30.4"
-  resolved "http://registry.npm.taobao.org/ipfsd-ctl/download/ipfsd-ctl-0.30.4.tgz#2c821f21cec1ecd213ce20880eb33141cd119903"
+ipfsd-ctl@^0.31.0:
+  version "0.31.0"
+  resolved "http://registry.npm.taobao.org/ipfsd-ctl/download/ipfsd-ctl-0.31.0.tgz#2e51a871c0a39b75dbb9b74603e03edaa533e7c2"
   dependencies:
     async "^2.6.0"
     boom "^7.2.0"
