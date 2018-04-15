@@ -57,6 +57,7 @@ export function* viewerRegisterSaga(action: ActionType) {
     // Put profile to IPFS
     const { hash: profileHash } = yield ipfs.uploadObject(newProfile);
     console.log(`viewerRegisterSaga profile created at https://ipfs.io/ipfs/${profileHash}`);
+    fetch(`https://ipfs.io/ipfs/${profileHash}`);
     if (profileHash) {
       // Put private key to localStorage
       yield saveStorage(getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
