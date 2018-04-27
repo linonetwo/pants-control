@@ -35,11 +35,14 @@ const MenuContainer = styled.div`
 `;
 
 export default class HoverMenu extends Component {
+  menuRef = null;
+
   /**
    * Check if the current selection has a mark with `type` in it.
    */
   hasMark(type: string): boolean {
     const { value } = this.props;
+    if (!value.activeMarks) return false;
     return value.activeMarks.some(mark => mark.type === type);
   }
 
@@ -56,7 +59,7 @@ export default class HoverMenu extends Component {
   /**
    * Render a mark-toggling toolbar button.
    */
-  renderMarkButton(type: string, icon: string): Element {
+  renderMarkButton(type: string, icon: string): React$Element<*> {
     const isActive = this.hasMark(type);
 
     return (
@@ -66,10 +69,39 @@ export default class HoverMenu extends Component {
     );
   }
 
+  updateMenu = value => {
+    if (!this.menuRef) return {};
+
+    if (value.isBlurred || value.isEmpty) {
+      return {};
+    }
+
+    const selection = window.getSelection();
+    if (selection.rangeCount <= 0) return {};
+
+    const range = selection.getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+
+    const top = `${rect.top + window.scrollY - this.menuRef.offsetHeight}px`;
+    const left = `${rect.left + window.scrollX - this.menuRef.offsetWidth / 2 + rect.width / 2}px`;
+    return {
+      opacity: 1,
+      top,
+      left,
+    };
+  };
+
   render() {
-    const { opacity, top, left } = this.props;
+    const { opacity, top, left } = this.updateMenu(this.props.value);
     return ReactDOM.createPortal(
-      <MenuContainer opacity={opacity} top={top} left={left} innerRef={this.props.menuRef}>
+      <MenuContainer
+        opacity={opacity}
+        top={top}
+        left={left}
+        innerRef={elem => {
+          this.menuRef = elem;
+        }}
+      >
         {this.renderMarkButton('bold', 'format_bold')}
         {this.renderMarkButton('italic', 'format_italic')}
         {this.renderMarkButton('underlined', 'format_underlined')}

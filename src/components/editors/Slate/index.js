@@ -79,30 +79,6 @@ export default class SlateEditor extends Component<Props, State> {
     this.setState({ value });
   };
 
-  /**
-   * Update the menu's absolute position.
-   */
-  updateMenu = () => {
-    const { value } = this.state;
-    if (!this.menu) return;
-
-    if (value.isBlurred || value.isEmpty) {
-      return {};
-    }
-
-    const selection = window.getSelection();
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-
-    const top = `${rect.top + window.scrollY - this.menu.offsetHeight}px`;
-    const left = `${rect.left + window.scrollX - this.menu.offsetWidth / 2 + rect.width / 2}px`;
-    return {
-      opacity: 1,
-      top,
-      left,
-    };
-  };
-
   renderMark = props => {
     const { children, mark } = props;
     switch (mark.type) {
@@ -123,10 +99,6 @@ export default class SlateEditor extends Component<Props, State> {
     return (
       <Fragment>
         <HoverMenu
-          {...this.updateMenu()}
-          menuRef={menu => {
-            this.menu = menu;
-          }}
           value={this.state.value}
           onChange={this.onChange}
         />
