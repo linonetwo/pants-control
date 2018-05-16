@@ -1,139 +1,97 @@
 // @flow
-import Immutable, { type Immutable as ImmutableType } from 'seamless-immutable';
+import produce from 'immer';
 import keypair from 'keypair';
-import { put, takeLatest, call, all } from 'redux-saga/effects';
+import { dispatch } from '@rematch/core'
+import uuid from 'uuid/v4'
 
-import type { ActionType, KeyValue } from './types';
-import { viewerRegister, viewerLogin, appStart, loadAvailableViewers } from './actions/core';
-import IPFSFileUploader from '../ipfs/IPFSFileUploader';
-import IPFSFileGetter from '../ipfs/IPFSFileGetter';
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
 
-const getPrivateKeyStoreKey = (profileHash: string) => `${profileHash}-private`;
-const getLocalProfileHashStoreKey = (name: string) => `${name}-profileHash`;
+const getPrivateKeyStoreKey = (profileID: string) => `${profileID}-private`;
+const getLocalProfileIDStoreKey = (name: string) => `${name}-profileID`;
 
-async function getAvailableUsers(): string[] {
-  const usersString = await loadStorage('users');
-  const users = usersString ? JSON.parse(usersString) : [];
-  return users;
-}
-/** 用户注册成功后把他注册的用户名保存到本地可登录的用户名列表里 */
-async function pushAvailableUsers(newUserName: string) {
-  const users = await getAvailableUsers();
-  const newUsers = [...users, newUserName];
-  await saveStorage('users', JSON.stringify(newUsers));
-}
-
-/** 加载本地可登录的用户名列表，用于登录时自动补全用户输入 */
-function* getAvailableUsersSaga() {
-  const users = yield getAvailableUsers();
-  yield put(loadAvailableViewers.success({ viewers: users }));
-}
-
-/** 创建用户公私钥和 profile，公钥放在 profile 里，私钥用密码加密后放在 localStorage 或者本地 */
-export function* viewerRegisterSaga(action: ActionType) {
-  try {
-    const { name, password } = action.payload;
-    const ipfs = yield IPFSFileUploader.create();
-
-    const { public: publicKey, private: privateKey } = keypair();
-    const encryptedPrivateKeyHex = yield encrypt(name, password, privateKey);
-
-    // prepare profile
-    const newProfile = {
-      '@context': {
-        '@vocab': 'http://schema.org',
-        foaf: 'http://xmlns.com/foaf/0.1/',
-      },
-      // @id could be a IPNS URI
-      '@id': '',
-      '@type': 'Person',
-      name,
-      description: '',
-      publicKey,
-      'foaf:homepage': '',
-    };
-    // Put profile to IPFS
-    const { hash: profileHash } = yield ipfs.uploadObject(newProfile);
-    console.log(`viewerRegisterSaga profile created at https://ipfs.io/ipfs/${profileHash}`);
-    fetch(`https://ipfs.io/ipfs/${profileHash}`);
-    if (profileHash) {
-      // Put private key to localStorage
-      yield saveStorage(getPrivateKeyStoreKey(profileHash), encryptedPrivateKeyHex);
-      // Remember username in localStorage for later login
-      yield all([saveStorage(getLocalProfileHashStoreKey(name), profileHash), pushAvailableUsers(name)]);
-      // inform UI that register succeed
-      yield put(viewerRegister.success({ profileHash, privateKey, profile: newProfile }));
-    } else {
-      throw new Error('Profile 创建失败');
-    }
-  } catch (error) {
-    yield put(viewerRegister.failure({ message: error.message }));
-    console.error(error);
-  }
-}
-
-/** 用户用密码登录之后，从本地加载用户的私钥和 profile */
-export function* loadViewerSecret(action: ActionType) {
-  try {
-    const { name, password } = action.payload;
-    const ipfs = yield IPFSFileGetter.create();
-
-    const profileHash = yield loadStorage(getLocalProfileHashStoreKey(name));
-    const encryptedPrivateKeyHex = yield loadStorage(getPrivateKeyStoreKey(profileHash));
-    const privateKey = yield decrypt(name, password, encryptedPrivateKeyHex);
-    // get profile from IPFS
-    console.log('loadViewerSecret start loading profile from IPFS.');
-    const profile = yield ipfs.getFile(profileHash);
-    console.log('loadViewerSecret', profile);
-    yield put(viewerLogin.success({ privateKey, profileHash, profile: profile[0] }));
-  } catch (error) {
-    yield put(viewerLogin.failure({ message: error.message }));
-    console.error(error);
-  }
-}
-
-export const viewerSagas = [
-  takeLatest(viewerRegister.TRIGGER, viewerRegisterSaga),
-  takeLatest(viewerLogin.TRIGGER, loadViewerSecret),
-  takeLatest(appStart.TRIGGER, getAvailableUsersSaga),
-];
-
-type ViewerInitialStateType = {
-  // 本机上可用的用户名列表
-  viewers: string[],
-  // 当前登录用户的档案
-  profile: KeyValue,
-  // 当前登录用户的档案的 IPFS 散列值
-  profileHash: string,
-  // 当前登录用户的私钥
-  privateKey: string,
+type State = {
+  // 界面上显示的登录时可以使用的账号列表
+  availableUsers: string[],
+  profile: Object,
 };
+export default (initialState: State) => ({
+  state: {
+    availableUsers: [],
+    profile: {},
+    ...initialState,
+  },
+  reducers: {
+    /** 保存笔记内容到内存 */
+    setAvailableUsers(state: State, users: string[]) {
+      return produce(state, draft => {
+        draft.availableUsers = users;
+        return draft;
+      });
+    },
+    focusNote(state: State, id: string) {
+      return produce(state, draft => {
+        draft.currentNoteID = id;
+        return draft;
+      });
+    },
+  },
+  effects: {
+    async getAvailableUsers() {
+      const usersString = await loadStorage('users');
+      const users = usersString ? JSON.parse(usersString) : [];
+      this.setAvailableUsers(users);
+    },
+    /** 用户注册成功后把他注册的用户名保存到本地可登录的用户名列表里 */
+    async pushAvailableUsers(newUserName: string) {
+      const users = await this.getAvailableUsers();
+      const newUsers = [...users, newUserName];
+      await saveStorage('users', JSON.stringify(newUsers));
+      this.setAvailableUsers(newUsers);
+    },
+    async createUser(name: string, password: string) {
+      const { public: publicKey, private: privateKey } = keypair();
+      const encryptedPrivateKeyHex = await encrypt(name, password, privateKey);
 
-const viewerInitialState: ImmutableType<ViewerInitialStateType> = Immutable({
-  viewers: [],
-  profile: {},
-  profileHash: '',
-  privateKey: '',
+      // prepare profile
+      const newProfile = {
+        '@context': {
+          '@vocab': 'http://schema.org',
+          foaf: 'http://xmlns.com/foaf/0.1/',
+        },
+        // @id could be a IPNS URI
+        '@id': '',
+        '@type': 'Person',
+        name,
+        description: '',
+        publicKey,
+        'foaf:homepage': '',
+      };
+      const profileID = uuid();
+      try {
+        // save profile to backend
+        dispatch.backend.save(profileID, newProfile);
+        // Put private key to localStorage
+        await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
+        // Remember username in localStorage for later login
+        await Promise.all([saveStorage(getLocalProfileIDStoreKey(name), profileID), this.pushAvailableUsers(name)]);
+        // TODO: inform UI that register succeed
+      } catch (error) {
+        console.error(error)
+        throw new Error('Profile 创建失败');
+      }
+    },
+    async loadUserSecret(name: string, password: string) {
+      const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
+      const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
+      const privateKey = await decrypt(name, password, encryptedPrivateKeyHex);
+      try {
+        // get profile from backend
+        const profile = await dispatch.backend.load(profileID);
+        // TODO: inform UI that loading succeed
+      } catch (error) {
+        console.error(error)
+      }
+    },
+  },
 });
-
-export function viewerReducer(
-  state: ImmutableType<ViewerInitialStateType> = viewerInitialState,
-  action: ActionType,
-): ImmutableType<ViewerInitialStateType> {
-  switch (action.type) {
-    case viewerRegister.SUCCESS:
-    case viewerLogin.SUCCESS:
-      return state
-        .set('profile', action.payload.profile)
-        .set('privateKey', action.payload.privateKey)
-        .set('profileHash', action.payload.profileHash);
-
-    case loadAvailableViewers.SUCCESS:
-      return state.set('viewers', action.payload.viewers);
-
-    default:
-      return state;
-  }
-}
