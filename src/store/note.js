@@ -1,5 +1,6 @@
 // @flow
 import produce from 'immer';
+import { dispatch } from '@rematch/core';
 
 type State = {
   // 扁平化的笔记
@@ -37,8 +38,9 @@ export default (initialState: State) => ({
   effects: {
     async openNote(id: string) {
       if (!this.ids.includes(id)) {
-        // load note from IPFS or server, then
-        // this.setNote({ note, id });
+        // load note from IPFS or server
+        const note = await dispatch.backend.load(id);
+        this.setNote({ note, id });
       }
       this.focusNote(id);
     },

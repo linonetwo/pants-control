@@ -1,8 +1,8 @@
 // @flow
 import produce from 'immer';
 import keypair from 'keypair';
-import { dispatch } from '@rematch/core'
-import uuid from 'uuid/v4'
+import { dispatch } from '@rematch/core';
+import uuid from 'uuid/v4';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
@@ -14,24 +14,31 @@ type State = {
   // 界面上显示的登录时可以使用的账号列表
   availableUsers: string[],
   profile: Object,
+  privateKey: string,
 };
 export default (initialState: State) => ({
   state: {
     availableUsers: [],
     profile: {},
+    privateKey: '',
     ...initialState,
   },
   reducers: {
-    /** 保存笔记内容到内存 */
     setAvailableUsers(state: State, users: string[]) {
       return produce(state, draft => {
         draft.availableUsers = users;
         return draft;
       });
     },
-    focusNote(state: State, id: string) {
+    setProfile(state: State, newProfile: Object) {
       return produce(state, draft => {
-        draft.currentNoteID = id;
+        draft.profile = newProfile;
+        return draft;
+      });
+    },
+    setPrivateKey(state: State, privateKey: Object) {
+      return produce(state, draft => {
+        draft.privateKey = privateKey;
         return draft;
       });
     },
@@ -75,9 +82,11 @@ export default (initialState: State) => ({
         await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
         // Remember username in localStorage for later login
         await Promise.all([saveStorage(getLocalProfileIDStoreKey(name), profileID), this.pushAvailableUsers(name)]);
-        // TODO: inform UI that register succeed
+        // inform UI that register succeed
+        this.setProfile(newProfile);
+        this.setPrivateKey(privateKey);
       } catch (error) {
-        console.error(error)
+        console.error(error);
         throw new Error('Profile 创建失败');
       }
     },
@@ -88,9 +97,11 @@ export default (initialState: State) => ({
       try {
         // get profile from backend
         const profile = await dispatch.backend.load(profileID);
-        // TODO: inform UI that loading succeed
+        // inform UI that loading succeed
+        this.setProfile(profile);
+        this.setPrivateKey(privateKey);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     },
   },

@@ -11,7 +11,7 @@ type NativeUtils = {
     stderr: string[],
   }>,
   saveStorage(key: string, value: string): Promise<void>,
-  loadStorage(key: string): Promise<void>,
+  loadStorage(key: string): Promise<string>,
 };
 
 // eslint-disable-next-line

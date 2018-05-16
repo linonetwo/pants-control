@@ -1,19 +1,25 @@
 // @flow
 import produce from 'immer';
-import { getState } from '@rematch/core';
 
 import IPFSFileUploader from './ipfs/IPFSFileUploader';
 import IPFSFileGetter from './ipfs/IPFSFileGetter';
 
 type State = {
-  currentBackEnd: string | void | null,
+  currentBackEnd?: string,
 };
 export default (initialState: State) => ({
   state: {
-    currentBackEnd: null,
+    currentBackEnd: undefined,
     ...initialState,
   },
-  reducers: {},
+  reducers: {
+    activatingBackend(state: State, backendToActivate: string) {
+      return produce(state, draft => {
+        draft.currentBackEnd = backendToActivate;
+        return draft;
+      });
+    },
+  },
   effects: {
     save(id: string, note: string) {
       switch (this.currentBackEnd) {
