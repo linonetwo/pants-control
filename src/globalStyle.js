@@ -1,24 +1,18 @@
+/* eslint no-unused-expressions: "off" */
 import { injectGlobal } from 'styled-components';
 import styledNormalize from 'styled-normalize';
-import 'antd/dist/antd.css';
 
 injectGlobal`
   ${styledNormalize};
 
-  * {
-    box-sizing: border-box;
-    outline: none;
-    font-family: Arial, Helvetica, Helvetica Neue, "Microsoft Yahei", STXihei, "华文细黑", "PingFang SC", serif;
-    color: #333;
-  }
   body {
-    position: relative;
-    -webkit-font-smoothing: antialiased;
-    height: 100vh;
     margin: 0;
-    padding: 0;
-    background-color: white;
-    overflow: auto;
+  }
+  * {
+    outline: none;
+    color: #333;
+    font-family: Arial, Helvetica, Helvetica Neue, "Microsoft Yahei", "PingFang SC", "华文细黑", STXihei, serif;
+    -webkit-font-smoothing: antialiased;
   }
 
   input:-webkit-autofill {
@@ -38,22 +32,8 @@ injectGlobal`
     appearance: none;
   }
 
-  #root {
-    height: 100%;
-    & > div {
-      height: 100%;
-    }
-  }
-
-  p {
-    margin: 0;
-  }
-  
-  li {
-    list-style: none;
-  }
-  
   a {
+    color: #333;
     text-decoration: none;
   }
   
@@ -61,10 +41,5 @@ injectGlobal`
     opacity: 1;
     text-decoration: none;
     cursor: pointer;
-  }
-
-  ::selection {
-    background: rgba(255,125,210,0.85);
-    color: white;
   }
 `;

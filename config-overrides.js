@@ -1,46 +1,45 @@
-// @flow
 const path = require('path');
-const { getBabelLoader, injectBabelPlugin } = require('react-app-rewired');
+const { injectBabelPlugin, getBabelLoader } = require('react-app-rewired');
 
-const removeEslint = function (config) {
-  const rules = config.module.rules;
-  if (!rules[1] || !rules[0]) {
-    console.log('eslint rule not found');
-    return config;
-  }
-  config.module.rules = [rules[1]];
-  return config;
-};
-const babelIgnorePath = function (exclude = [], config) {
+function babelIgnorePath(exclude = [], config) {
   const loader = getBabelLoader(config.module.rules);
   if (!loader) {
     console.log('babel-loader not found');
     return config;
   }
-  loader.exclude = exclude.concat(loader.exclude || []);
+  loader.options.exclude = exclude.concat(loader.options.exclude || []);
   return config;
-};
+}
 
 module.exports = function override(config, env) {
-  // Make it run in electron renderer process
-  // If we want electron start, we will set cross-env BROWSER=none
-  if (process.env.BROWSER === 'none') {
-    delete config.node;
-    config.target = 'electron-renderer';
-  }
+  // remove eslint in eslint, we only need it on VSCode
+  config.module.rules.splice(1, 1);
 
-  config = injectBabelPlugin('flow-runtime', config);
-  config = injectBabelPlugin('macros', config);
+  config = injectBabelPlugin(
+    [
+      'flow-runtime',
+      {
+        assert: true,
+        annotate: true,
+      },
+    ],
+    config,
+  );
   config = injectBabelPlugin('transform-decorators-legacy', config);
-  config = injectBabelPlugin('styled-components', config);
-
-  config = removeEslint(config);
+  config = injectBabelPlugin('@babel/plugin-proposal-do-expressions', config);
+  config = injectBabelPlugin('@babel/plugin-proposal-optional-chaining', config);
+  config = injectBabelPlugin(['import', { libraryName: 'antd', libraryDirectory: 'es', style: 'css' }], config);
 
   const nativeModulesPath = [path.resolve(__dirname, 'src/node_modules'), path.resolve(__dirname, 'src/~')];
   config = babelIgnorePath(nativeModulesPath, config);
+  config = injectBabelPlugin('macros', config);
+  config = injectBabelPlugin('styled-components', config);
 
   if (env === 'production') {
-    console.log('⚡ Production build with Optimization.');
+    console.log('⚡ Production build with optimization ⚡');
+    config = injectBabelPlugin('closure-elimination', config);
+    config = injectBabelPlugin('@babel/plugin-transform-react-inline-elements', config);
+    config = injectBabelPlugin('@babel/plugin-transform-react-constant-elements', config);
   }
 
   return config;
