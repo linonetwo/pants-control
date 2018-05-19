@@ -21,4 +21,5 @@ const configureStore = ({ note, history: historyInitialState, backend, viewer } 
   });
 
 export default configureStore;
+export const store = configureStore();
 export { history } from './history';

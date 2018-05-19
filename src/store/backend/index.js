@@ -18,30 +18,31 @@ export default (initialState?: State) => ({
     },
   },
   effects: {
-    save(id: string, data: string) {
+    save(payload: { id: string, data: string }) {
       switch (this.currentBackEnd) {
         case 'ipfs':
-        return this.saveDataToIPFS(id, data);
+          return this.saveDataToIPFS(payload);
         case 'levelDB':
         default:
-          return this.saveDataToLevelDB(id, data);
+          return this.saveDataToLevelDB(payload);
       }
     },
-    load(id: string) {
+    load(id: string): Promise<string> {
       switch (this.currentBackEnd) {
         case 'ipfs':
           return this.loadDataFromIPFS(id);
+        case 'levelDB':
         default:
-          return this.loadDataFromLevelDB(id)
+          return this.loadDataFromLevelDB(id);
       }
     },
 
-    async saveDataToIPFS(id: string, data: string) {
+    async saveDataToIPFS({ id, data }: { id: string, data: string }) {
       const ipfs = await IPFSFileUploader.create();
       const { hash } = await ipfs.uploadObject(data);
       // TODO: save id -> hash mapping to a storage for example IPNS node
     },
-    async loadDataFromIPFS(id: string) {
+    async loadDataFromIPFS(id: string): Promise<string> {
       // TODO: get hash by id from some storage
       const hash = id; // TODO: placeholder
       const ipfs = await IPFSFileGetter.create();
@@ -49,14 +50,14 @@ export default (initialState?: State) => ({
       return files;
     },
 
-    async saveDataToLevelDB(id: string, data: string) {
-      const db = getLevelDB();
-      await db.put(id, data);
+    async saveDataToLevelDB({ id, data }: { id: string, data: string }) {
+      const db = await getLevelDB();
+      await db.putAsync(id, data);
     },
     async loadDataFromLevelDB(id: string): Promise<string> {
-      const db = getLevelDB();
-      const data = await db.get(id)
-      return data;
+      const db = await getLevelDB();
+      const data: Buffer = await db.getAsync(id);
+      return data.toString('utf8');
     },
   },
 });

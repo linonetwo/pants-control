@@ -5,12 +5,11 @@ import { Router, Route, Switch } from 'react-router';
 
 import './globalStyle';
 import registerServiceWorker from './registerServiceWorker';
-import configureStore, { history } from './store';
+import { store, history } from './store';
 import { APP_START } from './store/constants/core';
 import Editors from './components/Editors';
 import Login from './components/Login';
 
-const store = configureStore();
 class App extends Component {
   componentDidMount() {
     store.dispatch({ type: APP_START });

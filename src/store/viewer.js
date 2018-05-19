@@ -1,10 +1,10 @@
 // @flow
 import keypair from 'keypair';
-import { dispatch } from '@rematch/core';
 import uuid from 'uuid/v4';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt } from '../utils/crypto';
+import { store } from './'
 
 const getPrivateKeyStoreKey = (profileID: string) => `${profileID}-private`;
 const getLocalProfileIDStoreKey = (name: string) => `${name}-profileID`;
@@ -31,16 +31,17 @@ export default (initialState?: State) => ({
       state.profile = newProfile;
       return state;
     },
-    setPrivateKey(state: State, privateKey: Object) {
+    setPrivateKey(state: State, privateKey: string) {
       state.privateKey = privateKey;
       return state;
     },
   },
   effects: {
-    async getAvailableUsers() {
+    async getAvailableUsers(): Promise<string[]> {
       const usersString = await loadStorage('users');
       const users = usersString ? JSON.parse(usersString) : [];
       this.setAvailableUsers(users);
+      return users;
     },
     /** 用户注册成功后把他注册的用户名保存到本地可登录的用户名列表里 */
     async pushAvailableUsers(newUserName: string) {
@@ -49,7 +50,7 @@ export default (initialState?: State) => ({
       await saveStorage('users', JSON.stringify(newUsers));
       this.setAvailableUsers(newUsers);
     },
-    async createUser(name: string, password: string) {
+    async createUser({ name, password }: { name: string, password: string }) {
       const { public: publicKey, private: privateKey } = keypair();
       const encryptedPrivateKeyHex = await encrypt(name, password, privateKey);
 
@@ -70,7 +71,7 @@ export default (initialState?: State) => ({
       const profileID = uuid();
       try {
         // save profile to backend
-        dispatch.backend.save(profileID, newProfile);
+        store.dispatch.backend.save({ id: profileID, data: JSON.stringify(newProfile, null, '  ') });
         // Put private key to localStorage
         await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
         // Remember username in localStorage for later login
@@ -83,15 +84,15 @@ export default (initialState?: State) => ({
         throw new Error('Profile 创建失败');
       }
     },
-    async userLogin(name: string, password: string) {
+    async userLogin({ name, password }: { name: string, password: string }) {
       const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
       const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
       const privateKey = await decrypt(name, password, encryptedPrivateKeyHex);
       try {
         // get profile from backend
-        const profile = await dispatch.backend.load(profileID);
+        const profileString = await store.dispatch.backend.load(profileID);
         // inform UI that loading succeed
-        this.setProfile(profile);
+        this.setProfile(JSON.parse(profileString));
         this.setPrivateKey(privateKey);
       } catch (error) {
         console.error(error);

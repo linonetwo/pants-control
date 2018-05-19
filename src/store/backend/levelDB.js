@@ -1,11 +1,12 @@
 import level from 'level-js';
-import { promisifyAll } from 'bluebird';
+import Promise from 'bluebird';
 
 let db = null;
-export default function getLevelDB() {
+export default async function getLevelDB() {
   if (!db) {
     db = level('pants-control');
-    promisifyAll(db);
+    Promise.promisifyAll(db);
+    await db.openAsync();
   }
   return db;
 }

@@ -51,8 +51,8 @@ type Store = {
   availableUsers: string[],
 };
 type Dispatch = {
-  userLogin: (name: string, password: string) => void,
-  createUser: (name: string, password: string) => void,
+  userLogin: ({ name: string, password: string }) => void,
+  createUser: ({ name: string, password: string }) => void,
 };
 type State = {
   name: string,
@@ -67,11 +67,11 @@ class Login extends Component<Store & Dispatch, State> {
 
   checkInput = () => {
     if (!this.state.name) {
-      message.error('请输入您的网名（昵称）');
+      message.warning('请输入您的网名（昵称）');
       return false;
     }
     if (!this.state.password) {
-      message.error('请输入用于加密私人内容的密码');
+      message.warning('请输入用于加密私人内容的密码');
       return false;
     }
     return true;
@@ -116,10 +116,14 @@ class Login extends Component<Store & Dispatch, State> {
               active={this.state.name && this.state.password}
               onClick={() => {
                 if (this.checkInput()) {
-                  if (this.hasUser()) {
-                    this.props.userLogin({ name: this.state.name, password: this.state.password });
-                  } else {
-                    this.props.createUser({ name: this.state.name, password: this.state.password });
+                  try {
+                    if (this.hasUser()) {
+                      this.props.userLogin({ name: this.state.name, password: this.state.password });
+                    } else {
+                      this.props.createUser({ name: this.state.name, password: this.state.password });
+                    }
+                  } catch (error) {
+                    message.error(error);
                   }
                 }
               }}
