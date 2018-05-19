@@ -8,6 +8,7 @@ import Flex from 'styled-flex-component';
 import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
 
 import BackgroundAnimation from './BackgroundAnimation';
+import type { ViewerDispatch } from '../../store/viewer'
 
 const Container = styled(Flex)`
   height: 100vh;
@@ -50,10 +51,7 @@ const Button = styled(ButtonA)`
 type Store = {
   availableUsers: string[],
 };
-type Dispatch = {
-  userLogin: ({ name: string, password: string }) => void,
-  createUser: ({ name: string, password: string }) => void,
-};
+type Dispatch = ViewerDispatch;
 type State = {
   name: string,
   password: string,
@@ -64,6 +62,10 @@ class Login extends Component<Store & Dispatch, State> {
     name: '',
     password: '',
   };
+
+  componentWillMount() {
+    this.props.getAvailableUsers();
+  }
 
   checkInput = () => {
     if (!this.state.name) {
@@ -138,5 +140,9 @@ class Login extends Component<Store & Dispatch, State> {
 }
 
 const mapState = ({ viewer: { availableUsers } }): Store => ({ availableUsers });
-const mapDispatch = ({ viewer: { createUser, userLogin } }): Dispatch => ({ createUser, userLogin });
+const mapDispatch = ({ viewer: { getAvailableUsers, createUser, userLogin } }: *): Dispatch => ({
+  getAvailableUsers,
+  createUser,
+  userLogin,
+});
 export default connect(mapState, mapDispatch)(Login);

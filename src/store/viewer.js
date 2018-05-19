@@ -15,6 +15,11 @@ type State = {
   profile: Object,
   privateKey: string,
 };
+export type ViewerDispatch = {
+  userLogin: ({ name: string, password: string }) => void,
+  createUser: ({ name: string, password: string }) => void,
+  getAvailableUsers: void => void,
+};
 export default (initialState?: State) => ({
   state: {
     availableUsers: [],
