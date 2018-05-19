@@ -1,5 +1,4 @@
 // @flow
-import produce from 'immer';
 import keypair from 'keypair';
 import { dispatch } from '@rematch/core';
 import uuid from 'uuid/v4';
@@ -25,22 +24,16 @@ export default (initialState: State) => ({
   },
   reducers: {
     setAvailableUsers(state: State, users: string[]) {
-      return produce(state, draft => {
-        draft.availableUsers = users;
-        return draft;
-      });
+      state.availableUsers = users;
+      return state;
     },
     setProfile(state: State, newProfile: Object) {
-      return produce(state, draft => {
-        draft.profile = newProfile;
-        return draft;
-      });
+      state.profile = newProfile;
+      return state;
     },
     setPrivateKey(state: State, privateKey: Object) {
-      return produce(state, draft => {
-        draft.privateKey = privateKey;
-        return draft;
-      });
+      state.privateKey = privateKey;
+      return state;
     },
   },
   effects: {

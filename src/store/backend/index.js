@@ -1,6 +1,4 @@
 // @flow
-import produce from 'immer';
-
 import IPFSFileUploader from './ipfs/IPFSFileUploader';
 import IPFSFileGetter from './ipfs/IPFSFileGetter';
 
@@ -14,10 +12,8 @@ export default (initialState: State) => ({
   },
   reducers: {
     activatingBackend(state: State, backendToActivate: string) {
-      return produce(state, draft => {
-        draft.currentBackEnd = backendToActivate;
-        return draft;
-      });
+      state.currentBackEnd = backendToActivate;
+      return state;
     },
   },
   effects: {

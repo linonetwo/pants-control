@@ -1,5 +1,4 @@
 // @flow
-import produce from 'immer';
 import { dispatch } from '@rematch/core';
 
 type State = {
@@ -22,17 +21,13 @@ export default (initialState: State) => ({
   reducers: {
     /** 保存笔记内容到内存 */
     setNote(state: State, { note, id }: { note: string, id: string }) {
-      return produce(state, draft => {
-        draft.notes[id] = note;
-        draft.ids.push(id);
-        return draft;
-      });
+      state.notes[id] = note;
+      state.ids.push(id);
+      return state;
     },
     focusNote(state: State, id: string) {
-      return produce(state, draft => {
-        draft.currentNoteID = id;
-        return draft;
-      });
+      state.currentNoteID = id;
+      return state;
     },
   },
   effects: {
