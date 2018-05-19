@@ -15,7 +15,7 @@ type State = {
   profile: Object,
   privateKey: string,
 };
-export default (initialState: State) => ({
+export default (initialState?: State) => ({
   state: {
     availableUsers: [],
     profile: {},
@@ -83,7 +83,7 @@ export default (initialState: State) => ({
         throw new Error('Profile 创建失败');
       }
     },
-    async loadUserSecret(name: string, password: string) {
+    async userLogin(name: string, password: string) {
       const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
       const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
       const privateKey = await decrypt(name, password, encryptedPrivateKeyHex);

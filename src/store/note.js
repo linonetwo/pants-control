@@ -10,7 +10,7 @@ type State = {
   // 当前打开的笔记 ID
   currentNoteID: string,
 };
-export default (initialState: State) => ({
+export default (initialState?: State) => ({
   state: {
     notes: {},
     ids: [],

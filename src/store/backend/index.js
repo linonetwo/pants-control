@@ -5,7 +5,7 @@ import IPFSFileGetter from './ipfs/IPFSFileGetter';
 type State = {
   currentBackEnd?: string,
 };
-export default (initialState: State) => ({
+export default (initialState?: State) => ({
   state: {
     currentBackEnd: undefined,
     ...initialState,

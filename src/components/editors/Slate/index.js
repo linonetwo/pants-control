@@ -7,7 +7,6 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 
 import HoverMenu from './HoverMenu';
-import { loadNote } from '../../../store/actions/core';
 
 const EditorContainer = styled.div`
   /* providing margin */
@@ -17,7 +16,6 @@ const EditorContainer = styled.div`
 type Props = {
   currentNote: Object | string,
   currentNoteID: string,
-  loadNote: ({ hash: string }) => void,
 };
 type State = {
   value: Object,
@@ -28,7 +26,6 @@ const mapStateToProps = ({ note: { notes, currentNoteID }, info: { loadingCounte
   loadingCounter,
 });
 
-@connect(mapStateToProps, { loadNote })
 export default class SlateEditor extends Component<Props, State> {
   state = {
     value: Plain.deserialize('This is editable plain text.\nJust like a <textarea>!'),

@@ -1,6 +1,7 @@
 {
   "name": "pants-control",
   "version": "0.1.0",
+  "license": "MIT",
   "scripts": {
     "preinstall": "export ELECTRON_MIRROR=\"https://npm.taobao.org/mirrors/electron/\"",
     "cosmos": "cosmos",
@@ -21,7 +22,7 @@
   "dependencies": {
     "@manaflair/redux-batch": "^0.1.0",
     "@rematch/core": "^1.0.0-alpha.4",
-    "@rematch/immer": "^1.0.1",
+    "@rematch/immer": "^1.0.2",
     "@rematch/select": "0.3.0",
     "aes-js": "^3.1.1",
     "antd": "^3.5.2",
@@ -60,6 +61,7 @@
     "scrypt-async-modern": "^3.0.6",
     "segmentit": "^1.1.4",
     "slate": "^0.33.6",
+    "slate-plain-serializer": "^0.5.12",
     "slate-react": "^0.12.6",
     "stream-buffers": "^3.0.1",
     "string-to-arraybuffer": "^1.0.0",
@@ -101,6 +103,7 @@
     "flow-typed": "^2.4.0",
     "react-app-rewired": "^1.5.2",
     "react-cosmos": "^4.3.0",
+    "spawn-sync": "^2.0.0",
     "wait-on": "^2.1.0"
   },
   "browserslist": {

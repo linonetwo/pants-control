@@ -1,21 +1,23 @@
 // @flow
 import { includes } from 'lodash';
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
 import Flex from 'styled-flex-component';
 import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
 
-import { viewerRegister, viewerLogin } from '../../store/actions/core';
 import BackgroundAnimation from './BackgroundAnimation';
 
+const Container = styled(Flex)`
+  height: 100vh;
+  width: 100vw;
+`;
 const loginWidth = 350;
 const LoginContainer = styled(Flex)`
   width: ${loginWidth + 150}px;
-  padding: 0;
-  margin: auto;
-  background-color: rgba(255,255,255,0.8);
+  padding: 50px;
+  background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 0 25px white;
 
   & i {
@@ -25,37 +27,39 @@ const LoginContainer = styled(Flex)`
 
 const Title = styled.h2``;
 const UserNameAutoComplete = styled(AutoComplete)`
-  width: ${loginWidth}px;
-  margin-bottom: 10px;
+  width: ${loginWidth}px !important;
+  margin-bottom: 10px !important;
 `;
 const RegisterInput = styled(Input)`
-  width: ${loginWidth}px;
-  margin-bottom: 10px;
+  width: ${loginWidth}px !important;
+  margin-bottom: 10px !important;
 `;
 const Buttons = styled(Flex)`
   width: ${loginWidth}px;
 `;
 const Button = styled(ButtonA)`
-  width: ${loginWidth}px;
-  border-color: transparent;
-  opacity: 0.3;
+  width: ${loginWidth}px !important;
+  border-color: transparent !important;
+  opacity: 0.3 !important;
   ${is('active')`
-    opacity: 1;
-    background-color: rgba(255,255,255,0.8);
+    opacity: 1 !important;
+    background-color: rgba(255,255,255,0.8) !important;
   `};
 `;
 
-type Props = {
-  viewers: string[],
-  viewerLogin: ({ name: string, password: string }) => void,
-  viewerRegister: ({ name: string, password: string }) => void,
+type Store = {
+  availableUsers: string[],
+};
+type Dispatch = {
+  userLogin: (name: string, password: string) => void,
+  createUser: (name: string, password: string) => void,
 };
 type State = {
   name: string,
   password: string,
 };
-@connect(({ viewer: { viewers } }) => ({ viewers }), { viewerRegister, viewerLogin })
-export default class Editors extends Component<Props, State> {
+
+class Login extends Component<Store & Dispatch, State> {
   state = {
     name: '',
     password: '',
@@ -74,7 +78,7 @@ export default class Editors extends Component<Props, State> {
   };
 
   hasUser(): boolean {
-    return includes(this.props.viewers, this.state.name);
+    return includes(this.props.availableUsers, this.state.name);
   }
   get title(): string {
     if (this.hasUser()) {
@@ -88,12 +92,12 @@ export default class Editors extends Component<Props, State> {
 
   render() {
     return (
-      <Fragment>
+      <Container center>
         <BackgroundAnimation />
         <LoginContainer column center>
           <Title>{this.title}</Title>
           <UserNameAutoComplete
-            dataSource={this.props.viewers}
+            dataSource={this.props.availableUsers}
             onSelect={this.setName}
             onChange={this.setName}
             handleSearch={this.setName}
@@ -113,9 +117,9 @@ export default class Editors extends Component<Props, State> {
               onClick={() => {
                 if (this.checkInput()) {
                   if (this.hasUser()) {
-                    this.props.viewerLogin({ name: this.state.name, password: this.state.password });
+                    this.props.userLogin({ name: this.state.name, password: this.state.password });
                   } else {
-                    this.props.viewerRegister({ name: this.state.name, password: this.state.password });
+                    this.props.createUser({ name: this.state.name, password: this.state.password });
                   }
                 }
               }}
@@ -124,7 +128,11 @@ export default class Editors extends Component<Props, State> {
             </Button>
           </Buttons>
         </LoginContainer>
-      </Fragment>
+      </Container>
     );
   }
 }
+
+const mapState = ({ viewer: { availableUsers } }): Store => ({ availableUsers });
+const mapDispatch = ({ viewer: { createUser, userLogin } }): Dispatch => ({ createUser, userLogin });
+export default connect(mapState, mapDispatch)(Login);

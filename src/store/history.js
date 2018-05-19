@@ -1,10 +1,12 @@
+// @flow
 import createHistory from 'history/createBrowserHistory';
-import { getState } from '@rematch/core';
 import queryString from 'query-string';
 
 export const history = createHistory();
 
-export default {
+type State = {};
+export default (initialState?: State) => ({
   state: {},
   effects: {},
-};
+  ...initialState,
+});
