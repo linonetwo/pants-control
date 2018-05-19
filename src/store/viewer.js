@@ -3,8 +3,8 @@ import keypair from 'keypair';
 import uuid from 'uuid/v4';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
-import { encrypt, decrypt } from '../utils/crypto';
-import { store } from './'
+import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
+import { store } from './';
 
 const getPrivateKeyStoreKey = (profileID: string) => `${profileID}-private`;
 const getLocalProfileIDStoreKey = (name: string) => `${name}-profileID`;
@@ -84,20 +84,32 @@ export default (initialState?: State) => ({
         // inform UI that register succeed
         this.setProfile(newProfile);
         this.setPrivateKey(privateKey);
+        console.log(publicKey, privateKey);
       } catch (error) {
         console.error(error);
         throw new Error('Profile 创建失败');
       }
     },
     async userLogin({ name, password }: { name: string, password: string }) {
-      const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
-      const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
-      const privateKey = await decrypt(name, password, encryptedPrivateKeyHex);
       try {
-        // get profile from backend
+        // loads profile
+        const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
         const profileString = await store.dispatch.backend.load(profileID);
+        const profile = JSON.parse(profileString);
+        // checks password
+        const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
+        const privateKey = await decrypt(name, password, encryptedPrivateKeyHex);
+
+        try {
+          if (!checkKeyPair(profile.publicKey, privateKey)) {
+            throw new Error('密码错误');
+          }
+        } catch (err) {
+          throw new Error('密码错误');
+        }
+        // get profile from backend
         // inform UI that loading succeed
-        this.setProfile(JSON.parse(profileString));
+        this.setProfile(profile);
         this.setPrivateKey(privateKey);
       } catch (error) {
         console.error(error);

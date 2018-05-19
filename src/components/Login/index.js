@@ -118,14 +118,10 @@ class Login extends Component<Store & Dispatch, State> {
               active={this.state.name && this.state.password}
               onClick={() => {
                 if (this.checkInput()) {
-                  try {
-                    if (this.hasUser()) {
-                      this.props.userLogin({ name: this.state.name, password: this.state.password });
-                    } else {
-                      this.props.createUser({ name: this.state.name, password: this.state.password });
-                    }
-                  } catch (error) {
-                    message.error(error);
+                  if (this.hasUser()) {
+                    this.props.userLogin({ name: this.state.name, password: this.state.password });
+                  } else {
+                    this.props.createUser({ name: this.state.name, password: this.state.password });
                   }
                 }
               }}
