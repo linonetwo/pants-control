@@ -1,6 +1,7 @@
 // @flow
 import IPFSFileUploader from './ipfs/IPFSFileUploader';
 import IPFSFileGetter from './ipfs/IPFSFileGetter';
+import getLevelDB from './levelDB';
 
 type State = {
   currentBackEnd?: string,
@@ -17,33 +18,45 @@ export default (initialState?: State) => ({
     },
   },
   effects: {
-    save(id: string, note: string) {
+    save(id: string, data: string) {
       switch (this.currentBackEnd) {
         case 'ipfs':
-          return this.saveNoteToIPFS(id, note);
+        return this.saveDataToIPFS(id, data);
+        case 'levelDB':
         default:
-          throw new Error('No backend configured');
+          return this.saveDataToLevelDB(id, data);
       }
     },
     load(id: string) {
       switch (this.currentBackEnd) {
         case 'ipfs':
-          return this.loadNoteFromIPFS(id);
+          return this.loadDataFromIPFS(id);
         default:
-          throw new Error('No backend configured');
+          return this.loadDataFromLevelDB(id)
       }
     },
-    async saveNoteToIPFS(id: string, note: string) {
+
+    async saveDataToIPFS(id: string, data: string) {
       const ipfs = await IPFSFileUploader.create();
-      const { hash } = await ipfs.uploadObject(note);
+      const { hash } = await ipfs.uploadObject(data);
       // TODO: save id -> hash mapping to a storage for example IPNS node
     },
-    async loadNoteFromIPFS(id: string) {
+    async loadDataFromIPFS(id: string) {
       // TODO: get hash by id from some storage
       const hash = id; // TODO: placeholder
       const ipfs = await IPFSFileGetter.create();
       const files = await ipfs.getFile(hash);
       return files;
+    },
+
+    async saveDataToLevelDB(id: string, data: string) {
+      const db = getLevelDB();
+      await db.put(id, data);
+    },
+    async loadDataFromLevelDB(id: string): Promise<string> {
+      const db = getLevelDB();
+      const data = await db.get(id)
+      return data;
     },
   },
 });
