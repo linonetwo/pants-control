@@ -76,6 +76,7 @@ export default (initialState?: State) => ({
       const profileID = uuid();
       try {
         // save profile to backend
+        const { store } = await import('./');
         store.dispatch.backend.save({ id: profileID, data: JSON.stringify(newProfile, null, '  ') });
         // Put private key to localStorage
         await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
@@ -94,6 +95,7 @@ export default (initialState?: State) => ({
       try {
         // loads profile
         const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
+        const { store } = await import('./');
         const profileString = await store.dispatch.backend.load(profileID);
         const profile = JSON.parse(profileString);
         // checks password
