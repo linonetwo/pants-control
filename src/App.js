@@ -8,7 +8,7 @@ import registerServiceWorker from './registerServiceWorker';
 import { store, history } from './store';
 import { APP_START } from './store/constants/core';
 import Editors from './components/Editors';
-import Login from './components/Login';
+import Login from './pages/Login';
 
 class App extends Component {
   componentDidMount() {
