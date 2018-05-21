@@ -5,7 +5,7 @@ import queryString from 'query-string';
 export const history = createHistory();
 
 type State = {};
-export default (initialState?: State) => ({
+export default (initialState?: * = {}) => ({
   state: {},
   effects: {},
   ...initialState,

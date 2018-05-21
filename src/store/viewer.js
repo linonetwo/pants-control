@@ -4,7 +4,6 @@ import uuid from 'uuid/v4';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
-import { store } from './';
 
 const getPrivateKeyStoreKey = (profileID: string) => `${profileID}-private`;
 const getLocalProfileIDStoreKey = (name: string) => `${name}-profileID`;
@@ -20,7 +19,7 @@ export type ViewerDispatch = {
   createUser: ({ name: string, password: string }) => void,
   getAvailableUsers: void => void,
 };
-export default (initialState?: State) => ({
+export default (initialState?: * = {}) => ({
   state: {
     availableUsers: [],
     profile: {},

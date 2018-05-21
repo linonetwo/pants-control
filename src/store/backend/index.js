@@ -6,7 +6,7 @@ import getLevelDB from './levelDB';
 type State = {
   currentBackEnd?: string,
 };
-export default (initialState?: State) => ({
+export default (initialState?: * = {}) => ({
   state: {
     currentBackEnd: undefined,
     ...initialState,

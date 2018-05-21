@@ -9,8 +9,7 @@ import viewerModel from './viewer';
 
 const immer = immerPlugin();
 const select = selectorsPlugin();
-const configureStore = ({ note, history: historyInitialState, backend, viewer } = {}) =>
-  init({
+const configureStore = ({ note, history: historyInitialState, backend, viewer } = {}) => init({
     models: {
       note: noteModel(note),
       history: historyModel(historyInitialState),
