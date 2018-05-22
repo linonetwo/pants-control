@@ -55,8 +55,9 @@ export default (initialState?: * = {}) => ({
       this.setAvailableUsers(newUsers);
     },
     async createUser({ name, password }: { name: string, password: string }) {
+      // TODO: switch to https://ed25519.cr.yp.to/ ? like textileio does
       const { public: publicKey, private: privateKey } = keypair();
-      const encryptedPrivateKeyHex = await encrypt(name, password, privateKey);
+      const encryptedPrivateKeyHex = await encrypt(name, password, privateKey); 
 
       // prepare profile
       const newProfile = {
