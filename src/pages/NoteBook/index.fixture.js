@@ -11,9 +11,7 @@ export default [
       note: {
         notes: {
           Qwvsage33: {
-            content: JSON.stringify(
-              Plain.deserialize('This is editable plain text.\nJust like a <textarea>!').toJSON(),
-            ),
+            content: Plain.deserialize('This is editable plain text.\nJust like a <textarea>!').toJSON(),
           },
         },
         ids: ['Qwvsage33'],

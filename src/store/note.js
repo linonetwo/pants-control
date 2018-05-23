@@ -1,12 +1,14 @@
 // @flow
 import { dispatch } from '@rematch/core';
+import { Value } from 'slate';
 
 export type Note = {
-  content: string,
+  content: Object,
 };
+export type Notes = { [id: string]: Note };
 type State = {
   // 扁平化的笔记
-  notes: { [id: string]: Note },
+  notes: Notes,
   ids: string[],
   // 没有持久化的笔记 ID
   notSyncedNoteIDs: string[],
@@ -23,7 +25,7 @@ export default (initialState?: * = {}) => ({
   },
   reducers: {
     /** 保存笔记内容到内存 */
-    setNote(state: State, { note, id }: { note: string, id: string }) {
+    setNote(state: State, { note, id }: { note: Object, id: string }) {
       if (!state.notes[id]) {
         state.notes[id] = {
           content: note,

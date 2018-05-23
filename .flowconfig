@@ -16,6 +16,7 @@
 [options]
 esproposal.class_static_fields=enable
 esproposal.class_instance_fields=enable
+esproposal.optional_chaining=enable
 esproposal.decorators=ignore
 esproposal.export_star_as=enable
 module.name_mapper.extension='css' -> '<PROJECT_ROOT>/internals/flow/CSSModule.js.flow'

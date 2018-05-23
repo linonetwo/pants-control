@@ -1,61 +1,58 @@
 // @flow
+import { debounce } from 'lodash';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import Plain from 'slate-plain-serializer';
 import styled from 'styled-components';
 import { Editor } from 'slate-react';
 import { Value } from 'slate';
+import Plain from 'slate-plain-serializer';
+import equal from 'fast-deep-equal';
+
+import type { Note } from '../../../store/note';
 
 import HoverMenu from './HoverMenu';
 
-const EditorContainer = styled.div`
-  /* providing margin */
-  margin: 10px ${({ margin }) => (margin ? '100px' : '10px')};
-`;
+const EditorContainer = styled.div``;
 
 type Store = {
-  currentNote?: string | null,
-  currentNoteID: string | null,
+  currentNoteInStore?: Note,
 };
 type Dispatch = {
   setNote: ({ note: string, id: string }) => void,
 };
 type Props = {
-  margin?: boolean,
+  noteID?: string | null,
 };
 type State = {
+  noteID?: string | null,
   value: Object,
-  currentNoteID: string | null,
 };
 
 class SlateEditor extends Component<Store & Dispatch & Props, State> {
-  /** Note switching: load new note from store
-   * noteID is the content multihash in the IPFS.
-   */
-  /** Initialization: load note from store
-   * Some public data like profile should be a plain JSON-LD, so we load it as a string.
-   * Others are rich text, load it as standard Slate value.
-   */
-  static getDerivedStateFromProps(nextProps: Store, currentState: State) {
-    if (nextProps.currentNoteID !== currentState.currentNoteID && nextProps.currentNote) {
-      return { value: Value.fromJSON(JSON.parse(nextProps.currentNote)), currentNoteID: nextProps.currentNoteID };
+  static getDerivedStateFromProps(nextProps: Store & Props, currentState: State) {
+    if (
+      nextProps.currentNoteInStore?.content &&
+      !equal(nextProps.currentNoteInStore?.content, currentState.value.toJSON())
+    ) {
+      const value = Value.fromJSON(nextProps.currentNoteInStore.content);
+      return { value, noteID: nextProps.noteID };
     }
     return null;
   }
 
   state = {
-    value: Plain.deserialize('This is editable plain text.\nJust like a <textarea>!'),
-    currentNoteID: null,
+    value: Plain.deserialize(''),
+    noteID: null,
   };
 
   onChange = ({ value }) => {
     if (value.document !== this.state.value.document) {
       // save serialized content to local cache in redux store
-
-      const content = JSON.stringify(value.toJSON());
-      this.props.setNote({ note: content, id: this.props.currentNoteID });
+      const content = value.toJSON();
+      if (this.state.noteID) {
+        this.props.setNote({ note: content, id: this.state.noteID });
+      }
     }
-    // save content to fast local cache in react state
     this.setState({ value });
   };
 
@@ -78,9 +75,9 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   render() {
     return (
       <Fragment>
-        <HoverMenu value={this.state.value} onChange={this.onChange} />
-        <EditorContainer margin={this.props.margin}>
-          {this.props.currentNote ? (
+        {this.props.noteID && <HoverMenu value={this.state.value} onChange={this.onChange} />}
+        <EditorContainer>
+          {this.props.noteID ? (
             <Editor
               placeholder="你可以用 @ 插入特殊块"
               value={this.state.value}
@@ -96,9 +93,8 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   }
 }
 
-const mapStateTo = ({ note: { notes, currentNoteID } }): Store => ({
-  currentNote: notes[currentNoteID]?.content,
-  currentNoteID,
+const mapState = ({ note: { notes } }, { noteID }): Store => ({
+  currentNoteInStore: notes[noteID],
 });
 const mapDispatch = ({ note: { setNote } }): Dispatch => ({ setNote });
-export default connect(mapStateTo, mapDispatch)(SlateEditor);
+export default connect(mapState, mapDispatch)(SlateEditor);
