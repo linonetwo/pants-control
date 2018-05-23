@@ -38,7 +38,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
    */
   static getDerivedStateFromProps(nextProps: Store, currentState: State) {
     if (nextProps.currentNoteID !== currentState.currentNoteID && nextProps.currentNote) {
-      return { value: Value.fromJSON(JSON.parse(nextProps.currentNote)) };
+      return { value: Value.fromJSON(JSON.parse(nextProps.currentNote)), currentNoteID: nextProps.currentNoteID };
     }
     return null;
   }
