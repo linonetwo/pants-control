@@ -14,7 +14,7 @@ export default class Editors extends Component {
   render() {
     return (
       <EditorScroll>
-        <SlateEditor />
+        <SlateEditor margin={this.props.margin} />
       </EditorScroll>
     );
   }

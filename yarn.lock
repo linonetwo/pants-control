@@ -11097,6 +11097,12 @@ styled-components@^3.2.6:
     stylis-rule-sheet "^0.0.10"
     supports-color "^3.2.3"
 
+styled-css-grid@^0.9.0:
+  version "0.9.0"
+  resolved "http://registry.npm.taobao.org/styled-css-grid/download/styled-css-grid-0.9.0.tgz#e64bb28f96fd0fff3cbb83a17dd00d7f541ef0ad"
+  dependencies:
+    prop-types "^15.6.0"
+
 styled-flex-component@^2.2.2:
   version "2.2.2"
   resolved "http://registry.npm.taobao.org/styled-flex-component/download/styled-flex-component-2.2.2.tgz#6d5225228bb48ee4b7fe451a3492236381d991d1"

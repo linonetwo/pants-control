@@ -10,26 +10,30 @@ import HoverMenu from './HoverMenu';
 
 const EditorContainer = styled.div`
   /* providing margin */
-  margin: 10px 300px;
+  margin: 10px ${({ margin }) => (margin ? '300px' : '10px')};
 `;
 
 type Store = {
-  currentNote: Object | string,
-  currentNoteID: string,
+  currentNote?: Object | null,
+  currentNoteID: string | null,
 };
 type Dispatch = {
   setNote: ({ note: string, id: string }) => void,
 };
+type Props = {
+  margin?: boolean,
+};
 type State = {
   value: Object,
+  currentNoteID: string | null,
 };
 
-class SlateEditor extends Component<Store & Dispatch, State> {
+class SlateEditor extends Component<Store & Dispatch & Props, State> {
   /** Note switching: load new note from store
    * noteID is the content multihash in the IPFS.
    */
-  static getDerivedStateFromProps(nextProps: Store) {
-    if (nextProps.currentNoteID !== this.props.currentNoteID) {
+  static getDerivedStateFromProps(nextProps: Store, currentState: State) {
+    if (nextProps.currentNoteID !== currentState.currentNoteID && nextProps.currentNote) {
       return { value: Value.fromJSON(nextProps.currentNote) };
     }
     return null;
@@ -37,6 +41,7 @@ class SlateEditor extends Component<Store & Dispatch, State> {
 
   state = {
     value: Plain.deserialize('This is editable plain text.\nJust like a <textarea>!'),
+    currentNoteID: null,
   };
 
   /** Initialization: load note from store
@@ -45,7 +50,9 @@ class SlateEditor extends Component<Store & Dispatch, State> {
    */
   componentWillMount() {
     const { currentNote } = this.props;
-    this.setState({ value: Value.fromJSON(currentNote) });
+    if (currentNote) {
+      this.setState({ value: Value.fromJSON(currentNote) });
+    }
   }
 
   onChange = ({ value }) => {
@@ -78,7 +85,7 @@ class SlateEditor extends Component<Store & Dispatch, State> {
     return (
       <Fragment>
         <HoverMenu value={this.state.value} onChange={this.onChange} />
-        <EditorContainer>
+        <EditorContainer margin={this.props.margin}>
           {this.props.currentNote ? (
             <Editor
               placeholder="你可以用 @ 插入特殊块"
@@ -96,7 +103,7 @@ class SlateEditor extends Component<Store & Dispatch, State> {
 }
 
 const mapStateTo = ({ note: { notes, currentNoteID } }): Store => ({
-  currentNote: notes[currentNoteID].content,
+  currentNote: notes[currentNoteID]?.content,
   currentNoteID,
 });
 const mapDispatch = ({ note: { setNote } }): Dispatch => ({ setNote });
