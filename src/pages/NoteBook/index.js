@@ -19,7 +19,10 @@ const Container = styled(Grid)`
   height: 100vh;
   width: 100vw;
 `;
-class NoteBook extends Component<*, *> {
+type Store = {
+  currentNoteID: string | null,
+};
+class NoteBook extends Component<Store, *> {
   state = {
     leftNoteWidth: 3,
     noteAreaWidth: 12,
@@ -34,11 +37,14 @@ class NoteBook extends Component<*, *> {
           <Header>
             <HeaderTitle>Welcome to Pants-Control</HeaderTitle>
           </Header>
-          <Editors margin />
+          <Editors noteID={this.props.currentNoteID} />
         </Cell>
       </Container>
     );
   }
 }
 
-export default connect(() => ({}))(NoteBook);
+const mapState = ({ note: { currentNoteID } }): Store => ({
+  currentNoteID,
+});
+export default connect(mapState)(NoteBook);
