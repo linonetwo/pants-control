@@ -48,5 +48,16 @@ export default (initialState?: * = {}) => ({
       }
       this.focusNote(id);
     },
+    async saveNote(id: string) {
+      if (!this.ids.includes(id)) {
+        const {
+          note: { notes },
+        } = await import('./');
+        if (id in notes) {
+          const serializedNote = Value.fromJSON(JSON.parse(notes[id].content));
+          await dispatch.backend.save({ id, data: serializedNote });
+        }
+      }
+    },
   },
 });
