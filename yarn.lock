@@ -9646,6 +9646,10 @@ react-immutable-proptypes@^2.1.0:
   version "2.1.0"
   resolved "http://registry.npm.taobao.org/react-immutable-proptypes/download/react-immutable-proptypes-2.1.0.tgz#023d6f39bb15c97c071e9e60d00d136eac5fa0b4"
 
+react-ink@^6.2.0:
+  version "6.2.0"
+  resolved "http://registry.npm.taobao.org/react-ink/download/react-ink-6.2.0.tgz#b268107bf986c6009bd38d7d3baa9fba1016e368"
+
 react-is@^16.3.1:
   version "16.3.2"
   resolved "http://registry.npm.taobao.org/react-is/download/react-is-16.3.2.tgz#f4d3d0e2f5fbb6ac46450641eb2e25bf05d36b22"
@@ -11081,6 +11085,10 @@ style-loader@0.19.1:
   dependencies:
     loader-utils "^1.0.2"
     schema-utils "^0.3.0"
+
+styled-components-mixins@^0.0.5:
+  version "0.0.5"
+  resolved "http://registry.npm.taobao.org/styled-components-mixins/download/styled-components-mixins-0.0.5.tgz#d4bee344c8ddb67038309eef7de77daf642a5ca2"
 
 styled-components@^3.2.6:
   version "3.2.6"
