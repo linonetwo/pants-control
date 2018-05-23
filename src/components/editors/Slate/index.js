@@ -14,7 +14,7 @@ const EditorContainer = styled.div`
 `;
 
 type Store = {
-  currentNote?: Object | null,
+  currentNote?: string | null,
   currentNoteID: string | null,
 };
 type Dispatch = {
@@ -32,9 +32,13 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   /** Note switching: load new note from store
    * noteID is the content multihash in the IPFS.
    */
+  /** Initialization: load note from store
+   * Some public data like profile should be a plain JSON-LD, so we load it as a string.
+   * Others are rich text, load it as standard Slate value.
+   */
   static getDerivedStateFromProps(nextProps: Store, currentState: State) {
     if (nextProps.currentNoteID !== currentState.currentNoteID && nextProps.currentNote) {
-      return { value: Value.fromJSON(nextProps.currentNote) };
+      return { value: Value.fromJSON(JSON.parse(nextProps.currentNote)) };
     }
     return null;
   }
@@ -44,20 +48,10 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     currentNoteID: null,
   };
 
-  /** Initialization: load note from store
-   * Some public data like profile should be a plain JSON-LD, so we load it as a string.
-   * Others are rich text, load it as standard Slate value.
-   */
-  componentWillMount() {
-    const { currentNote } = this.props;
-    if (currentNote) {
-      this.setState({ value: Value.fromJSON(currentNote) });
-    }
-  }
-
   onChange = ({ value }) => {
     if (value.document !== this.state.value.document) {
       // save serialized content to local cache in redux store
+
       const content = JSON.stringify(value.toJSON());
       this.props.setNote({ note: content, id: this.props.currentNoteID });
     }
