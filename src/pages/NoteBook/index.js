@@ -13,7 +13,7 @@ const Header = styled.header`
   top: 0;
   height: ${headerHeight};
 `;
-const Container = styled(Flex)`
+const Container = styled(Grid)`
   height: calc(100vh - ${headerHeight});
   margin-top: ${headerHeight};
   width: 100vw;
@@ -29,15 +29,13 @@ class NoteBook extends Component<*> {
         <Header>
           <h1>Welcome to Pants-Control</h1>
         </Header>
-        <Container>
-          <Grid columns={this.state.noteAreaWidth}>
-            <Cell width={this.state.leftNoteWidth}>
-              <Editors />
-            </Cell>
-            <Cell width={this.state.noteAreaWidth - this.state.leftNoteWidth}>
-              <Editors margin/>
-            </Cell>
-          </Grid>
+        <Container columns={this.state.noteAreaWidth}>
+          <Cell width={this.state.leftNoteWidth}>
+            <Editors />
+          </Cell>
+          <Cell width={this.state.noteAreaWidth - this.state.leftNoteWidth}>
+            <Editors margin />
+          </Cell>
         </Container>
       </Fragment>
     );
