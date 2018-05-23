@@ -42,4 +42,8 @@ injectGlobal`
     text-decoration: none;
     cursor: pointer;
   }
+
+  ::-webkit-scrollbar{
+    display:none;
+  }
 `;

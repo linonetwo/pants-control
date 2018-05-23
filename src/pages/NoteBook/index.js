@@ -1,43 +1,42 @@
 // @flow
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Grid, Cell } from 'styled-css-grid';
-import Flex from 'styled-flex-component';
 
 import Editors from '../../components/Editors';
 
-const headerHeight = '50px';
 const Header = styled.header`
-  position: absolute;
-  top: 0;
-  height: ${headerHeight};
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+const HeaderTitle = styled.h1`
+  font-size: 14px;
 `;
 const Container = styled(Grid)`
-  height: calc(100vh - ${headerHeight});
-  margin-top: ${headerHeight};
+  height: 100vh;
   width: 100vw;
 `;
-class NoteBook extends Component<*> {
+class NoteBook extends Component<*, *> {
   state = {
     leftNoteWidth: 3,
     noteAreaWidth: 12,
   };
   render() {
     return (
-      <Fragment>
-        <Header>
-          <h1>Welcome to Pants-Control</h1>
-        </Header>
-        <Container columns={this.state.noteAreaWidth}>
-          <Cell width={this.state.leftNoteWidth}>
-            <Editors />
-          </Cell>
-          <Cell width={this.state.noteAreaWidth - this.state.leftNoteWidth}>
-            <Editors margin />
-          </Cell>
-        </Container>
-      </Fragment>
+      <Container columns={this.state.noteAreaWidth}>
+        <Cell width={this.state.leftNoteWidth}>
+          <Editors sideBar />
+        </Cell>
+        <Cell width={this.state.noteAreaWidth - this.state.leftNoteWidth}>
+          <Header>
+            <HeaderTitle>Welcome to Pants-Control</HeaderTitle>
+          </Header>
+          <Editors margin />
+        </Cell>
+      </Container>
     );
   }
 }

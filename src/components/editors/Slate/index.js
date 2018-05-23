@@ -10,7 +10,7 @@ import HoverMenu from './HoverMenu';
 
 const EditorContainer = styled.div`
   /* providing margin */
-  margin: 10px ${({ margin }) => (margin ? '300px' : '10px')};
+  margin: 10px ${({ margin }) => (margin ? '100px' : '10px')};
 `;
 
 type Store = {
