@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Grid, Cell } from 'styled-css-grid';
 
-import Editors from '../../components/Editors';
+import Editors, { headerHeight } from '../../components/Editors';
 
 const Header = styled.header`
-  height: 30px;
+  height: ${headerHeight};
   display: flex;
   align-items: center;
   justify-content: center;

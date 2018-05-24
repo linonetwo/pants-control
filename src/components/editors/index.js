@@ -4,14 +4,16 @@ import styled, { css } from 'styled-components';
 
 import SlateEditor from './Slate';
 
+export const headerHeight = '30px';
 const EditorScroll = styled.div`
-  height: 100%;
+  height: calc(100% - ${headerHeight});
   overflow-y: scroll;
   overflow-x: hidden;
   padding: 10px 100px;
   ${({ sideBar }) =>
     sideBar &&
     css`
+      height: 100%;
       background-color: whitesmoke;
       padding: 10px;
     `};
