@@ -2,37 +2,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { btn } from 'styled-components-mixins/materialize';
 import Flex from 'styled-flex-component';
 import Ink from 'react-ink';
 import Plain from 'slate-plain-serializer';
 import uuid from 'uuid/v4';
 
+import { materialButton } from '../../styles/material';
+
 const ButtonContainer = styled(Flex)`
-  ${btn};
-  background-color: white;
-  color: #333;
-  box-shadow: none;
-  &:hover,
-  &:focus {
-    background-color: white;
-    color: #333;
-  }
-  &:focus {
-    box-shadow: none;
-  }
-
-  width: min-content;
-  max-width: 300px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-
-  text-align: left;
-  padding-left: 5px;
-  padding-right: 5px;
-
-  position: relative;
+  ${materialButton};
 `;
 
 class NewNoteButton extends Component<*> {

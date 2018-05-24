@@ -4,6 +4,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Flex from 'styled-flex-component';
+import is from 'styled-is';
+
+import { materialButton } from '../../styles/material';
 
 const Container = styled(Flex)`
   margin: auto;
@@ -24,9 +27,17 @@ const Tags = styled.div`
     }
   }
 `;
-const NoteLink = styled(Flex)`
-  cursor: pointer;
+const NoteLink = styled.button`
+  ${materialButton};
   user-select: none;
+  width: 100%;
+  ${is('focused')`
+    border: 1px solid #999;
+  `};
+
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
 `;
 const Expander = styled(Flex)`
   cursor: pointer;
@@ -45,6 +56,7 @@ type Props = {
 };
 type Store = {
   ids: string[],
+  currentNoteID: string | null,
 };
 type Dispatch = {
   focusNote: (id: string) => void,
@@ -64,7 +76,12 @@ class NewNoteButton extends Component<Props & Store & Dispatch, *> {
         <Title onClick={this.expandArea}>{this.props.title || this.props.children}</Title>
         <Tags>
           {(this.state.expanded ? this.props.ids : take(this.props.ids, this.displayLimit)).map(id => (
-            <NoteLink key={id} onClick={() => this.props.focusNote(id)} contenteditable={false}>
+            <NoteLink
+              focused={id === this.props.currentNoteID}
+              key={id}
+              onClick={() => this.props.focusNote(id)}
+              contenteditable={false}
+            >
               {id}
             </NoteLink>
           ))}
@@ -79,8 +96,8 @@ class NewNoteButton extends Component<Props & Store & Dispatch, *> {
   }
 }
 
-function mapState({ note: { ids } }): Store {
-  return { ids };
+function mapState({ note: { ids, currentNoteID } }): Store {
+  return { ids, currentNoteID };
 }
 function mapDispatch({ note: { focusNote } }): Dispatch {
   return {

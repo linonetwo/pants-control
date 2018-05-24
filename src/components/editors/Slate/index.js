@@ -88,6 +88,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
               value={this.state.value}
               onChange={this.onChange}
               renderMark={this.renderMark}
+              spellCheck={false}
             />
           ) : (
             'Loading...'
