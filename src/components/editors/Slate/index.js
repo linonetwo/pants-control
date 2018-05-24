@@ -1,5 +1,4 @@
 // @flow
-import { debounce } from 'lodash';
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -7,6 +6,7 @@ import { Editor } from 'slate-react';
 import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
+import NewNoteButton from '../../Buttons/NewNoteButton';
 
 import type { Note } from '../../../store/note';
 
@@ -67,6 +67,8 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         return <em>{children}</em>;
       case 'underlined':
         return <u>{children}</u>;
+      case 'new-note-button':
+        return <NewNoteButton>{children}</NewNoteButton>;
       default:
         return <p>{children}</p>;
     }

@@ -22,7 +22,7 @@ const ButtonContainer = styled(Flex)`
     box-shadow: none;
   }
 
-  width: 100%;
+  width: min-content;
   max-width: 300px;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -31,13 +31,16 @@ const ButtonContainer = styled(Flex)`
   text-align: left;
   padding-left: 5px;
   padding-right: 5px;
+
+  position: relative;
 `;
 
 class NewNoteButton extends Component<*> {
   handleClick = () => {
-    const note = JSON.stringify(Plain.deserialize('').toJSON());
+    const note = Plain.deserialize('New Note').toJSON();
     const id = uuid();
     this.props.setNote({ note, id });
+    this.props.focusNote(id);
   };
   render() {
     return (
@@ -49,9 +52,10 @@ class NewNoteButton extends Component<*> {
   }
 }
 
-function mapDispatch({ note: { setNote } }) {
+function mapDispatch({ note: { setNote, focusNote } }) {
   return {
     setNote,
+    focusNote,
   };
 }
 export default connect(undefined, mapDispatch)(NewNoteButton);

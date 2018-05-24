@@ -1,14 +1,16 @@
 // @flow
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import is from 'styled-is';
 
 import ReactDOM from 'react-dom';
 
 const MenuButton = styled.span`
-  color: ${props => (props.isActive ? '#fff' : '#aaa')};
   cursor: pointer;
 
   & .material-icons {
+    color: #aaa;
+    color: ${is('active')`#fff`};
     font-size: 18px;
     vertical-align: text-bottom;
   }
@@ -42,6 +44,7 @@ export default class HoverMenu extends Component {
    */
   hasMark(type: string): boolean {
     const { value } = this.props;
+
     if (!value.activeMarks) return false;
     return value.activeMarks.some(mark => mark.type === type);
   }
@@ -60,10 +63,8 @@ export default class HoverMenu extends Component {
    * Render a mark-toggling toolbar button.
    */
   renderMarkButton(type: string, icon: string): React$Element<*> {
-    const isActive = this.hasMark(type);
-
     return (
-      <MenuButton onMouseDown={event => this.onClickMark(event, type)} isActive={isActive}>
+      <MenuButton onMouseDown={event => this.onClickMark(event, type)} active={this.hasMark(type)}>
         <span className="material-icons">{icon}</span>
       </MenuButton>
     );
@@ -106,6 +107,7 @@ export default class HoverMenu extends Component {
         {this.renderMarkButton('italic', 'format_italic')}
         {this.renderMarkButton('underlined', 'format_underlined')}
         {this.renderMarkButton('code', 'code')}
+        {this.renderMarkButton('new-note-button', 'add')}
       </MenuContainer>,
       document.getElementById('root'),
     );
