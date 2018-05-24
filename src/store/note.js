@@ -21,6 +21,7 @@ export default (initialState?: * = {}) => ({
     ids: [],
     notSyncedNoteIDs: [],
     currentNoteID: null,
+    sideNoteID: null,
     ...initialState,
   },
   reducers: {

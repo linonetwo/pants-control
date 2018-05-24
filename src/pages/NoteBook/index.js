@@ -21,6 +21,7 @@ const Container = styled(Grid)`
 `;
 type Store = {
   currentNoteID: string | null,
+  sideNoteID: string | null,
 };
 class NoteBook extends Component<Store, *> {
   state = {
@@ -31,7 +32,7 @@ class NoteBook extends Component<Store, *> {
     return (
       <Container columns={this.state.noteAreaWidth}>
         <Cell width={this.state.leftNoteWidth}>
-          <Editors sideBar />
+          <Editors sideBar noteID={this.props.sideNoteID} />
         </Cell>
         <Cell width={this.state.noteAreaWidth - this.state.leftNoteWidth}>
           <Header>
@@ -44,7 +45,8 @@ class NoteBook extends Component<Store, *> {
   }
 }
 
-const mapState = ({ note: { currentNoteID } }): Store => ({
+const mapState = ({ note: { currentNoteID, sideNoteID } }): Store => ({
   currentNoteID,
+  sideNoteID,
 });
 export default connect(mapState)(NoteBook);
