@@ -21,7 +21,13 @@ const exampleSideNote = {
                 {
                   object: 'leaf',
                   text: 'Your notes:',
-                  marks: [],
+                  marks: [
+                    {
+                      object: 'mark',
+                      type: 'note-list',
+                      data: {},
+                    },
+                  ],
                 },
               ],
             },

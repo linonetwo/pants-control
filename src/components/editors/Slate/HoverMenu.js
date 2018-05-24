@@ -108,6 +108,7 @@ export default class HoverMenu extends Component {
         {this.renderMarkButton('underlined', 'format_underlined')}
         {this.renderMarkButton('code', 'code')}
         {this.renderMarkButton('new-note-button', 'add')}
+        {this.renderMarkButton('note-list', 'view_list')}
       </MenuContainer>,
       document.getElementById('root'),
     );

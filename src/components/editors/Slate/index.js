@@ -7,6 +7,7 @@ import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
 import NewNoteButton from '../../Buttons/NewNoteButton';
+import NoteList from '../../Facets/NoteList';
 
 import type { Note } from '../../../store/note';
 
@@ -69,6 +70,8 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         return <u>{children}</u>;
       case 'new-note-button':
         return <NewNoteButton>{children}</NewNoteButton>;
+      case 'note-list':
+        return <NoteList>{children}</NoteList>;
       default:
         return <p>{children}</p>;
     }
