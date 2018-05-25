@@ -1,5 +1,5 @@
 // @flow
-import { dispatch } from '@rematch/core';
+import { uniq } from 'lodash';
 import { Value } from 'slate';
 
 export type Note = {
@@ -35,6 +35,8 @@ export default (initialState?: * = {}) => ({
       } else {
         state.notes[id].content = note;
       }
+      // add note to ready to sync list, sync it to backend later
+      state.notSyncedNoteIDs = uniq([...state.notSyncedNoteIDs, id]);
       return state;
     },
     focusNote(state: State, id: string) {
@@ -45,8 +47,9 @@ export default (initialState?: * = {}) => ({
   effects: {
     async openNote(id: string) {
       if (!this.ids.includes(id)) {
+        const { dispatch } = await import('./');
         // load note from IPFS or server
-        const note = await dispatch.backend.load(id);
+        const note = JSON.parse(await dispatch.backend.load(id));
         this.setNote({ note, id });
       }
       this.focusNote(id);
@@ -55,12 +58,24 @@ export default (initialState?: * = {}) => ({
       if (!this.ids.includes(id)) {
         const {
           note: { notes },
+          dispatch,
         } = await import('./');
         if (id in notes) {
-          const serializedNote = Value.fromJSON(JSON.parse(notes[id].content));
+          const serializedNote = JSON.stringify(notes[id].content);
           await dispatch.backend.save({ id, data: serializedNote });
         }
       }
+    },
+    async syncToBackend() {
+      const {
+        note: { notSyncedNoteIDs },
+      }: {
+        note: {
+          notSyncedNoteIDs: string[],
+        },
+      } = await import('./');
+      if (notSyncedNoteIDs.length === 0) return;
+      return Promise.all(notSyncedNoteIDs.map(id => this.saveNote(id)));
     },
   },
 });
