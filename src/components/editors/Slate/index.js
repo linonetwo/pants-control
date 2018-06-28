@@ -3,9 +3,11 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Editor } from 'slate-react';
-import { Value } from 'slate';
+import { Block, Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
+import { CHILD_REQUIRED, CHILD_TYPE_INVALID } from 'slate-schema-violations'
+
 import NewNoteButton from '../../Buttons/NewNoteButton';
 import NoteList from '../../Facets/NoteList';
 
@@ -27,6 +29,25 @@ type Props = {
 type State = {
   noteID?: string | null,
   value: Object,
+};
+
+const schema = {
+  document: {
+    nodes: [{ types: ['title'], min: 1, max: 1 }, { types: ['paragraph'], min: 1 }],
+    normalize: (change, violation, { node, child, index }) => {
+      switch (violation) {
+        case CHILD_TYPE_INVALID: {
+          return change.setNodeByKey(child.key, index === 0 ? 'title' : 'paragraph');
+        }
+        case CHILD_REQUIRED: {
+          const block = Block.create(index === 0 ? 'title' : 'paragraph');
+          return change.insertNodeByKey(node.key, index, block);
+        }
+        default:
+          return change;
+      }
+    },
+  },
 };
 
 class SlateEditor extends Component<Store & Dispatch & Props, State> {
@@ -85,6 +106,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
           {this.props.noteID ? (
             <Editor
               placeholder="你可以用 @ 插入特殊块"
+              schema={schema}
               value={this.state.value}
               onChange={this.onChange}
               renderMark={this.renderMark}
