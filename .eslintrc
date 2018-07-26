@@ -22,10 +22,15 @@
     "browser": true,
     "jest/globals": true
   },
+  "globals": {
+    "fetch": true
+  },
   "rules": {
+    "linebreak-style": 0,
     "comma-dangle": 1,
     "arrow-parens": ["off"],
     "consistent-return": "off",
+    "react/prefer-stateless-function": "off",
     "no-underscore-dangle": "off",
     "no-unused-expressions": "off",
     "flowtype/define-flow-type": 1,
@@ -46,6 +51,7 @@
     "react/no-multi-comp": "off",
     "no-param-reassign": "off",
     "no-restricted-syntax": "off",
+    "no-undef": ["error", { "typeof": false }],
     "max-len": "off",
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".js", ".jsx"] }],
@@ -57,9 +63,5 @@
         "aspects": ["noHref", "invalidHref", "preferButton"]
       }
     ]
-  },
-  "globals": {
-    "window": true,
-    "document": true
   }
 }

@@ -6,7 +6,7 @@ let _ipfsd = null;
 
 const port = 43134;
 
-function initIPFSD(repoPath = '/Users/dongwu/Desktop/ipfsRepo') {
+function initIPFSD(repoPath = '/Users/linonetwo/Desktop/ipfsRepo') {
   console.log(`Start IPFS Daemon with repo: ${repoPath}`);
   return new Promise((resolve, reject) => {
     DaemonFactory.create({ type: 'proc', exec: require('ipfs'), port }).spawn(
