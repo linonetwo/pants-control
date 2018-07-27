@@ -1408,9 +1408,9 @@
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/@protobufjs/utf8/download/@protobufjs/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
 
-"@rematch/core@^1.0.0-alpha.4":
-  version "1.0.0-alpha.4"
-  resolved "http://registry.npm.taobao.org/@rematch/core/download/@rematch/core-1.0.0-alpha.4.tgz#9aba7690f989e879ad5a9d2452a1fdaf89f8bb2f"
+"@rematch/core@^1.0.0-beta.4":
+  version "1.0.0-beta.4"
+  resolved "http://registry.npm.taobao.org/@rematch/core/download/@rematch/core-1.0.0-beta.4.tgz#5bf2f7d80e952582f733c8e66d653022cffca8a4"
   dependencies:
     redux "4.0.0"
 

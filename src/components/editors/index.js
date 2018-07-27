@@ -21,9 +21,10 @@ const EditorScroll = styled.div`
 
 export default class Editors extends Component<*> {
   render() {
+    const { sideBar, noteID } = this.props;
     return (
-      <EditorScroll sideBar={this.props.sideBar}>
-        <SlateEditor noteID={this.props.noteID} />
+      <EditorScroll sideBar={sideBar}>
+        <SlateEditor noteID={noteID} />
       </EditorScroll>
     );
   }

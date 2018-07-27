@@ -6,7 +6,7 @@ import { Editor } from 'slate-react';
 import { Block, Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
-import { CHILD_REQUIRED, CHILD_TYPE_INVALID } from 'slate-schema-violations'
+import { CHILD_REQUIRED, CHILD_TYPE_INVALID } from 'slate-schema-violations';
 
 import NewNoteButton from '../../Buttons/NewNoteButton';
 import NoteList from '../../Facets/NoteList';
@@ -51,6 +51,11 @@ const schema = {
 };
 
 class SlateEditor extends Component<Store & Dispatch & Props, State> {
+  state = {
+    value: Plain.deserialize(''),
+    noteID: null,
+  };
+
   static getDerivedStateFromProps(nextProps: Store & Props, currentState: State) {
     if (
       nextProps.currentNoteInStore?.content &&
@@ -62,17 +67,14 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     return null;
   }
 
-  state = {
-    value: Plain.deserialize(''),
-    noteID: null,
-  };
-
   onChange = ({ value }) => {
-    if (value.document !== this.state.value.document) {
+    const { setNote } = this.props;
+    const { value: prevValue, noteID } = this.state;
+    if (value.document !== prevValue.document) {
       // save serialized content to local cache in redux store
       const content = value.toJSON();
-      if (this.state.noteID) {
-        this.props.setNote({ note: content, id: this.state.noteID });
+      if (noteID) {
+        setNote({ note: content, id: noteID });
       }
     }
     this.setState({ value });
@@ -99,15 +101,17 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   };
 
   render() {
+    const { noteID } = this.props;
+    const { value } = this.state;
     return (
       <Fragment>
-        {this.props.noteID && <HoverMenu value={this.state.value} onChange={this.onChange} />}
+        {noteID && <HoverMenu value={value} onChange={this.onChange} />}
         <EditorContainer>
-          {this.props.noteID ? (
+          {noteID ? (
             <Editor
               placeholder="你可以用 @ 插入特殊块"
               schema={schema}
-              value={this.state.value}
+              value={value}
               onChange={this.onChange}
               renderMark={this.renderMark}
               spellCheck={false}

@@ -13,7 +13,9 @@ type State = {
   // 没有持久化的笔记 ID
   notSyncedNoteIDs: string[],
   // 当前打开的笔记 ID
-  currentNoteID: string,
+  currentNoteID: string | null,
+  // 当前打开的侧边栏 ID
+  sideNoteID: string | null,
 };
 export default (initialState?: * = {}) => ({
   state: {
@@ -45,35 +47,45 @@ export default (initialState?: * = {}) => ({
     },
   },
   effects: {
-    async openNote(id: string) {
-      if (!this.ids.includes(id)) {
-        const { dispatch } = await import('./');
+    async openNote(
+      id: string,
+      {
+        note: { ids },
+      }: { note: State },
+    ) {
+      if (!ids.includes(id)) {
+        const {
+          store: { dispatch },
+        } = await import('./');
         // load note from IPFS or server
         const note = JSON.parse(await dispatch.backend.load(id));
         this.setNote({ note, id });
       }
       this.focusNote(id);
     },
-    async saveNote(id: string) {
-      if (!this.ids.includes(id)) {
-        const {
-          note: { notes },
-          dispatch,
-        } = await import('./');
+    async saveNote(
+      id: string,
+      {
+        note: { ids, notes },
+      }: { note: State },
+    ) {
+      if (!ids.includes(id)) {
         if (id in notes) {
           const serializedNote = JSON.stringify(notes[id].content);
+          const {
+            store: { dispatch },
+          } = await import('./');
           await dispatch.backend.save({ id, data: serializedNote });
         }
       }
     },
-    async syncToBackend() {
-      const {
-        note: { notSyncedNoteIDs },
-      }: {
-        note: {
-          notSyncedNoteIDs: string[],
-        },
-      } = await import('./');
+    async syncToBackend({
+      note: { notSyncedNoteIDs },
+    }: {
+      note: {
+        notSyncedNoteIDs: string[],
+      },
+    }) {
       if (notSyncedNoteIDs.length === 0) return;
       return Promise.all(notSyncedNoteIDs.map(id => this.saveNote(id)));
     },

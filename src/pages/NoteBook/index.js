@@ -28,17 +28,20 @@ class NoteBook extends Component<Store, *> {
     leftNoteWidth: 3,
     noteAreaWidth: 12,
   };
+
   render() {
+    const { sideNoteID, currentNoteID } = this.props;
+    const { noteAreaWidth, leftNoteWidth } = this.state;
     return (
-      <Container columns={this.state.noteAreaWidth}>
-        <Cell width={this.state.leftNoteWidth}>
-          <Editors sideBar noteID={this.props.sideNoteID} />
+      <Container columns={noteAreaWidth}>
+        <Cell width={leftNoteWidth}>
+          <Editors sideBar noteID={sideNoteID} />
         </Cell>
-        <Cell width={this.state.noteAreaWidth - this.state.leftNoteWidth}>
+        <Cell width={noteAreaWidth - leftNoteWidth}>
           <Header>
             <HeaderTitle>Welcome to Pants-Control</HeaderTitle>
           </Header>
-          <Editors noteID={this.props.currentNoteID} />
+          <Editors noteID={currentNoteID} />
         </Cell>
       </Container>
     );
