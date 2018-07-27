@@ -1,10 +1,10 @@
 // @flow
 import keypair from 'keypair';
 import uuid from 'uuid/v4';
+import { message } from 'antd';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
-import { protocol } from '../config';
 
 const getPrivateKeyStoreKey = (profileID: string) => `${profileID}-private`;
 const getLocalProfileIDStoreKey = (name: string) => `${name}-profileID`;
@@ -61,6 +61,9 @@ export default (initialState?: * = {}) => ({
       const encryptedPrivateKeyHex = await encrypt(name, password, privateKey);
 
       // prepare profile
+      const homepageID = uuid();
+      const sideNoteID = uuid();
+      const profileID = uuid();
       const newProfile = {
         '@context': {
           '@vocab': 'http://schema.org',
@@ -72,13 +75,13 @@ export default (initialState?: * = {}) => ({
         name,
         description: '',
         publicKey,
-        'foaf:homepage': `${protocol}note/${uuid()}`,
+        'foaf:homepage': homepageID,
+        'pants-control:sideNote': sideNoteID,
       };
-      const profileID = uuid();
       try {
         // save profile to backend
-        const { store } = await import('./');
-        store.dispatch.backend.save({ id: profileID, data: JSON.stringify(newProfile, null, '  ') });
+        const { dispatch, history } = await import('./');
+        dispatch.backend.save({ id: profileID, data: JSON.stringify(newProfile, null, '  ') });
         // Put private key to localStorage
         await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
         // Remember username in localStorage for later login
@@ -87,8 +90,16 @@ export default (initialState?: * = {}) => ({
         this.setProfile(newProfile);
         this.setPrivateKey(privateKey);
         console.log(publicKey, privateKey);
+        // create initial notes
+        dispatch.note.saveNewEmptyNote(sideNoteID);
+        dispatch.note.setSideNote(sideNoteID);
+        dispatch.note.saveNewEmptyNote(homepageID);
+
+        // goto page
+        return history.push(`/note/${newProfile['foaf:homepage']}`);
       } catch (error) {
         console.error(error);
+        message.warning(error.message);
         throw new Error('Profile 创建失败');
       }
     },
@@ -96,8 +107,8 @@ export default (initialState?: * = {}) => ({
       try {
         // loads profile
         const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
-        const { store } = await import('./');
-        const profileString = await store.dispatch.backend.load(profileID);
+        const { dispatch, history } = await import('./');
+        const profileString = await dispatch.backend.load(profileID);
         const profile = JSON.parse(profileString);
         // checks password
         const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
@@ -115,8 +126,16 @@ export default (initialState?: * = {}) => ({
         this.setProfile(profile);
         this.setPrivateKey(privateKey);
         console.log(profile, privateKey);
+        // load notes
+        dispatch.note.openNote(profile['pants-control:sideNote']);
+        dispatch.note.setSideNote(profile['pants-control:sideNote']);
+        dispatch.note.openNote(profile['foaf:homepage']);
+
+        // goto page
+        return history.push(`/note/${profile['foaf:homepage']}`);
       } catch (error) {
         console.error(error);
+        message.warning(error.message);
       }
     },
   },

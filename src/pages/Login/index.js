@@ -10,7 +10,6 @@ import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
 
 import BackgroundAnimation from './BackgroundAnimation';
 import type { ViewerDispatch } from '../../store/viewer'
-import { protocol } from '../../config';
 
 const Container = styled(Flex)`
   height: 100vh;
@@ -122,15 +121,15 @@ class Login extends Component<Props & Store & Dispatch, State> {
           <Buttons justifyAround>
             <Button
               active={this.state.name && this.state.password}
-              onClick={async () => {
+              onClick={() => {
                 if (this.checkInput()) {
                   if (this.hasUser()) {
-                    await this.props.userLogin({ name: this.state.name, password: this.state.password });
+                    // try login and loads profile and notes
+                    return this.props.userLogin({ name: this.state.name, password: this.state.password });
                   } else {
-                    await this.props.createUser({ name: this.state.name, password: this.state.password });
+                    // register and create profile and notes
+                    return this.props.createUser({ name: this.state.name, password: this.state.password });
                   }
-                  const { history, profile } = this.props;
-                  return history.push(`/${profile['foaf:homepage'].replace(protocol, '')}`);
                 }
               }}
             >

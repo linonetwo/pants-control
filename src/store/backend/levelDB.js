@@ -1,12 +1,11 @@
 import level from 'level-js';
-import Promise from 'bluebird';
+import levelup from 'levelup';
 
 let db = null;
 export default async function getLevelDB() {
   if (!db) {
-    db = level('pants-control');
-    Promise.promisifyAll(db);
-    await db.openAsync();
+    db = levelup(level('pants-control'));
+    await db.open();
   }
   return db;
 }

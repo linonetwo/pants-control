@@ -52,11 +52,12 @@ export default (initialState?: * = {}) => ({
 
     async saveDataToLevelDB({ id, data }: { id: string, data: string }) {
       const db = await getLevelDB();
-      await db.putAsync(id, data);
+      console.log(db, id, data);
+      await db.put(id, data);
     },
     async loadDataFromLevelDB(id: string): Promise<string> {
       const db = await getLevelDB();
-      const data: Buffer = await db.getAsync(id);
+      const data: Buffer = await db.get(id);
       return data.toString('utf8');
     },
   },

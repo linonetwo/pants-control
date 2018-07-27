@@ -1,6 +1,6 @@
 // @flow
 import { uniq } from 'lodash';
-import { Value } from 'slate';
+import Plain from 'slate-plain-serializer';
 
 export type Note = {
   content: Object,
@@ -45,6 +45,10 @@ export default (initialState?: * = {}) => ({
       state.currentNoteID = id;
       return state;
     },
+    setSideNote(state: State, id: string) {
+      state.sideNoteID = id;
+      return state;
+    },
   },
   effects: {
     async openNote(
@@ -54,9 +58,7 @@ export default (initialState?: * = {}) => ({
       }: { note: State },
     ) {
       if (!ids.includes(id)) {
-        const {
-          store: { dispatch },
-        } = await import('./');
+        const { dispatch } = await import('./');
         // load note from IPFS or server
         const note = JSON.parse(await dispatch.backend.load(id));
         this.setNote({ note, id });
@@ -69,15 +71,16 @@ export default (initialState?: * = {}) => ({
         note: { ids, notes },
       }: { note: State },
     ) {
-      if (!ids.includes(id)) {
-        if (id in notes) {
-          const serializedNote = JSON.stringify(notes[id].content);
-          const {
-            store: { dispatch },
-          } = await import('./');
-          await dispatch.backend.save({ id, data: serializedNote });
-        }
+      if (ids.includes(id) && id in notes) {
+        const serializedNote = JSON.stringify(notes[id].content);
+        const { dispatch } = await import('./');
+        await dispatch.backend.save({ id, data: serializedNote });
       }
+    },
+    saveNewEmptyNote(id: string) {
+      const newNoteContent = Plain.deserialize('');
+      this.setNote({ note: newNoteContent, id });
+      this.saveNote(id);
     },
     async syncToBackend({
       note: { notSyncedNoteIDs },
