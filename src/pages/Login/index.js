@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import Flex from 'styled-flex-component';
 import { withRouter } from 'react-router-dom';
-import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
+import { message, Button as ButtonA, Input, AutoComplete, Icon, Dropdown, Menu } from 'antd';
 
 import BackgroundAnimation from './BackgroundAnimation';
 import type { ViewerDispatch } from '../../store/viewer'
@@ -60,12 +60,14 @@ type Dispatch = ViewerDispatch;
 type State = {
   name: string,
   password: string,
+  remember: number,
 };
 
 class Login extends Component<Props & Store & Dispatch, State> {
   state = {
     name: '',
     password: '',
+    remember: 0,
   };
 
   componentWillMount() {
@@ -98,8 +100,13 @@ class Login extends Component<Props & Store & Dispatch, State> {
   setName = value => this.setState({ name: value });
 
   render() {
+    const { name, password, remember } = this.state;
+    const rememberMap = {
+      '0': '不记住密码',
+      '8': '记住8天',
+    };
     return (
-      <Container center>
+      <Container center column>
         <BackgroundAnimation />
         <LoginContainer column center>
           <Title>{this.title}</Title>
@@ -115,20 +122,20 @@ class Login extends Component<Props & Store & Dispatch, State> {
             type="password"
             prefix={<Icon type="lock" />}
             placeholder="请输入用于加密私人内容的密码"
-            value={this.state.password}
+            value={password}
             onChange={event => this.setState({ password: event.target.value })}
           />
           <Buttons justifyAround>
             <Button
-              active={this.state.name && this.state.password}
+              active={name && password}
               onClick={() => {
                 if (this.checkInput()) {
                   if (this.hasUser()) {
                     // try login and loads profile and notes
-                    return this.props.userLogin({ name: this.state.name, password: this.state.password });
+                    return this.props.userLogin({ name, password, remember });
                   } else {
                     // register and create profile and notes
-                    return this.props.createUser({ name: this.state.name, password: this.state.password });
+                    return this.props.createUser({ name, password, remember });
                   }
                 }
               }}
@@ -137,6 +144,16 @@ class Login extends Component<Props & Store & Dispatch, State> {
             </Button>
           </Buttons>
         </LoginContainer>
+        <Dropdown overlay={(
+          <Menu onClick={({ key }) => this.setState({ remember: Number(key) })}>
+            <Menu.Item key="0">{rememberMap['0']}</Menu.Item>
+            <Menu.Item key="8">{rememberMap['8']}</Menu.Item>
+          </Menu>
+        )}>
+          <ButtonA>
+            {rememberMap[String(remember)]} <Icon type="down" />
+          </ButtonA>
+        </Dropdown>
       </Container>
     );
   }

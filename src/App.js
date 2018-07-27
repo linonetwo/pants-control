@@ -5,14 +5,15 @@ import { Router, Route, Switch } from 'react-router';
 
 import './globalStyle';
 import registerServiceWorker from './registerServiceWorker';
-import { store, history } from './store';
+import { store, dispatch, history } from './store';
 import { APP_START } from './store/constants/core';
 import NoteBook from './pages/NoteBook';
 import Login from './pages/Login';
 
 class App extends Component {
   componentDidMount() {
-    store.dispatch({ type: APP_START });
+    dispatch({ type: APP_START });
+    dispatch.viewer.rememberUser();
   }
 
   render() {

@@ -55,7 +55,7 @@ export default (initialState?: * = {}) => ({
       await saveStorage('users', JSON.stringify(newUsers));
       this.setAvailableUsers(newUsers);
     },
-    async createUser({ name, password }: { name: string, password: string }) {
+    async createUser({ name, password, remember }: { name: string, password: string, remember?: number }) {
       // TODO: switch to https://ed25519.cr.yp.to/ ? like textileio does
       const { public: publicKey, private: privateKey } = keypair();
       const encryptedPrivateKeyHex = await encrypt(name, password, privateKey);
@@ -86,6 +86,13 @@ export default (initialState?: * = {}) => ({
         await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
         // Remember username in localStorage for later login
         await Promise.all([saveStorage(getLocalProfileIDStoreKey(name), profileID), this.pushAvailableUsers(name)]);
+        // Remember username for 8 Days so later it can auto login
+        if (remember && typeof remember === 'number') {
+          await saveStorage(
+            'currentUser',
+            JSON.stringify({ name, password, expire: Date.now() + remember * 24 * 3600 * 1000 }),
+          );
+        }
         // inform UI that register succeed
         this.setProfile(newProfile);
         this.setPrivateKey(privateKey);
@@ -104,7 +111,17 @@ export default (initialState?: * = {}) => ({
         throw new Error('Profile 创建失败');
       }
     },
-    async userLogin({ name, password }: { name: string, password: string }) {
+    async rememberUser() {
+      const remembered = await loadStorage('currentUser');
+      if (remembered) {
+        const { name, password, expire } = JSON.parse(remembered);
+        if (expire && expire - Date.now() > 0) {
+          message.loading('正在登录记住的账户', 0.5);
+          return this.userLogin({ name, password });
+        }
+      }
+    },
+    async userLogin({ name, password, remember }: { name: string, password: string, remember?: number }) {
       try {
         // loads profile
         const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
@@ -121,6 +138,13 @@ export default (initialState?: * = {}) => ({
           }
         } catch (err) {
           throw new Error('密码错误');
+        }
+        // Remember username for 8 Days so later it can auto login
+        if (remember && typeof remember === 'number') {
+          await saveStorage(
+            'currentUser',
+            JSON.stringify({ name, password, expire: Date.now() + remember * 24 * 3600 * 1000 }),
+          );
         }
         // get profile from backend
         // inform UI that loading succeed
