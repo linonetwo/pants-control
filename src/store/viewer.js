@@ -4,6 +4,7 @@ import uuid from 'uuid/v4';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
+import { protocol } from '../config';
 
 const getPrivateKeyStoreKey = (profileID: string) => `${profileID}-private`;
 const getLocalProfileIDStoreKey = (name: string) => `${name}-profileID`;
@@ -57,7 +58,7 @@ export default (initialState?: * = {}) => ({
     async createUser({ name, password }: { name: string, password: string }) {
       // TODO: switch to https://ed25519.cr.yp.to/ ? like textileio does
       const { public: publicKey, private: privateKey } = keypair();
-      const encryptedPrivateKeyHex = await encrypt(name, password, privateKey); 
+      const encryptedPrivateKeyHex = await encrypt(name, password, privateKey);
 
       // prepare profile
       const newProfile = {
@@ -71,7 +72,7 @@ export default (initialState?: * = {}) => ({
         name,
         description: '',
         publicKey,
-        'foaf:homepage': '',
+        'foaf:homepage': `${protocol}note/${uuid()}`,
       };
       const profileID = uuid();
       try {
@@ -113,6 +114,7 @@ export default (initialState?: * = {}) => ({
         // inform UI that loading succeed
         this.setProfile(profile);
         this.setPrivateKey(privateKey);
+        console.log(profile, privateKey);
       } catch (error) {
         console.error(error);
       }

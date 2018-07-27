@@ -5,10 +5,12 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import is from 'styled-is';
 import Flex from 'styled-flex-component';
+import { withRouter } from 'react-router-dom';
 import { message, Button as ButtonA, Input, AutoComplete, Icon } from 'antd';
 
 import BackgroundAnimation from './BackgroundAnimation';
 import type { ViewerDispatch } from '../../store/viewer'
+import { protocol } from '../../config';
 
 const Container = styled(Flex)`
   height: 100vh;
@@ -48,8 +50,12 @@ const Button = styled(ButtonA)`
   `};
 `;
 
+type Props = {
+  history: Object,
+};
 type Store = {
   availableUsers: string[],
+  profile: Object,
 };
 type Dispatch = ViewerDispatch;
 type State = {
@@ -57,7 +63,7 @@ type State = {
   password: string,
 };
 
-class Login extends Component<Store & Dispatch, State> {
+class Login extends Component<Props & Store & Dispatch, State> {
   state = {
     name: '',
     password: '',
@@ -116,13 +122,15 @@ class Login extends Component<Store & Dispatch, State> {
           <Buttons justifyAround>
             <Button
               active={this.state.name && this.state.password}
-              onClick={() => {
+              onClick={async () => {
                 if (this.checkInput()) {
                   if (this.hasUser()) {
-                    this.props.userLogin({ name: this.state.name, password: this.state.password });
+                    await this.props.userLogin({ name: this.state.name, password: this.state.password });
                   } else {
-                    this.props.createUser({ name: this.state.name, password: this.state.password });
+                    await this.props.createUser({ name: this.state.name, password: this.state.password });
                   }
+                  const { history, profile } = this.props;
+                  return history.push(`/${profile['foaf:homepage'].replace(protocol, '')}`);
                 }
               }}
             >
@@ -135,10 +143,10 @@ class Login extends Component<Store & Dispatch, State> {
   }
 }
 
-const mapState = ({ viewer: { availableUsers } }): Store => ({ availableUsers });
+const mapState = ({ viewer: { availableUsers, profile } }): Store => ({ availableUsers, profile });
 const mapDispatch = ({ viewer: { getAvailableUsers, createUser, userLogin } }: *): Dispatch => ({
   getAvailableUsers,
   createUser,
   userLogin,
 });
-export default connect(mapState, mapDispatch)(Login);
+export default withRouter(connect(mapState, mapDispatch)(Login));
