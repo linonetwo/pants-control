@@ -12,5 +12,4 @@ const initRenderer = async () => {
       return import('./App');
   }
 };
-
 initRenderer();

@@ -1,10 +1,9 @@
-import { makeExecutableSchema } from 'graphql-tools';
 import fs from 'fs-extra';
 
 const _profiles = {};
 
 // Define your types here.
-const typeDefs = `
+export const typeDefs = `
   type Note {
     id: ID!,
     content: String,
@@ -32,7 +31,7 @@ function getProfile(viewerID) {
   return profile;
 }
 
-const resolvers = {
+export const resolvers = {
   Viewer: {
     allNotes: async ({ viewerID }) => {
       const profile = getProfile(viewerID);
@@ -55,6 +54,3 @@ const resolvers = {
     },
   },
 };
-
-// Generate the schema object from your types definition.
-export default makeExecutableSchema({ typeDefs, resolvers });

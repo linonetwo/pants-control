@@ -39,7 +39,7 @@ module.exports = function override(config, env) {
           annotate: true,
         },
       ],
-      config
+      config,
     );
   }
 
@@ -64,5 +64,9 @@ module.exports = function override(config, env) {
   const nativeModulesPath = [path.resolve(__dirname, 'src/node_modules'), path.resolve(__dirname, 'src/~')];
   config = babelIgnorePath(nativeModulesPath, config);
 
+  // when open in electron, change compile target to electron-renderer
+  if (process.env.BROWSER === 'none') {
+    config.target = 'electron-renderer';
+  }
   return config;
 };
