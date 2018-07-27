@@ -91,9 +91,9 @@ export default (initialState?: * = {}) => ({
         this.setPrivateKey(privateKey);
         console.log(publicKey, privateKey);
         // create initial notes
-        dispatch.note.saveNewEmptyNote(sideNoteID);
-        dispatch.note.setSideNote(sideNoteID);
-        dispatch.note.saveNewEmptyNote(homepageID);
+        await dispatch.note.saveNewEmptyNote(sideNoteID);
+        await dispatch.note.setSideNote(sideNoteID);
+        await dispatch.note.saveNewEmptyNote(homepageID);
 
         // goto page
         return history.push(`/note/${newProfile['foaf:homepage']}`);
@@ -127,9 +127,9 @@ export default (initialState?: * = {}) => ({
         this.setPrivateKey(privateKey);
         console.log(profile, privateKey);
         // load notes
-        dispatch.note.openNote(profile['pants-control:sideNote']);
-        dispatch.note.setSideNote(profile['pants-control:sideNote']);
-        dispatch.note.openNote(profile['foaf:homepage']);
+        await dispatch.note.openNote(profile['pants-control:sideNote']);
+        await dispatch.note.setSideNote(profile['pants-control:sideNote']);
+        await dispatch.note.openNote(profile['foaf:homepage']);
 
         // goto page
         return history.push(`/note/${profile['foaf:homepage']}`);

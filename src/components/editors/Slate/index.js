@@ -36,6 +36,7 @@ const schema = {
     nodes: [{ types: ['title'], min: 1, max: 1 }, { types: ['paragraph'], min: 1 }],
     normalize: (change, violation, { node, child, index }) => {
       switch (violation) {
+        // forced title https://github.com/ianstormtaylor/slate/blob/master/examples/forced-layout/index.js
         case CHILD_TYPE_INVALID: {
           return change.setNodeByKey(child.key, index === 0 ? 'title' : 'paragraph');
         }
@@ -80,6 +81,18 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     this.setState({ value });
   };
 
+  renderNode = props => {
+    const { attributes, children, node } = props;
+
+    switch (node.type) {
+      case 'title':
+        return <h2 {...attributes}>{children}</h2>;
+      case 'paragraph':
+      default:
+        return <p {...attributes}>{children}</p>;
+    }
+  };
+
   renderMark = props => {
     const { children, mark } = props;
     switch (mark.type) {
@@ -114,6 +127,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
               value={value}
               onChange={this.onChange}
               renderMark={this.renderMark}
+              renderNode={this.renderNode}
               spellCheck={false}
             />
           ) : (
