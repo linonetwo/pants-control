@@ -22,7 +22,7 @@ const configureStore = ({ note, history: historyInitialState, backend, viewer } 
 
 export default configureStore;
 export const store = configureStore();
-export const { dispatch } = store;
+export const { dispatch, getState } = store;
 
 history.listen(async location => {
   if (/\/note\//.test(location.pathname)) {

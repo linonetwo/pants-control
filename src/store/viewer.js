@@ -94,7 +94,8 @@ export default (initialState?: * = {}) => ({
         await dispatch.note.saveNewEmptyNote(sideNoteID);
         await dispatch.note.setSideNote(sideNoteID);
         await dispatch.note.saveNewEmptyNote(homepageID);
-
+        // start syncing, looping
+        dispatch.note.syncToBackend();
         // goto page
         return history.push(`/note/${newProfile['foaf:homepage']}`);
       } catch (error) {
@@ -130,7 +131,8 @@ export default (initialState?: * = {}) => ({
         await dispatch.note.openNote(profile['pants-control:sideNote']);
         await dispatch.note.setSideNote(profile['pants-control:sideNote']);
         await dispatch.note.openNote(profile['foaf:homepage']);
-
+        // start syncing, looping
+        dispatch.note.syncToBackend();
         // goto page
         return history.push(`/note/${profile['foaf:homepage']}`);
       } catch (error) {

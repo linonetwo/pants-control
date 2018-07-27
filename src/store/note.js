@@ -1,4 +1,6 @@
+/* eslint-disable no-await-in-loop */
 // @flow
+import Promise from 'bluebird';
 import { uniq } from 'lodash';
 import Plain from 'slate-plain-serializer';
 
@@ -16,6 +18,8 @@ type State = {
   currentNoteID: string | null,
   // 当前打开的侧边栏 ID
   sideNoteID: string | null,
+  // 是否正在同步数据到后端
+  syncing: boolean,
 };
 export default (initialState?: * = {}) => ({
   state: {
@@ -24,6 +28,7 @@ export default (initialState?: * = {}) => ({
     notSyncedNoteIDs: [],
     currentNoteID: null,
     sideNoteID: null,
+    syncing: false,
     ...initialState,
   },
   reducers: {
@@ -41,12 +46,24 @@ export default (initialState?: * = {}) => ({
       state.notSyncedNoteIDs = uniq([...state.notSyncedNoteIDs, id]);
       return state;
     },
+    clearNotSyncedNoteIDs(state: State) {
+      state.notSyncedNoteIDs = [];
+      return state;
+    },
     focusNote(state: State, id: string) {
       state.currentNoteID = id;
       return state;
     },
     setSideNote(state: State, id: string) {
       state.sideNoteID = id;
+      return state;
+    },
+    disallowSyncing(state: State) {
+      state.syncing = false;
+      return state;
+    },
+    allowSyncing(state: State) {
+      state.syncing = true;
       return state;
     },
   },
@@ -82,15 +99,26 @@ export default (initialState?: * = {}) => ({
       this.setNote({ note: newNoteContent, id });
       this.saveNote(id);
     },
-    async syncToBackend({
-      note: { notSyncedNoteIDs },
-    }: {
-      note: {
-        notSyncedNoteIDs: string[],
-      },
-    }) {
-      if (notSyncedNoteIDs.length === 0) return;
-      return Promise.all(notSyncedNoteIDs.map(id => this.saveNote(id)));
+    async syncToBackend(
+      _: any,
+      {
+        note: { syncing: alreadySyncing },
+      }: { note: State },
+    ) {
+      if (alreadySyncing) return;
+      this.allowSyncing();
+      const { getState } = await import('./');
+      while (true) {
+        const {
+          note: { syncing, notSyncedNoteIDs },
+        } = await getState();
+        if (!syncing) break;
+        if (notSyncedNoteIDs.length !== 0) {
+          await Promise.all(notSyncedNoteIDs.map(id => this.saveNote(id)));
+          this.clearNotSyncedNoteIDs();
+        }
+        await Promise.delay(5000);
+      }
     },
   },
 });
