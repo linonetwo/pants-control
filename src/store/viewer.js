@@ -96,7 +96,6 @@ export default (initialState?: * = {}) => ({
         // inform UI that register succeed
         this.setProfile(newProfile);
         this.setPrivateKey(privateKey);
-        console.log(publicKey, privateKey);
         // create initial notes
         await dispatch.note.saveNewEmptyNote(sideNoteID);
         await dispatch.note.setSideNote(sideNoteID);
@@ -150,7 +149,6 @@ export default (initialState?: * = {}) => ({
         // inform UI that loading succeed
         this.setProfile(profile);
         this.setPrivateKey(privateKey);
-        console.log(profile, privateKey);
         // load notes
         await dispatch.note.openNote(profile['pants-control:sideNote']);
         await dispatch.note.setSideNote(profile['pants-control:sideNote']);

@@ -52,7 +52,6 @@ export default (initialState?: * = {}) => ({
 
     async saveDataToLevelDB({ id, data }: { id: string, data: string }) {
       const db = await getLevelDB();
-      console.log(db, id, data);
       await db.put(id, data);
     },
     async loadDataFromLevelDB(id: string): Promise<string> {

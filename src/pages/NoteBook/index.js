@@ -34,7 +34,6 @@ class NoteBook extends Component<Store, *> {
 
   render() {
     const { sideNoteID, currentNoteID, syncing, allNoteSynced } = this.props;
-    console.log(syncing)
     const { noteAreaWidth, leftNoteWidth } = this.state;
     return (
       <Container columns={noteAreaWidth}>
