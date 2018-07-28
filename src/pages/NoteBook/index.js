@@ -1,9 +1,10 @@
 // @flow
+import { size } from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Grid, Cell } from 'styled-css-grid';
-import { Icon, Spin } from 'antd';
+import { Icon, Spin, Button } from 'antd';
 
 import Editors, { headerHeight } from '../../components/Editors';
 
@@ -25,8 +26,12 @@ type Store = {
   allNoteSynced: boolean,
   currentNoteID: string | null,
   sideNoteID: string | null,
+  profile: Object,
 };
-class NoteBook extends Component<Store, *> {
+type Props = {
+  history: Object,
+};
+class NoteBook extends Component<Store & Props, *> {
   state = {
     leftNoteWidth: 3,
     noteAreaWidth: 12,
@@ -42,7 +47,7 @@ class NoteBook extends Component<Store, *> {
   }
 
   render() {
-    const { sideNoteID, currentNoteID, syncing, allNoteSynced } = this.props;
+    const { sideNoteID, currentNoteID, syncing, allNoteSynced, profile, history } = this.props;
     const { noteAreaWidth, leftNoteWidth } = this.state;
     return (
       <Container columns={noteAreaWidth}>
@@ -65,6 +70,12 @@ class NoteBook extends Component<Store, *> {
                   <Icon type="check" style={{ fontSize: 14 }} />已保存
                 </small>
               )}
+              {size(profile) === 0 &&
+                currentNoteID && (
+                  <Button size="small" icon="user" onClick={() => history.push(`/?note=${currentNoteID}`)}>
+                    登录
+                  </Button>
+                )}
             </HeaderTitle>
           </Header>
           <Editors noteID={currentNoteID} />
@@ -74,10 +85,11 @@ class NoteBook extends Component<Store, *> {
   }
 }
 
-const mapState = ({ note: { currentNoteID, sideNoteID, notSyncedNoteIDs }, loading }): Store => ({
+const mapState = ({ note: { currentNoteID, sideNoteID, notSyncedNoteIDs }, viewer: { profile }, loading }): Store => ({
   syncing: !!loading.effects.note.saveNote,
   allNoteSynced: notSyncedNoteIDs.length === 0,
   currentNoteID,
   sideNoteID,
+  profile,
 });
 export default connect(mapState)(NoteBook);

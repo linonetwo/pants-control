@@ -2,6 +2,7 @@
 import keypair from 'keypair';
 import uuid from 'uuid/v4';
 import { message } from 'antd';
+import queryString from 'query-string';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
@@ -102,6 +103,11 @@ export default (initialState?: * = {}) => ({
         await dispatch.note.saveNewEmptyNote(homepageID);
         // start syncing, looping
         dispatch.note.syncToBackend();
+        // If user come from a note and just want to login and come back to that note
+        const currentQueryString = queryString.parse(history.location.search)
+        if (currentQueryString?.note) {
+          return history.push(`/note/${currentQueryString.note}/`);
+        }
         // goto homepage after register
         return history.push(`/note/${newProfile['foaf:homepage']}/`);
       } catch (error) {
@@ -155,6 +161,11 @@ export default (initialState?: * = {}) => ({
         await dispatch.note.openNote(profile['foaf:homepage']);
         // start syncing, looping
         dispatch.note.syncToBackend();
+        // If user come from a note and just want to login and come back to that note
+        const currentQueryString = queryString.parse(history.location.search)
+        if (currentQueryString?.note) {
+          return history.push(`/note/${currentQueryString.note}/`);
+        }
         // if user is not viewing a page, then goto homepage
         if (!/\/note\//.test(history.location.pathname)) {
           return history.push(`/note/${profile['foaf:homepage']}/`);
