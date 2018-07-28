@@ -11,9 +11,10 @@ import NoteBook from './pages/NoteBook';
 import Login from './pages/Login';
 
 class App extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     dispatch({ type: APP_START });
-    dispatch.viewer.rememberUser();
+    await dispatch.viewer.rememberUser();
+    dispatch.history.syncIDFromURLToStore();
   }
 
   render() {

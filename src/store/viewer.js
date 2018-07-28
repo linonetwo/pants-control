@@ -102,8 +102,8 @@ export default (initialState?: * = {}) => ({
         await dispatch.note.saveNewEmptyNote(homepageID);
         // start syncing, looping
         dispatch.note.syncToBackend();
-        // goto page
-        return history.push(`/note/${newProfile['foaf:homepage']}`);
+        // goto homepage after register
+        return history.push(`/note/${newProfile['foaf:homepage']}/`);
       } catch (error) {
         console.error(error);
         message.warning(error.message);
@@ -155,8 +155,10 @@ export default (initialState?: * = {}) => ({
         await dispatch.note.openNote(profile['foaf:homepage']);
         // start syncing, looping
         dispatch.note.syncToBackend();
-        // goto page
-        return history.push(`/note/${profile['foaf:homepage']}`);
+        // if user is not viewing a page, then goto homepage
+        if (!/\/note\//.test(history.location.pathname)) {
+          return history.push(`/note/${profile['foaf:homepage']}/`);
+        }
       } catch (error) {
         console.error(error);
         message.warning(error.message);

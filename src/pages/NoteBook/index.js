@@ -32,14 +32,25 @@ class NoteBook extends Component<Store, *> {
     noteAreaWidth: 12,
   };
 
+  static getDerivedStateFromProps(nextProps: Store) {
+    if (!nextProps.sideNoteID) {
+      return { leftNoteWidth: 0 };
+    }
+    return {
+      leftNoteWidth: 3,
+    };
+  }
+
   render() {
     const { sideNoteID, currentNoteID, syncing, allNoteSynced } = this.props;
     const { noteAreaWidth, leftNoteWidth } = this.state;
     return (
       <Container columns={noteAreaWidth}>
-        <Cell width={leftNoteWidth}>
-          <Editors sideBar noteID={sideNoteID} />
-        </Cell>
+        {sideNoteID && (
+          <Cell width={leftNoteWidth}>
+            <Editors sideBar noteID={sideNoteID} />
+          </Cell>
+        )}
         <Cell width={noteAreaWidth - leftNoteWidth}>
           <Header>
             <HeaderTitle>
