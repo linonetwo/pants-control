@@ -23,9 +23,9 @@ const MenuContainer = styled.div`
   background-color: #222;
   border-radius: 4px;
   transition: opacity 0.75s;
-  opacity: ${props => props.opacity || 0};
-  top: ${props => props.top || '-10000px'};
-  left: ${props => props.left || '-10000px'};
+  opacity: ${({ opacity }) => opacity || 0};
+  top: ${({ top }) => top || '-10000px'};
+  left: ${({ left }) => left || '-10000px'};
 
   /* margin between buttons */
   & > span {
@@ -36,7 +36,7 @@ const MenuContainer = styled.div`
   }
 `;
 
-export default class HoverMenu extends Component {
+export default class HoverMenu extends Component<*> {
   menuRef = null;
 
   /**
@@ -72,47 +72,47 @@ export default class HoverMenu extends Component {
 
   getMenuStyle = () => {
     const { value } = this.props;
-    if (!this.menuRef) return {};
-
-    if (value.isBlurred || value.isEmpty) {
-      return {};
-    }
-
     const selection = window.getSelection();
-    if (selection.rangeCount <= 0) return {};
+    if (this.menuRef !== null && selection.rangeCount > 0 && !value.isBlurred && !value.isEmpty) {
+      const { offsetHeight, offsetWidth } = this.menuRef;
+      const range = selection.getRangeAt(0);
+      const rect = range.getBoundingClientRect();
 
-    const range = selection.getRangeAt(0);
-    const rect = range.getBoundingClientRect();
+      const top = `${rect.top + window.scrollY - offsetHeight}px`;
+      const left = `${rect.left + window.scrollX - offsetWidth / 2 + rect.width / 2}px`;
 
-    const top = `${rect.top + window.scrollY - this.menuRef.offsetHeight}px`;
-    const left = `${rect.left + window.scrollX - this.menuRef.offsetWidth / 2 + rect.width / 2}px`;
-    return {
-      opacity: 1,
-      top,
-      left,
-    };
+      return {
+        opacity: 1,
+        top,
+        left,
+      };
+    }
+    return {};
   };
 
   render() {
-
     const { opacity, top, left } = this.getMenuStyle();
-    return ReactDOM.createPortal(
-      <MenuContainer
-        opacity={opacity}
-        top={top}
-        left={left}
-        innerRef={elem => {
-          this.menuRef = elem;
-        }}
-      >
-        {this.renderMarkButton('bold', 'format_bold')}
-        {this.renderMarkButton('italic', 'format_italic')}
-        {this.renderMarkButton('underlined', 'format_underlined')}
-        {this.renderMarkButton('code', 'code')}
-        {this.renderMarkButton('new-note-button', 'add')}
-        {this.renderMarkButton('note-list', 'view_list')}
-      </MenuContainer>,
-      document.getElementById('root'),
-    );
+    const mountPoint = document.getElementById('root');
+    if (mountPoint) {
+      return ReactDOM.createPortal(
+        <MenuContainer
+          opacity={opacity}
+          top={top}
+          left={left}
+          innerRef={elem => {
+            this.menuRef = elem;
+          }}
+        >
+          {this.renderMarkButton('bold', 'format_bold')}
+          {this.renderMarkButton('italic', 'format_italic')}
+          {this.renderMarkButton('underlined', 'format_underlined')}
+          {this.renderMarkButton('code', 'code')}
+          {this.renderMarkButton('new-note-button', 'add')}
+          {this.renderMarkButton('note-list', 'view_list')}
+        </MenuContainer>,
+        mountPoint,
+      );
+    }
+    return null;
   }
 }

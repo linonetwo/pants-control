@@ -8,8 +8,8 @@ import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
 import { CHILD_REQUIRED, CHILD_TYPE_INVALID } from 'slate-schema-violations';
 
-import NewNoteButton from '../../Buttons/NewNoteButton';
-import NoteList from '../../Facets/NoteList';
+import NewNoteButton from './Buttons/NewNoteButton';
+import NoteList from './Facets/NoteList';
 
 import type { Note } from '../../../store/note';
 
@@ -59,7 +59,8 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
 
   static getDerivedStateFromProps(nextProps: Store & Props, currentState: State) {
     if (
-      nextProps.currentNoteInStore?.content &&
+      nextProps.currentNoteInStore &&
+      nextProps.currentNoteInStore.content &&
       !equal(nextProps.currentNoteInStore?.content, currentState.value.toJSON())
     ) {
       const value = Value.fromJSON(nextProps.currentNoteInStore.content);
@@ -85,6 +86,10 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     const { attributes, children, node } = props;
 
     switch (node.type) {
+      case 'new-note-button':
+        return <NewNoteButton>{children}</NewNoteButton>;
+      case 'note-list':
+        return <NoteList>{children}</NoteList>;
       case 'title':
         return <h2 {...attributes}>{children}</h2>;
       case 'paragraph':
@@ -104,12 +109,8 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         return <em>{children}</em>;
       case 'underlined':
         return <u>{children}</u>;
-      case 'new-note-button':
-        return <NewNoteButton>{children}</NewNoteButton>;
-      case 'note-list':
-        return <NoteList>{children}</NoteList>;
       default:
-        return <p>{children}</p>;
+        return <span>{children}</span>;
     }
   };
 
@@ -142,5 +143,5 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
 const mapState = ({ note: { notes } }, { noteID }): Store => ({
   currentNoteInStore: notes[noteID],
 });
-const mapDispatch = ({ note: { setNote } }): Dispatch => ({ setNote });
+const mapDispatch = ({ note: { setNote } }: *): Dispatch => ({ setNote });
 export default connect(mapState, mapDispatch)(SlateEditor);

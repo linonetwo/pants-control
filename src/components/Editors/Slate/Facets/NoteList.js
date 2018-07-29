@@ -1,13 +1,14 @@
 // @flow
 import { take } from 'lodash';
 import React, { Component } from 'react';
+import type { Element } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Flex from 'styled-flex-component';
 import is from 'styled-is';
 import { Link } from 'react-router-dom';
 
-import { materialButton } from '../../styles/material';
+import { materialButton } from '../../../../styles/material';
 
 const Container = styled(Flex)`
   margin: auto;
@@ -54,7 +55,7 @@ const Expander = styled(Flex)`
 
 type Props = {
   title?: string,
-  children: string | React$Element<*>,
+  children: string | Element<any>,
 };
 type Store = {
   ids: string[],
@@ -63,7 +64,7 @@ type Store = {
 type State = {
   expanded: boolean,
 };
-class NewNoteButton extends Component<Props & Store, State> {
+class NoteList extends Component<Props & Store, State> {
   state = {
     expanded: false,
   };
@@ -80,8 +81,8 @@ class NewNoteButton extends Component<Props & Store, State> {
         <Title onClick={this.expandArea}>{title || children}</Title>
         <Tags>
           {(expanded ? ids : take(ids, this.displayLimit)).map(id => (
-            <Link to={`/note/${id}/`}>
-              <NoteLink focused={id === currentNoteID} key={id} contenteditable={false}>
+            <Link to={`/note/${id}/`} key={id}>
+              <NoteLink focused={id === currentNoteID} contenteditable={false}>
                 {id}
               </NoteLink>
             </Link>
@@ -101,4 +102,4 @@ function mapState({ note: { ids, currentNoteID } }): Store {
   return { ids, currentNoteID };
 }
 
-export default connect(mapState)(NewNoteButton);
+export default connect(mapState)(NoteList);
