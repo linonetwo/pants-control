@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import type { Element } from 'react';
 import styled from 'styled-components';
 
-const TextContainer = styled.p``;
+const TextContainer = styled.p`
+  padding-top: 7px;
+`;
 
 type Dispatch = {};
 type Props = {

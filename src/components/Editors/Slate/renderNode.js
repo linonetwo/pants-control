@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 // wrappers to provide shared functionality
 import WrapNodeMenu from './Wrappers/NodeMenu';
@@ -25,6 +26,11 @@ function renderBasicNode(props) {
   }
 }
 
+/* eslint-disable react/destructuring-assignment */
 export default function renderNodeWithWrapper(value, onChange) {
-  return props => <WrapNodeMenu value={value} onChange={onChange}>{renderBasicNode(props)}</WrapNodeMenu>;
+  return (props: *) => (
+    <WrapNodeMenu value={value} onChange={onChange} node={props.node}>
+      {renderBasicNode(props)}
+    </WrapNodeMenu>
+  );
 }

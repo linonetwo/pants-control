@@ -14,7 +14,7 @@ const MenuButton = styled.div`
 
   position: absolute;
   left: ${-(menuSize + 10)}px;
-  top: calc((100% - ${menuSize}px) / 2);
+  top: 5px;
 
   cursor: grab;
   user-select: none;
@@ -44,6 +44,7 @@ const Container = styled.div`
 
 type Props = {
   value: { change: Function },
+  node: Object,
   onChange: Function,
   children: string | Element<any>,
 };
@@ -54,8 +55,8 @@ export default class NodeMenu extends Component<Props> {
    * When a mark button is clicked, toggle the current mark.
    */
   onClickNodeType(type: string) {
-    const { value, onChange } = this.props;
-    const change = value.change().setBlocks(type);
+    const { value, onChange, node } = this.props;
+    const change = value.change().setNodeByKey(node.key, type);
     onChange(change);
   }
 
@@ -84,6 +85,7 @@ export default class NodeMenu extends Component<Props> {
           </Flex>
         }
       >
+        <Menu.ItemGroup title="文档">{this.renderNodeButton('paragraph', 'short_text')}</Menu.ItemGroup>
         <Menu.ItemGroup title="索引">{this.renderNodeButton('note-list', 'dns')}</Menu.ItemGroup>
         <Menu.ItemGroup title="按钮">{this.renderNodeButton('new-note-button', 'library_add')}</Menu.ItemGroup>
       </Menu.SubMenu>

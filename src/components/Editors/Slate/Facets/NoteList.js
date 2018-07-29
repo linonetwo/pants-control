@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { materialButton } from '../../../../styles/material';
 
 const Container = styled(Flex)`
+  padding-top: 5px;
   margin: auto;
 `;
 const Title = styled.h3`

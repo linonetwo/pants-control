@@ -3,7 +3,13 @@ import { CHILD_REQUIRED, CHILD_TYPE_INVALID } from 'slate-schema-violations';
 
 export default {
   document: {
-    nodes: [{ match: { type: 'title' }, min: 1, max: 1 }, { match: { type: 'paragraph' }, min: 1 }],
+    nodes: [
+      { match: { type: 'title' }, min: 1, max: 1 },
+      { match: { type: 'paragraph' }, min: 1 },
+      {
+        match: [{ type: 'note-list' }, { type: 'new-note-button' }],
+      },
+    ],
     normalize: (change, { code, node, child, index }) => {
       switch (code) {
         case CHILD_TYPE_INVALID: {
