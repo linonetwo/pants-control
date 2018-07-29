@@ -99,7 +99,11 @@ export default (initialState?: * = {}) => ({
         this.setPrivateKey(privateKey);
         // create initial notes
         await dispatch.note.saveNewNoteFromString({ id: profileID, note: JSON.stringify(newProfile, null, '  ') });
-        await dispatch.note.saveNewNoteFromString({ id: sideNoteID });
+        await dispatch.note.saveNewNoteFromJSONString({
+          id: sideNoteID,
+          note:
+            '{"object":"value","document":{"object":"document","data":{},"nodes":[{"object":"block","type":"title","isVoid":false,"data":{},"nodes":[{"object":"text","leaves":[{"object":"leaf","text":"侧边栏可以自由编辑","marks":[]}]}]},{"object":"block","type":"note-list","isVoid":false,"data":{},"nodes":[{"object":"text","leaves":[{"object":"leaf","text":"笔记目录","marks":[]}]}]}]}',
+        });
         await dispatch.note.setSideNote(sideNoteID);
         await dispatch.note.saveNewNoteFromString({ id: homepageID });
         // start syncing, looping

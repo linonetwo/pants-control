@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Editor } from 'slate-react';
-import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
 
@@ -26,7 +25,6 @@ type Dispatch = {
 };
 type Props = {
   noteID?: string | null,
-  sideBar?: boolean,
 };
 type State = {
   noteID?: string | null,
@@ -40,6 +38,11 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   };
 
   static getDerivedStateFromProps(nextProps: Store & Props, currentState: State) {
+    if (nextProps.currentNoteInStore && nextProps.currentNoteInStore?.content?.toJSON)
+    console.log(
+      equal(nextProps.currentNoteInStore.content.toJSON(), currentState.value.toJSON()),
+      nextProps.currentNoteInStore.content.equals(currentState.value),
+    );
     if (
       nextProps.currentNoteInStore &&
       nextProps.currentNoteInStore?.content?.toJSON &&
@@ -51,20 +54,19 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   }
 
   onChange = ({ value }) => {
-    const { setNote } = this.props;
-    const { value: prevValue, noteID } = this.state;
+    const { setNote, noteID } = this.props;
+    const { value: prevValue, noteID: prevNoteID } = this.state;
     if (!value.document.equals(prevValue.document)) {
       // save serialized content to local cache in redux store
-      const content = value.toJSON();
-      if (noteID) {
-        setNote({ note: content, id: noteID });
+      if (noteID && prevNoteID && prevNoteID === noteID) {
+        setNote({ note: value, id: noteID });
       }
     }
     this.setState({ value });
   };
 
   render() {
-    const { noteID, sideBar } = this.props;
+    const { noteID } = this.props;
     const { value } = this.state;
     return (
       <Fragment>
@@ -73,7 +75,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
           {noteID ? (
             <Editor
               placeholder="你可以用 @ 插入特殊块"
-              schema={sideBar ? null : schema}
+              schema={schema}
               value={value}
               onChange={this.onChange}
               renderMark={renderMark}

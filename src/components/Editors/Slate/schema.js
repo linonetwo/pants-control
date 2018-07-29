@@ -5,9 +5,8 @@ export default {
   document: {
     nodes: [
       { match: { type: 'title' }, min: 1, max: 1 },
-      { match: { type: 'paragraph' }, min: 1 },
       {
-        match: [{ type: 'note-list' }, { type: 'new-note-button' }],
+        match: [{ type: 'paragraph' }, { type: 'note-list' }, { type: 'new-note-button' }],
       },
     ],
     normalize: (change, { code, node, child, index }) => {

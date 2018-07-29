@@ -25,7 +25,7 @@ export default class Editors extends Component<*> {
     const { sideBar, noteID } = this.props;
     return (
       <EditorScroll sideBar={sideBar}>
-        <SlateEditor sideBar={sideBar} noteID={noteID} />
+        <SlateEditor noteID={noteID} />
       </EditorScroll>
     );
   }

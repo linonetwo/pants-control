@@ -100,6 +100,11 @@ export default (initialState?: * = {}) => ({
       this.setNote({ note: newNoteContent, id });
       await this.saveNote(id);
     },
+    async saveNewNoteFromJSONString({ id, note = '' }: { id: string, note?: string }) {
+      const newNoteContent = Value.fromJSON(JSON.parse(note));
+      this.setNote({ note: newNoteContent, id });
+      await this.saveNote(id);
+    },
     async syncToBackend(
       _: any,
       {
