@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Flex from 'styled-flex-component';
 import is from 'styled-is';
+import { Link } from 'react-router-dom';
 
 import { materialButton } from '../../styles/material';
 
@@ -53,42 +54,42 @@ const Expander = styled(Flex)`
 
 type Props = {
   title?: string,
+  children: string | React$Element<*>,
 };
 type Store = {
   ids: string[],
   currentNoteID: string | null,
 };
-type Dispatch = {
-  focusNote: (id: string) => void,
+type State = {
+  expanded: boolean,
 };
-class NewNoteButton extends Component<Props & Store & Dispatch, *> {
+class NewNoteButton extends Component<Props & Store, State> {
   state = {
     expanded: false,
   };
 
   displayLimit = 18;
 
-  expandArea = () => this.setState({ expanded: !this.state.expanded });
+  expandArea = () => this.setState((prevState: State) => ({ expanded: !prevState.expanded }));
 
   render() {
+    const { title, children, ids, currentNoteID } = this.props;
+    const { expanded } = this.state;
     return (
       <Container column>
-        <Title onClick={this.expandArea}>{this.props.title || this.props.children}</Title>
+        <Title onClick={this.expandArea}>{title || children}</Title>
         <Tags>
-          {(this.state.expanded ? this.props.ids : take(this.props.ids, this.displayLimit)).map(id => (
-            <NoteLink
-              focused={id === this.props.currentNoteID}
-              key={id}
-              onClick={() => this.props.focusNote(id)}
-              contenteditable={false}
-            >
-              {id}
-            </NoteLink>
+          {(expanded ? ids : take(ids, this.displayLimit)).map(id => (
+            <Link to={`/note/${id}/`}>
+              <NoteLink focused={id === currentNoteID} key={id} contenteditable={false}>
+                {id}
+              </NoteLink>
+            </Link>
           ))}
         </Tags>
-        {this.props.ids.length > this.displayLimit && (
+        {ids.length > this.displayLimit && (
           <Expander center onClick={this.expandArea}>
-            {this.state.expanded ? '收起' : '展开'}
+            {expanded ? '收起' : '展开'}
           </Expander>
         )}
       </Container>
@@ -99,9 +100,5 @@ class NewNoteButton extends Component<Props & Store & Dispatch, *> {
 function mapState({ note: { ids, currentNoteID } }): Store {
   return { ids, currentNoteID };
 }
-function mapDispatch({ note: { focusNote } }): Dispatch {
-  return {
-    focusNote,
-  };
-}
-export default connect(mapState, mapDispatch)(NewNoteButton);
+
+export default connect(mapState)(NewNoteButton);
