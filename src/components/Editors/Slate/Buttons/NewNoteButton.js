@@ -31,7 +31,7 @@ class NewNoteButton extends Component<Dispatch & Props> {
   }
 }
 
-function mapDispatch({ note: { saveNewNoteFromString } }: { note: Dispatch }): Dispatch {
+function mapDispatch({ note: { saveNewNoteFromString } }: *): Dispatch {
   return {
     saveNewNoteFromString,
   };

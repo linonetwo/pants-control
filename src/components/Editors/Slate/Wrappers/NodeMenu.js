@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import type { Element } from 'react';
 import styled from 'styled-components';
-import { Popover, Input } from 'antd';
+import { Popover, Input, Menu } from 'antd';
+import Flex from 'styled-flex-component';
 
 const menuSize = 25;
 const MenuButton = styled.div`
@@ -42,16 +43,51 @@ const Container = styled.div`
 `;
 
 type Props = {
+  value: { change: Function },
+  onChange: Function,
   children: string | Element<any>,
 };
 export default class NodeMenu extends Component<Props> {
-  menuSearch = <Input.Search placeholder="input search text" onSearch={value => console.log(value)} />;
+  menuSearch = <Input.Search placeholder="现在还用不了，以后可以过滤菜单" onSearch={value => console.log(value)} />;
+
+  /**
+   * When a mark button is clicked, toggle the current mark.
+   */
+  onClickNodeType(type: string) {
+    const { value, onChange } = this.props;
+    const change = value.change().setBlocks(type);
+    onChange(change);
+  }
+
+  /**
+   * Render a mark-toggling toolbar button.
+   */
+  renderNodeButton(type: string, icon: string): React$Element<*> {
+    return (
+      <Menu.Item key="note-list" onClick={() => this.onClickNodeType(type)}>
+        <Flex alignCenter>
+          <span className="material-icons">{icon}</span>
+          <span>{type}</span>
+        </Flex>
+      </Menu.Item>
+    );
+  }
 
   menu = (
-    <div>
-      <p>Content</p>
-      <p>Content</p>
-    </div>
+    <Menu mode="vertical">
+      <Menu.SubMenu
+        key="node-type"
+        title={
+          <Flex alignCenter>
+            <span className="material-icons">developer_board</span>
+            <span>节点类型</span>
+          </Flex>
+        }
+      >
+        <Menu.ItemGroup title="索引">{this.renderNodeButton('note-list', 'dns')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="按钮">{this.renderNodeButton('new-note-button', 'library_add')}</Menu.ItemGroup>
+      </Menu.SubMenu>
+    </Menu>
   );
 
   render() {
@@ -60,7 +96,7 @@ export default class NodeMenu extends Component<Props> {
       <Container>
         <Popover content={this.menu} title={this.menuSearch} trigger="click">
           <MenuButton role="button" tabindex="0" contenteditable={false}>
-            <span className="material-icons">menu</span>
+            <span className="material-icons">drag_indicator</span>
           </MenuButton>
         </Popover>
         {children}

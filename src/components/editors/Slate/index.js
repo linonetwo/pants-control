@@ -7,7 +7,6 @@ import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
 
-
 import type { Note } from '../../../store/note';
 
 import HoverMenu from './HoverMenu';
@@ -27,13 +26,12 @@ type Dispatch = {
 };
 type Props = {
   noteID?: string | null,
+  sideBar?: boolean,
 };
 type State = {
   noteID?: string | null,
   value: Object,
 };
-
-
 
 class SlateEditor extends Component<Store & Dispatch & Props, State> {
   state = {
@@ -66,10 +64,8 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     this.setState({ value });
   };
 
-  
-
   render() {
-    const { noteID } = this.props;
+    const { noteID, sideBar } = this.props;
     const { value } = this.state;
     return (
       <Fragment>
@@ -78,11 +74,11 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
           {noteID ? (
             <Editor
               placeholder="你可以用 @ 插入特殊块"
-              schema={schema}
+              schema={sideBar ? null : schema}
               value={value}
               onChange={this.onChange}
               renderMark={renderMark}
-              renderNode={renderNode}
+              renderNode={renderNode(value, this.onChange)}
               spellCheck={false}
             />
           ) : (

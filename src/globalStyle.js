@@ -50,4 +50,7 @@ injectGlobal`
   .ant-popover-arrow {
     display: none !important;
   }
+  .ant-menu-vertical {
+    border-right: none !important;
+  }
 `;

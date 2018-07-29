@@ -25,6 +25,6 @@ function renderBasicNode(props) {
   }
 }
 
-export default function renderNodeWithWrapper(props) {
-  return <WrapNodeMenu>{renderBasicNode(props)}</WrapNodeMenu>;
+export default function renderNodeWithWrapper(value, onChange) {
+  return props => <WrapNodeMenu value={value} onChange={onChange}>{renderBasicNode(props)}</WrapNodeMenu>;
 }
