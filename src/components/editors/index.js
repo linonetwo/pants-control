@@ -16,6 +16,7 @@ const EditorScroll = styled.div`
       height: 100%;
       background-color: whitesmoke;
       padding: 10px;
+      padding-left: 30px;
     `};
 `;
 

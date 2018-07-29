@@ -3,22 +3,24 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Editor } from 'slate-react';
-import { Block, Value } from 'slate';
+import { Value } from 'slate';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
-import { CHILD_REQUIRED, CHILD_TYPE_INVALID } from 'slate-schema-violations';
 
-import NewNoteButton from './Buttons/NewNoteButton';
-import NoteList from './Facets/NoteList';
 
 import type { Note } from '../../../store/note';
 
 import HoverMenu from './HoverMenu';
+import renderMark from './renderMark';
+import renderNode from './renderNode';
+import schema from './schema';
 
 const EditorContainer = styled.div``;
 
 type Store = {
+  /* eslint-disable react/no-unused-prop-types */
   currentNoteInStore?: Note,
+  /* eslint-enable react/no-unused-prop-types */
 };
 type Dispatch = {
   setNote: ({ note: string, id: string }) => void,
@@ -31,25 +33,7 @@ type State = {
   value: Object,
 };
 
-const schema = {
-  document: {
-    nodes: [{ match: { type: 'title' }, min: 1, max: 1 }, { match: { type: 'paragraph' }, min: 1 }],
-    normalize: (change, { code, node, child, index }) => {
-      switch (code) {
-        case CHILD_TYPE_INVALID: {
-          const type = index === 0 ? 'title' : 'paragraph';
-          return change.setNodeByKey(child.key, type);
-        }
-        case CHILD_REQUIRED: {
-          const block = Block.create(index === 0 ? 'title' : 'paragraph');
-          return change.insertNodeByKey(node.key, index, block);
-        }
-        default:
-          return change;
-      }
-    },
-  },
-};
+
 
 class SlateEditor extends Component<Store & Dispatch & Props, State> {
   state = {
@@ -82,37 +66,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     this.setState({ value });
   };
 
-  renderNode = props => {
-    const { attributes, children, node } = props;
-
-    switch (node.type) {
-      case 'new-note-button':
-        return <NewNoteButton>{children}</NewNoteButton>;
-      case 'note-list':
-        return <NoteList>{children}</NoteList>;
-      case 'title':
-        return <h2 {...attributes}>{children}</h2>;
-      case 'paragraph':
-      default:
-        return <p {...attributes}>{children}</p>;
-    }
-  };
-
-  renderMark = props => {
-    const { children, mark } = props;
-    switch (mark.type) {
-      case 'bold':
-        return <strong>{children}</strong>;
-      case 'code':
-        return <code>{children}</code>;
-      case 'italic':
-        return <em>{children}</em>;
-      case 'underlined':
-        return <u>{children}</u>;
-      default:
-        return <span>{children}</span>;
-    }
-  };
+  
 
   render() {
     const { noteID } = this.props;
@@ -127,8 +81,8 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
               schema={schema}
               value={value}
               onChange={this.onChange}
-              renderMark={this.renderMark}
-              renderNode={this.renderNode}
+              renderMark={renderMark}
+              renderNode={renderNode}
               spellCheck={false}
             />
           ) : (
