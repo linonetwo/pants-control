@@ -117,7 +117,7 @@ export default (initialState?: * = {}) => ({
           await Promise.all(notSyncedNoteIDs.map(id => this.saveNote(id)));
           this.clearNotSyncedNoteIDs();
         }
-        await Promise.delay(5000);
+        await Promise.delay(1000);
       }
     },
   },

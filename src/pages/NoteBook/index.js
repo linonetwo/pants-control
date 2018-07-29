@@ -60,11 +60,12 @@ class NoteBook extends Component<Store & Props, *> {
           <Header>
             <HeaderTitle>
               欢迎使用内裤管理系统{' '}
-              {syncing && (
-                <span>
-                  <Spin indicator={<Icon type="loading" style={{ fontSize: 14 }} spin />} />保存中
-                </span>
-              )}
+              {!syncing &&
+                !allNoteSynced && (
+                  <small>
+                    <Icon type="loading" style={{ fontSize: 14 }} spin />待保存
+                  </small>
+                )}
               {allNoteSynced && (
                 <small>
                   <Icon type="check" style={{ fontSize: 14 }} />已保存
@@ -86,7 +87,7 @@ class NoteBook extends Component<Store & Props, *> {
 }
 
 const mapState = ({ note: { currentNoteID, sideNoteID, notSyncedNoteIDs }, viewer: { profile }, loading }): Store => ({
-  syncing: !!loading.effects.note.saveNote,
+  syncing: loading.effects.note.saveNote,
   allNoteSynced: notSyncedNoteIDs.length === 0,
   currentNoteID,
   sideNoteID,
