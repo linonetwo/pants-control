@@ -30,7 +30,7 @@ export const { dispatch, getState } = store;
 
 history.listen(async location => {
   if (/\/note\//.test(location.pathname)) {
-    dispatch.note.openNote(location.pathname.replace('/note/', ''));
+    dispatch.history.syncIDFromURLToStore();
   }
 });
 export { history };

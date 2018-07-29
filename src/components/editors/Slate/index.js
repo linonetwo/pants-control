@@ -33,12 +33,12 @@ type State = {
 
 const schema = {
   document: {
-    nodes: [{ types: ['title'], min: 1, max: 1 }, { types: ['paragraph'], min: 1 }],
-    normalize: (change, violation, { node, child, index }) => {
-      switch (violation) {
-        // forced title https://github.com/ianstormtaylor/slate/blob/master/examples/forced-layout/index.js
+    nodes: [{ match: { type: 'title' }, min: 1, max: 1 }, { match: { type: 'paragraph' }, min: 1 }],
+    normalize: (change, { code, node, child, index }) => {
+      switch (code) {
         case CHILD_TYPE_INVALID: {
-          return change.setNodeByKey(child.key, index === 0 ? 'title' : 'paragraph');
+          const type = index === 0 ? 'title' : 'paragraph';
+          return change.setNodeByKey(child.key, type);
         }
         case CHILD_REQUIRED: {
           const block = Block.create(index === 0 ? 'title' : 'paragraph');

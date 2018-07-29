@@ -3,6 +3,8 @@ import keypair from 'keypair';
 import uuid from 'uuid/v4';
 import { message } from 'antd';
 import queryString from 'query-string';
+import Plain from 'slate-plain-serializer';
+import { Value } from 'slate';
 
 import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
@@ -80,9 +82,7 @@ export default (initialState?: * = {}) => ({
         'pants-control:sideNote': sideNoteID,
       };
       try {
-        // save profile to backend
         const { dispatch, history } = await import('./');
-        dispatch.backend.save({ id: profileID, data: JSON.stringify(newProfile, null, '  ') });
         // Put private key to localStorage
         await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
         // Remember username in localStorage for later login
@@ -98,18 +98,19 @@ export default (initialState?: * = {}) => ({
         this.setProfile(newProfile);
         this.setPrivateKey(privateKey);
         // create initial notes
-        await dispatch.note.saveNewEmptyNote(sideNoteID);
+        await dispatch.note.saveNewNoteFromString({ id: profileID, note: JSON.stringify(newProfile, null, '  ') });
+        await dispatch.note.saveNewNoteFromString({ id: sideNoteID });
         await dispatch.note.setSideNote(sideNoteID);
-        await dispatch.note.saveNewEmptyNote(homepageID);
+        await dispatch.note.saveNewNoteFromString({ id: homepageID });
         // start syncing, looping
         dispatch.note.syncToBackend();
         // If user come from a note and just want to login and come back to that note
-        const currentQueryString = queryString.parse(history.location.search)
+        const currentQueryString = queryString.parse(history.location.search);
         if (currentQueryString?.note) {
-          return history.push(`/note/${currentQueryString.note}/`);
+          return history.push(`/note/${currentQueryString.note}/`, { loading: false });
         }
         // goto homepage after register
-        return history.push(`/note/${newProfile['foaf:homepage']}/`);
+        return history.push(`/note/${newProfile['foaf:homepage']}/`, { loading: false });
       } catch (error) {
         console.error(error);
         message.warning(error.message);
@@ -132,7 +133,12 @@ export default (initialState?: * = {}) => ({
         const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
         const { dispatch, history } = await import('./');
         const profileString = await dispatch.backend.load(profileID);
-        const profile = JSON.parse(profileString);
+        let profile = {};
+        try {
+          profile = JSON.parse(Plain.serialize(Value.fromJSON(JSON.parse(profileString))));
+        } catch (error) {
+          throw new Error(`Profile 格式不对：\n${profileString}`);
+        }
         // checks password
         const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
         const privateKey = await decrypt(name, password, encryptedPrivateKeyHex);
@@ -157,18 +163,19 @@ export default (initialState?: * = {}) => ({
         this.setPrivateKey(privateKey);
         // load notes
         await dispatch.note.openNote(profile['pants-control:sideNote']);
+        await dispatch.note.openNote(profileID);
         await dispatch.note.setSideNote(profile['pants-control:sideNote']);
         await dispatch.note.openNote(profile['foaf:homepage']);
         // start syncing, looping
         dispatch.note.syncToBackend();
         // If user come from a note and just want to login and come back to that note
-        const currentQueryString = queryString.parse(history.location.search)
+        const currentQueryString = queryString.parse(history.location.search);
         if (currentQueryString?.note) {
-          return history.push(`/note/${currentQueryString.note}/`);
+          return history.push(`/note/${currentQueryString.note}/`, { loading: false });
         }
         // if user is not viewing a page, then goto homepage
         if (!/\/note\//.test(history.location.pathname)) {
-          return history.push(`/note/${profile['foaf:homepage']}/`);
+          return history.push(`/note/${profile['foaf:homepage']}/`, { loading: false });
         }
       } catch (error) {
         console.error(error);

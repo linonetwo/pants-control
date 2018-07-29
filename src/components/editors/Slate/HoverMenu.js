@@ -70,7 +70,8 @@ export default class HoverMenu extends Component {
     );
   }
 
-  updateMenu = value => {
+  getMenuStyle = () => {
+    const { value } = this.props;
     if (!this.menuRef) return {};
 
     if (value.isBlurred || value.isEmpty) {
@@ -93,7 +94,8 @@ export default class HoverMenu extends Component {
   };
 
   render() {
-    const { opacity, top, left } = this.updateMenu(this.props.value);
+
+    const { opacity, top, left } = this.getMenuStyle();
     return ReactDOM.createPortal(
       <MenuContainer
         opacity={opacity}

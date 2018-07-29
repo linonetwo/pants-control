@@ -94,10 +94,10 @@ export default (initialState?: * = {}) => ({
         await dispatch.backend.save({ id, data: serializedNote });
       }
     },
-    saveNewEmptyNote(id: string) {
-      const newNoteContent = Plain.deserialize('');
+    async saveNewNoteFromString({ id, note = '' }: { id: string, note?: string }) {
+      const newNoteContent = Plain.deserialize(note);
       this.setNote({ note: newNoteContent, id });
-      this.saveNote(id);
+      await this.saveNote(id);
     },
     async syncToBackend(
       _: any,
