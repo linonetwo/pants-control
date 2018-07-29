@@ -46,4 +46,8 @@ injectGlobal`
   ::-webkit-scrollbar{
     display:none;
   }
+
+  .ant-popover-arrow {
+    display: none !important;
+  }
 `;
