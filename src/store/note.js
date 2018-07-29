@@ -3,6 +3,7 @@
 import Promise from 'bluebird';
 import { uniq } from 'lodash';
 import Plain from 'slate-plain-serializer';
+import { Value } from 'slate';
 
 export type Note = {
   content: Object,
@@ -77,7 +78,7 @@ export default (initialState?: * = {}) => ({
       if (!ids.includes(id)) {
         const { dispatch } = await import('./');
         // load note from IPFS or server
-        const note = JSON.parse(await dispatch.backend.load(id));
+        const note = Value.fromJSON(JSON.parse(await dispatch.backend.load(id)));
         this.setNote({ note, id });
       }
       this.focusNote(id);

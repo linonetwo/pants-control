@@ -42,11 +42,10 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   static getDerivedStateFromProps(nextProps: Store & Props, currentState: State) {
     if (
       nextProps.currentNoteInStore &&
-      nextProps.currentNoteInStore.content &&
-      !equal(nextProps.currentNoteInStore?.content, currentState.value.toJSON())
+      nextProps.currentNoteInStore?.content?.toJSON &&
+      !equal(nextProps.currentNoteInStore.content.toJSON(), currentState.value.toJSON())
     ) {
-      const value = Value.fromJSON(nextProps.currentNoteInStore.content);
-      return { value, noteID: nextProps.noteID };
+      return { value: nextProps.currentNoteInStore.content, noteID: nextProps.noteID };
     }
     return null;
   }
@@ -54,7 +53,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   onChange = ({ value }) => {
     const { setNote } = this.props;
     const { value: prevValue, noteID } = this.state;
-    if (value.document !== prevValue.document) {
+    if (!value.document.equals(prevValue.document)) {
       // save serialized content to local cache in redux store
       const content = value.toJSON();
       if (noteID) {
