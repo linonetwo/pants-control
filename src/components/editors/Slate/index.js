@@ -39,10 +39,6 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
 
   static getDerivedStateFromProps(nextProps: Store & Props, currentState: State) {
     if (nextProps.currentNoteInStore && nextProps.currentNoteInStore?.content?.toJSON)
-    console.log(
-      equal(nextProps.currentNoteInStore.content.toJSON(), currentState.value.toJSON()),
-      nextProps.currentNoteInStore.content.equals(currentState.value),
-    );
     if (
       nextProps.currentNoteInStore &&
       nextProps.currentNoteInStore?.content?.toJSON &&

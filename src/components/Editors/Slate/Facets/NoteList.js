@@ -55,11 +55,10 @@ const Expander = styled(Flex)`
 `;
 
 type Props = {
-  title?: string,
   children: string | Element<any>,
 };
 type Store = {
-  ids: string[],
+  notes: Object[],
   currentNoteID: string | null,
 };
 type State = {
@@ -75,21 +74,21 @@ class NoteList extends Component<Props & Store, State> {
   expandArea = () => this.setState((prevState: State) => ({ expanded: !prevState.expanded }));
 
   render() {
-    const { title, children, ids, currentNoteID } = this.props;
+    const { children, notes, currentNoteID } = this.props;
     const { expanded } = this.state;
     return (
       <Container column>
-        <Title onClick={this.expandArea}>{title || children}</Title>
+        <Title onClick={this.expandArea}>{children}</Title>
         <Tags>
-          {(expanded ? ids : take(ids, this.displayLimit)).map(id => (
+          {(expanded ? notes : take(notes, this.displayLimit)).map(({ id, title }) => (
             <Link to={`/note/${id}/`} key={id}>
               <NoteLink focused={id === currentNoteID} contenteditable={false}>
-                {id}
+                {title}
               </NoteLink>
             </Link>
           ))}
         </Tags>
-        {ids.length > this.displayLimit && (
+        {notes.length > this.displayLimit && (
           <Expander center onClick={this.expandArea}>
             {expanded ? '收起' : '展开'}
           </Expander>
@@ -99,8 +98,8 @@ class NoteList extends Component<Props & Store, State> {
   }
 }
 
-function mapState({ note: { ids, currentNoteID } }): Store {
-  return { ids, currentNoteID };
+function mapState({ note: { ids, notes, currentNoteID } }): Store {
+  return { notes: ids.map(id => notes[id]), currentNoteID };
 }
 
 export default connect(mapState)(NoteList);

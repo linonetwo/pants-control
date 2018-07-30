@@ -35,14 +35,28 @@ export default (initialState?: * = {}) => ({
   reducers: {
     /** 保存笔记内容到内存 */
     setNote(state: State, { note, id }: { note: Object, id: string }) {
-      if (!state.notes[id]) {
-        state.notes[id] = {
-          content: note,
-        };
-        state.ids.push(id);
-      } else {
-        state.notes[id].content = note;
+      // get potential title
+      let title = id;
+      if (
+        note.getIn(['document', 'nodes', 0, 'type']) === 'title' &&
+        note.getIn(['document', 'nodes', 0, 'nodes', 0, 'leaves', 0, 'text'])
+      ) {
+        title = note
+          .getIn(['document', 'nodes', 0, 'nodes', 0, 'leaves'])
+          .map(leaf => leaf.get('text'))
+          .join('');
       }
+      // add id to ids if not exist
+      if (!state.notes[id]) {
+        state.ids.push(id);
+      }
+      // update note data
+      state.notes[id] = {
+        ...state.notes[id],
+        id,
+        content: note,
+        title,
+      };
       // add note to ready to sync list, sync it to backend later
       state.notSyncedNoteIDs = uniq([...state.notSyncedNoteIDs, id]);
       return state;
