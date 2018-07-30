@@ -98,14 +98,19 @@ export default (initialState?: * = {}) => ({
         this.setProfile(newProfile);
         this.setPrivateKey(privateKey);
         // create initial notes
-        await dispatch.note.saveNewNoteFromString({ id: profileID, note: JSON.stringify(newProfile, null, '  ') });
+        await dispatch.note.saveNewNoteFromString({
+          id: profileID,
+          note: JSON.stringify(newProfile, null, '  '),
+          title: '账户信息',
+          type: 'json',
+        });
         await dispatch.note.saveNewNoteFromJSONString({
           id: sideNoteID,
           note:
             '{"object":"value","document":{"object":"document","data":{},"nodes":[{"object":"block","type":"title","isVoid":false,"data":{},"nodes":[{"object":"text","leaves":[{"object":"leaf","text":"侧边栏","marks":[]}]}]},{"object":"block","type":"note-list","isVoid":false,"data":{},"nodes":[{"object":"text","leaves":[{"object":"leaf","text":"笔记目录","marks":[]}]}]}]}}',
         });
         await dispatch.note.setSideNote(sideNoteID);
-        await dispatch.note.saveNewNoteFromString({ id: homepageID });
+        await dispatch.note.saveNewNoteFromString({ id: homepageID, title: '主页' });
         // start syncing, looping
         dispatch.note.syncToBackend();
         // If user come from a note and just want to login and come back to that note

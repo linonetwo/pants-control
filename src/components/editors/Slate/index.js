@@ -39,30 +39,30 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
 
   static getDerivedStateFromProps(nextProps: Store & Props, currentState: State) {
     if (nextProps.currentNoteInStore && nextProps.currentNoteInStore?.content?.toJSON)
-    if (
-      nextProps.currentNoteInStore &&
-      nextProps.currentNoteInStore?.content?.toJSON &&
-      !equal(nextProps.currentNoteInStore.content.toJSON(), currentState.value.toJSON())
-    ) {
-      return { value: nextProps.currentNoteInStore.content, noteID: nextProps.noteID };
-    }
+      if (
+        nextProps.currentNoteInStore &&
+        nextProps.currentNoteInStore?.content?.toJSON &&
+        !equal(nextProps.currentNoteInStore.content.toJSON(), currentState.value.toJSON())
+      ) {
+        return { value: nextProps.currentNoteInStore.content, noteID: nextProps.noteID };
+      }
     return null;
   }
 
   onChange = ({ value }) => {
-    const { setNote, noteID } = this.props;
+    const { setNote, noteID, currentNoteInStore } = this.props;
     const { value: prevValue, noteID: prevNoteID } = this.state;
     if (!value.document.equals(prevValue.document)) {
       // save serialized content to local cache in redux store
       if (noteID && prevNoteID && prevNoteID === noteID) {
-        setNote({ note: value, id: noteID });
+        setNote({ ...currentNoteInStore, note: value, id: noteID });
       }
     }
     this.setState({ value });
   };
 
   render() {
-    const { noteID } = this.props;
+    const { noteID, currentNoteInStore } = this.props;
     const { value } = this.state;
     return (
       <Fragment>
@@ -71,7 +71,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
           {noteID ? (
             <Editor
               placeholder="你可以用 @ 插入特殊块"
-              schema={schema}
+              schema={currentNoteInStore.type === 'document' ? schema : null}
               value={value}
               onChange={this.onChange}
               renderMark={renderMark}

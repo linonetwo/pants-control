@@ -23,7 +23,7 @@ class NewNoteButton extends Component<Dispatch & Props> {
   render() {
     const { saveNewNoteFromString, children } = this.props;
     return (
-      <ButtonContainer onClick={() => saveNewNoteFromString({ id: uuid(), note: '新笔记' })}>
+      <ButtonContainer onClick={() => saveNewNoteFromString({ id: uuid(), note: '', title: '新笔记' })}>
         <Ink />
         {children}
       </ButtonContainer>

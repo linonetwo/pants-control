@@ -34,14 +34,19 @@ export default (initialState?: * = {}) => ({
   },
   reducers: {
     /** 保存笔记内容到内存 */
-    setNote(state: State, { note, id }: { note: Object, id: string }) {
-      // get potential title
-      let title = id;
+    setNote(
+      state: State,
+      { note, id, title, type = 'document' }: { note: Object, id: string, title?: string, type?: string },
+    ) {
+      // get potential title of document
+      let defaultTitle = id;
       if (
+        !title &&
+        type === 'document' &&
         note.getIn(['document', 'nodes', 0, 'type']) === 'title' &&
         note.getIn(['document', 'nodes', 0, 'nodes', 0, 'leaves', 0, 'text'])
       ) {
-        title = note
+        defaultTitle = note
           .getIn(['document', 'nodes', 0, 'nodes', 0, 'leaves'])
           .map(leaf => leaf.get('text'))
           .join('');
@@ -55,7 +60,7 @@ export default (initialState?: * = {}) => ({
         ...state.notes[id],
         id,
         content: note,
-        title,
+        title: title || defaultTitle,
       };
       // add note to ready to sync list, sync it to backend later
       state.notSyncedNoteIDs = uniq([...state.notSyncedNoteIDs, id]);
@@ -92,8 +97,10 @@ export default (initialState?: * = {}) => ({
       if (!ids.includes(id)) {
         const { dispatch } = await import('./');
         // load note from IPFS or server
-        const note = Value.fromJSON(JSON.parse(await dispatch.backend.load(id)));
-        this.setNote({ note, id });
+        const {
+          data: { content, ...rest },
+        } = JSON.parse(await dispatch.backend.load(id));
+        this.setNote({ note: Value.fromJSON(content), ...rest, id });
       }
       this.focusNote(id);
     },
@@ -104,19 +111,39 @@ export default (initialState?: * = {}) => ({
       }: { note: State },
     ) {
       if (ids.includes(id) && id in notes) {
-        const serializedNote = JSON.stringify(notes[id].content);
         const { dispatch } = await import('./');
+        const serializedNote = JSON.stringify(notes[id]);
         await dispatch.backend.save({ id, data: serializedNote });
       }
     },
-    async saveNewNoteFromString({ id, note = '' }: { id: string, note?: string }) {
+    async saveNewNoteFromString({
+      id,
+      note = '',
+      title,
+      type,
+    }: {
+      id: string,
+      note?: string,
+      title?: string,
+      type?: string,
+    }) {
       const newNoteContent = Plain.deserialize(note);
-      this.setNote({ note: newNoteContent, id });
+      this.setNote({ note: newNoteContent, id, title, type });
       await this.saveNote(id);
     },
-    async saveNewNoteFromJSONString({ id, note = '' }: { id: string, note?: string }) {
+    async saveNewNoteFromJSONString({
+      id,
+      note = '',
+      title,
+      type,
+    }: {
+      id: string,
+      note?: string,
+      title?: string,
+      type?: string,
+    }) {
       const newNoteContent = Value.fromJSON(JSON.parse(note));
-      this.setNote({ note: newNoteContent, id });
+      this.setNote({ note: newNoteContent, id, title, type });
       await this.saveNote(id);
     },
     async syncToBackend(
