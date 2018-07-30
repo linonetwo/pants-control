@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import type { Element } from 'react';
 import styled from 'styled-components';
-import { Popover, Input, Menu } from 'antd';
+import { Popover, Input, Menu, Icon } from 'antd';
 import Flex from 'styled-flex-component';
 
 const menuSize = 25;
@@ -65,11 +65,11 @@ export default class NodeMenu extends Component<Props> {
    */
   renderNodeButton(type: string, icon: string): React$Element<*> {
     return (
-      <Menu.Item key="note-list" onClick={() => this.onClickNodeType(type)}>
-        <Flex alignCenter>
-          <span className="material-icons">{icon}</span>
+      <Menu.Item key={type} onClick={() => this.onClickNodeType(type)}>
+        <span>
+          <Icon type={icon} />
           <span>{type}</span>
-        </Flex>
+        </span>
       </Menu.Item>
     );
   }
@@ -79,15 +79,15 @@ export default class NodeMenu extends Component<Props> {
       <Menu.SubMenu
         key="node-type"
         title={
-          <Flex alignCenter>
-            <span className="material-icons">developer_board</span>
+          <span>
+            <Icon type="appstore" />
             <span>节点类型</span>
-          </Flex>
+          </span>
         }
       >
-        <Menu.ItemGroup title="文档">{this.renderNodeButton('paragraph', 'short_text')}</Menu.ItemGroup>
-        <Menu.ItemGroup title="索引">{this.renderNodeButton('note-list', 'dns')}</Menu.ItemGroup>
-        <Menu.ItemGroup title="按钮">{this.renderNodeButton('new-note-button', 'library_add')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="文档">{this.renderNodeButton('paragraph', 'file-word')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="索引">{this.renderNodeButton('note-list', 'bars')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="按钮">{this.renderNodeButton('new-note-button', 'file-add')}</Menu.ItemGroup>
       </Menu.SubMenu>
     </Menu>
   );
