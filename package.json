@@ -14,7 +14,10 @@
     "pm2": "pm2 delete 0 && pm2 start yarn -- start",
     "clear:babel-cache": "rimraf -rf ./node_modules/.cache/babel-loader/*",
     "flow-typed": "rimraf flow-typed/npm && flow-typed install --overwrite || true",
-    "postinstall": "cd ./src && cross-env npm_config_target=3.0.0-beta.3 npm_config_arch=x64 npm_config_target_arch=x64 npm_config_disturl=https://atom.io/download/electron npm_config_runtime=electron npm_config_build_from_source=true yarn",
+    "docker-build": "docker build . -t pants-control",
+    "docker-run": "docker run --rm -d --name pants-control -p 3000:3000 pants-control",
+    "analyse": "webpack-bundle-analyzer ./build/stats.json ./build",
+    "install-native": "cd ./src && cross-env npm_config_target=3.0.0-beta.3 npm_config_arch=x64 npm_config_target_arch=x64 npm_config_disturl=https://atom.io/download/electron npm_config_runtime=electron npm_config_build_from_source=true yarn",
     "eject": "react-scripts eject"
   },
   "private": true,
