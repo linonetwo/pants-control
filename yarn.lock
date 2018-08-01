@@ -4066,6 +4066,13 @@ default-shell@^1.0.0:
   version "1.0.1"
   resolved "http://registry.npm.taobao.org/default-shell/download/default-shell-1.0.1.tgz#752304bddc6174f49eb29cb988feea0b8813c8bc"
 
+deferred-leveldown@~4.0.0:
+  version "4.0.2"
+  resolved "http://registry.npm.taobao.org/deferred-leveldown/download/deferred-leveldown-4.0.2.tgz#0b0570087827bf480a23494b398f04c128c19a20"
+  dependencies:
+    abstract-leveldown "~5.0.0"
+    inherits "^2.0.3"
+
 define-properties@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/define-properties/-/define-properties-1.1.2.tgz#83a73f2fea569898fb737193c8f873caf6d45c94"
@@ -4581,7 +4588,7 @@ env-paths@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/env-paths/download/env-paths-1.0.0.tgz#4168133b42bb05c38a35b1ae4397c8298ab369e0"
 
-errno@^0.1.1, errno@~0.1.7:
+errno@^0.1.1, errno@~0.1.1, errno@~0.1.7:
   version "0.1.7"
   resolved "http://registry.npm.taobao.org/errno/download/errno-0.1.7.tgz#4684d71779ad39af177e3f007996f7c67c852618"
   dependencies:
@@ -7793,6 +7800,20 @@ less@^3.0.2:
     request "^2.83.0"
     source-map "~0.6.0"
 
+level-errors@~2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/level-errors/download/level-errors-2.0.0.tgz#2de5b566b62eef92f99e19be74397fbc512563fa"
+  dependencies:
+    errno "~0.1.1"
+
+level-iterator-stream@~3.0.0:
+  version "3.0.0"
+  resolved "http://registry.npm.taobao.org/level-iterator-stream/download/level-iterator-stream-3.0.0.tgz#2f780b524b8e7fa479c195e5b1180cd409f85219"
+  dependencies:
+    inherits "^2.0.1"
+    readable-stream "^2.0.5"
+    xtend "^4.0.0"
+
 level-js@^3.0.0:
   version "3.0.0"
   resolved "http://registry.npm.taobao.org/level-js/download/level-js-3.0.0.tgz#e6c066fb529b23eec230849c0751e4f6d548c865"
@@ -7802,6 +7823,15 @@ level-js@^3.0.0:
     inherits "^2.0.3"
     ltgt "^2.1.2"
     typedarray-to-buffer "~3.1.5"
+
+levelup@^3.1.1:
+  version "3.1.1"
+  resolved "http://registry.npm.taobao.org/levelup/download/levelup-3.1.1.tgz#c2c0b3be2b4dc316647c53b42e2f559e232d2189"
+  dependencies:
+    deferred-leveldown "~4.0.0"
+    level-errors "~2.0.0"
+    level-iterator-stream "~3.0.0"
+    xtend "~4.0.0"
 
 leven@^2.1.0:
   version "2.1.0"
