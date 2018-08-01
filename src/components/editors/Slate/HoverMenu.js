@@ -73,7 +73,7 @@ export default class HoverMenu extends Component<*> {
   getMenuStyle = () => {
     const { value } = this.props;
     const selection = window.getSelection();
-    if (this.menuRef !== null && selection.rangeCount > 0 && !value.isBlurred && !value.isCollapsed) {
+    if (this.menuRef !== null && selection.rangeCount > 0 && !value.isBlurred && !value.isEmpty) {
       const { offsetHeight, offsetWidth } = this.menuRef;
       const range = selection.getRangeAt(0);
       const rect = range.getBoundingClientRect();
