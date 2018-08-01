@@ -20,7 +20,7 @@ const EditorScroll = styled.div`
     `};
 `;
 
-export default class Editors extends Component<*> {
+export default class Editors extends Component<{ sideBar?: boolean, noteID?: string }> {
   render() {
     const { sideBar, noteID } = this.props;
     return (
