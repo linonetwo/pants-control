@@ -144,8 +144,9 @@ export default (initialState?: * = {}) => ({
         const profileString = await dispatch.backend.load(profileID);
         let profile = {};
         try {
-          profile = JSON.parse(Plain.serialize(Value.fromJSON(JSON.parse(profileString))));
+          profile = JSON.parse(Plain.serialize(Value.fromJSON(JSON.parse(profileString).content)));
         } catch (error) {
+          console.error(error);
           throw new Error(`Profile 格式不对：\n${profileString}`);
         }
         // checks password

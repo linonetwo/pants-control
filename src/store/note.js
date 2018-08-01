@@ -97,9 +97,7 @@ export default (initialState?: * = {}) => ({
       if (!ids.includes(id)) {
         const { dispatch } = await import('./');
         // load note from IPFS or server
-        const {
-          data: { content, ...rest },
-        } = JSON.parse(await dispatch.backend.load(id));
+        const { content, ...rest } = JSON.parse(await dispatch.backend.load(id));
         this.setNote({ note: Value.fromJSON(content), ...rest, id });
       }
       this.focusNote(id);
