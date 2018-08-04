@@ -12,6 +12,73 @@ import HoverMenu from './HoverMenu';
 import renderMark from './renderMark';
 import renderNode from './renderNode';
 import schema from './schema';
+import SuggestionsPlugin from './plugins/slate-suggestions';
+
+const suggestions = [
+  {
+    key: 'Jon Snow',
+    value: '@Jon Snow',
+    suggestion: '@Jon Snow', // Can be either string or react component
+  },
+  {
+    key: 'John Evans',
+    value: '@John Evans',
+    suggestion: '@John Evans',
+  },
+  {
+    key: 'Daenerys Targaryen',
+    value: '@Daenerys Targaryen',
+    suggestion: '@Daenerys Targaryen',
+  },
+  {
+    key: 'Cersei Lannister',
+    value: '@Cersei Lannister',
+    suggestion: '@Cersei Lannister',
+  },
+  {
+    key: 'Tyrion Lannister',
+    value: '@Tyrion Lannister',
+    suggestion: '@Tyrion Lannister',
+  },
+];
+function getCurrentWord(text, index, initialIndex) {
+  if (index === initialIndex) {
+    return { start: getCurrentWord(text, index - 1, initialIndex), end: getCurrentWord(text, index + 1, initialIndex) };
+  }
+  if (text[index] === ' ' || text[index] === '@' || text[index] === undefined) {
+    return index;
+  }
+  if (index < initialIndex) {
+    return getCurrentWord(text, index - 1, initialIndex);
+  }
+  if (index > initialIndex) {
+    return getCurrentWord(text, index + 1, initialIndex);
+  }
+}
+const suggestionsPlugin = SuggestionsPlugin({
+  trigger: '@',
+  regex: /@([\w]*)/,
+  suggestions,
+  onEnter: (suggestion, change) => {
+    const { anchorText, selection } = change.value;
+    const anchorOffset = selection.anchor.offset;
+    const { text } = anchorText;
+
+    let index = { start: anchorOffset - 1, end: anchorOffset };
+
+    if (text[anchorOffset - 1] !== '@') {
+      index = getCurrentWord(text, anchorOffset - 1, anchorOffset - 1);
+    }
+
+    const newText = `${text.substring(0, index.start)}${suggestion.value} `;
+
+    change.deleteBackward(anchorOffset).insertText(newText);
+
+    return true;
+  },
+});
+const { SuggestionPortal } = suggestionsPlugin;
+const plugins = [suggestionsPlugin];
 
 const EditorContainer = styled.div``;
 
@@ -67,9 +134,11 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     return (
       <Fragment>
         {noteID && <HoverMenu value={value} onChange={this.onChange} />}
+        <SuggestionPortal value={value} onChange={this.onChange} />
         <EditorContainer>
           {noteID ? (
             <Editor
+              plugins={plugins}
               placeholder="你可以用 @ 插入特殊块"
               schema={currentNoteInStore.type === 'document' ? schema : null}
               value={value}
