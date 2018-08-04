@@ -106,11 +106,11 @@
   dependencies:
     "@babel/types" "7.0.0-beta.47"
 
-"@babel/helper-annotate-as-pure@7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/helper-annotate-as-pure/download/@babel/helper-annotate-as-pure-7.0.0-beta.55.tgz#3c3e4c00e14e7dea917938e35ed5d9156cdd35ce"
+"@babel/helper-annotate-as-pure@7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/helper-annotate-as-pure/download/@babel/helper-annotate-as-pure-7.0.0-beta.56.tgz#3814bfda01ec19f7daac810cc2375932a79acbbc"
   dependencies:
-    "@babel/types" "7.0.0-beta.55"
+    "@babel/types" "7.0.0-beta.56"
 
 "@babel/helper-annotate-as-pure@^7.0.0-beta.37":
   version "7.0.0-beta.40"
@@ -146,11 +146,11 @@
     "@babel/types" "7.0.0-beta.47"
     esutils "^2.0.0"
 
-"@babel/helper-builder-react-jsx@7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/helper-builder-react-jsx/download/@babel/helper-builder-react-jsx-7.0.0-beta.55.tgz#9f5ef443e3610cf8be450685cbc3658480cfcd8f"
+"@babel/helper-builder-react-jsx@7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/helper-builder-react-jsx/download/@babel/helper-builder-react-jsx-7.0.0-beta.56.tgz#4e3e3be02f006a89452a2e4541e1db53468c763e"
   dependencies:
-    "@babel/types" "7.0.0-beta.55"
+    "@babel/types" "7.0.0-beta.56"
     esutils "^2.0.0"
 
 "@babel/helper-call-delegate@7.0.0-beta.42":
@@ -322,9 +322,9 @@
   version "7.0.0-beta.47"
   resolved "http://registry.npm.taobao.org/@babel/helper-plugin-utils/download/@babel/helper-plugin-utils-7.0.0-beta.47.tgz#4f564117ec39f96cf60fafcde35c9ddce0e008fd"
 
-"@babel/helper-plugin-utils@7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/helper-plugin-utils/download/@babel/helper-plugin-utils-7.0.0-beta.55.tgz#31f40777efd6b961da8496a923c22d2b062b3f73"
+"@babel/helper-plugin-utils@7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/helper-plugin-utils/download/@babel/helper-plugin-utils-7.0.0-beta.56.tgz#e5f63cae8b3b716825d64e69ad8b59d71cd2080c"
 
 "@babel/helper-regex@7.0.0-beta.42":
   version "7.0.0-beta.42"
@@ -492,12 +492,12 @@
     "@babel/helper-plugin-utils" "7.0.0-beta.42"
     "@babel/plugin-syntax-class-properties" "7.0.0-beta.42"
 
-"@babel/plugin-proposal-do-expressions@^7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/plugin-proposal-do-expressions/download/@babel/plugin-proposal-do-expressions-7.0.0-beta.55.tgz#27953138764f899a9ea34a338ae36e815db7bf82"
+"@babel/plugin-proposal-do-expressions@^7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/plugin-proposal-do-expressions/download/@babel/plugin-proposal-do-expressions-7.0.0-beta.56.tgz#9197e8d07ac71f4c1b69deeba0e5529f5298248d"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-beta.55"
-    "@babel/plugin-syntax-do-expressions" "7.0.0-beta.55"
+    "@babel/helper-plugin-utils" "7.0.0-beta.56"
+    "@babel/plugin-syntax-do-expressions" "7.0.0-beta.56"
 
 "@babel/plugin-proposal-object-rest-spread@7.0.0-beta.42":
   version "7.0.0-beta.42"
@@ -527,12 +527,12 @@
     "@babel/helper-plugin-utils" "7.0.0-beta.47"
     "@babel/plugin-syntax-optional-catch-binding" "7.0.0-beta.47"
 
-"@babel/plugin-proposal-optional-chaining@^7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/plugin-proposal-optional-chaining/download/@babel/plugin-proposal-optional-chaining-7.0.0-beta.55.tgz#30b771bf8c9c140a52fe3d7ace755eac402acc03"
+"@babel/plugin-proposal-optional-chaining@^7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/plugin-proposal-optional-chaining/download/@babel/plugin-proposal-optional-chaining-7.0.0-beta.56.tgz#46d200819d8929a8843d09d9f0df3c1d64f19e9d"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-beta.55"
-    "@babel/plugin-syntax-optional-chaining" "7.0.0-beta.55"
+    "@babel/helper-plugin-utils" "7.0.0-beta.56"
+    "@babel/plugin-syntax-optional-chaining" "7.0.0-beta.56"
 
 "@babel/plugin-proposal-unicode-property-regex@7.0.0-beta.42":
   version "7.0.0-beta.42"
@@ -568,11 +568,11 @@
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.42"
 
-"@babel/plugin-syntax-do-expressions@7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/plugin-syntax-do-expressions/download/@babel/plugin-syntax-do-expressions-7.0.0-beta.55.tgz#c0b0124cee0b29d08e56ffc8190fecb1cd0c43f8"
+"@babel/plugin-syntax-do-expressions@7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/plugin-syntax-do-expressions/download/@babel/plugin-syntax-do-expressions-7.0.0-beta.56.tgz#1b2025ca527eab30af118569adf1a295ef67ba74"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+    "@babel/helper-plugin-utils" "7.0.0-beta.56"
 
 "@babel/plugin-syntax-dynamic-import@7.0.0-beta.34":
   version "7.0.0-beta.34"
@@ -626,11 +626,11 @@
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.47"
 
-"@babel/plugin-syntax-optional-chaining@7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/plugin-syntax-optional-chaining/download/@babel/plugin-syntax-optional-chaining-7.0.0-beta.55.tgz#8e6027315419617dd50b7cbbba917d516cd66772"
+"@babel/plugin-syntax-optional-chaining@7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/plugin-syntax-optional-chaining/download/@babel/plugin-syntax-optional-chaining-7.0.0-beta.56.tgz#233eaff8ea1b2d57dcdb5e66ffc7b133734c1e9b"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+    "@babel/helper-plugin-utils" "7.0.0-beta.56"
 
 "@babel/plugin-transform-arrow-functions@7.0.0-beta.42":
   version "7.0.0-beta.42"
@@ -937,12 +937,12 @@
     "@babel/helper-annotate-as-pure" "7.0.0-beta.47"
     "@babel/helper-plugin-utils" "7.0.0-beta.47"
 
-"@babel/plugin-transform-react-constant-elements@^7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/plugin-transform-react-constant-elements/download/@babel/plugin-transform-react-constant-elements-7.0.0-beta.55.tgz#0f26185822342add98d34a01abfc58068ffea8ea"
+"@babel/plugin-transform-react-constant-elements@^7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/plugin-transform-react-constant-elements/download/@babel/plugin-transform-react-constant-elements-7.0.0-beta.56.tgz#d89eba712837ee982f070df8ad73833c28cb9035"
   dependencies:
-    "@babel/helper-annotate-as-pure" "7.0.0-beta.55"
-    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+    "@babel/helper-annotate-as-pure" "7.0.0-beta.56"
+    "@babel/helper-plugin-utils" "7.0.0-beta.56"
 
 "@babel/plugin-transform-react-display-name@7.0.0-beta.42":
   version "7.0.0-beta.42"
@@ -956,12 +956,12 @@
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.47"
 
-"@babel/plugin-transform-react-inline-elements@^7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/plugin-transform-react-inline-elements/download/@babel/plugin-transform-react-inline-elements-7.0.0-beta.55.tgz#7cc240759cec81601c281af0dcd019f5cc5e6bc9"
+"@babel/plugin-transform-react-inline-elements@^7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/plugin-transform-react-inline-elements/download/@babel/plugin-transform-react-inline-elements-7.0.0-beta.56.tgz#d82e722a5954169ba6f28f70ead086304ecd03c3"
   dependencies:
-    "@babel/helper-builder-react-jsx" "7.0.0-beta.55"
-    "@babel/helper-plugin-utils" "7.0.0-beta.55"
+    "@babel/helper-builder-react-jsx" "7.0.0-beta.56"
+    "@babel/helper-plugin-utils" "7.0.0-beta.56"
 
 "@babel/plugin-transform-react-jsx-self@7.0.0-beta.42":
   version "7.0.0-beta.42"
@@ -1342,9 +1342,9 @@
     lodash "^4.17.5"
     to-fast-properties "^2.0.0"
 
-"@babel/types@7.0.0-beta.55":
-  version "7.0.0-beta.55"
-  resolved "http://registry.npm.taobao.org/@babel/types/download/@babel/types-7.0.0-beta.55.tgz#7755c9d2e58315a64f05d8cf3322379be16d9199"
+"@babel/types@7.0.0-beta.56":
+  version "7.0.0-beta.56"
+  resolved "http://registry.npm.taobao.org/@babel/types/download/@babel/types-7.0.0-beta.56.tgz#df456947a82510ec30361971e566110d89489056"
   dependencies:
     esutils "^2.0.2"
     lodash "^4.17.10"
@@ -2959,7 +2959,7 @@ browserslist@^4.0.0:
     electron-to-chromium "^1.3.52"
     node-releases "^1.0.0-alpha.10"
 
-bs58@^4.0.1:
+bs58@4.0.1, bs58@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/bs58/-/bs58-4.0.1.tgz#be161e76c354f6f788ae4071f63f34e8c4f0a42a"
   dependencies:
@@ -3293,7 +3293,7 @@ ci-info@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/ci-info/-/ci-info-1.1.2.tgz#03561259db48d0474c8bdc90f5b47b068b6bbfb4"
 
-cids@^0.5.3, cids@~0.5.3:
+cids@0.5.3, cids@^0.5.3, cids@~0.5.3:
   version "0.5.3"
   resolved "http://registry.npm.taobao.org/cids/download/cids-0.5.3.tgz#9a25b697eb76faf807afcec35c4ab936edfbd0a4"
   dependencies:
@@ -4989,9 +4989,9 @@ eslint@4.15.0:
     table "^4.0.1"
     text-table "~0.2.0"
 
-eslint@^5.2.0:
-  version "5.2.0"
-  resolved "http://registry.npm.taobao.org/eslint/download/eslint-5.2.0.tgz#3901ae249195d473e633c4acbc370068b1c964dc"
+eslint@^5.3.0:
+  version "5.3.0"
+  resolved "http://registry.npm.taobao.org/eslint/download/eslint-5.3.0.tgz#53695aca5213968aacdf970ccb231e42a2b285f8"
   dependencies:
     ajv "^6.5.0"
     babel-code-frame "^6.26.0"
@@ -5024,7 +5024,7 @@ eslint@^5.2.0:
     path-is-inside "^1.0.2"
     pluralize "^7.0.0"
     progress "^2.0.0"
-    regexpp "^1.1.0"
+    regexpp "^2.0.0"
     require-uncached "^1.0.3"
     semver "^5.5.0"
     string.prototype.matchall "^2.0.0"
@@ -5534,9 +5534,9 @@ flatten@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
 
-flow-bin@^0.77.0:
-  version "0.77.0"
-  resolved "http://registry.npm.taobao.org/flow-bin/download/flow-bin-0.77.0.tgz#4e5c93929f289a0c28e08fb361a9734944a11297"
+flow-bin@^0.78.0:
+  version "0.78.0"
+  resolved "http://registry.npm.taobao.org/flow-bin/download/flow-bin-0.78.0.tgz#df9fe7f9c9a2dfaff39083949fe2d831b41627b7"
 
 flow-config-parser@^0.3.0:
   version "0.3.0"
@@ -5997,11 +5997,21 @@ graphql-tag@^2.9.2:
   version "2.9.2"
   resolved "http://registry.npm.taobao.org/graphql-tag/download/graphql-tag-2.9.2.tgz#2f60a5a981375f430bf1e6e95992427dc18af686"
 
-graphql-tools@^3.0.4, graphql-tools@^3.0.5:
+graphql-tools@^3.0.4:
   version "3.0.5"
   resolved "http://registry.npm.taobao.org/graphql-tools/download/graphql-tools-3.0.5.tgz#544542dbf2fddc8c3d7d654965285a3bc747b10b"
   dependencies:
     apollo-link "1.2.2"
+    apollo-utilities "^1.0.1"
+    deprecated-decorator "^0.1.6"
+    iterall "^1.1.3"
+    uuid "^3.1.0"
+
+graphql-tools@^3.1.1:
+  version "3.1.1"
+  resolved "http://registry.npm.taobao.org/graphql-tools/download/graphql-tools-3.1.1.tgz#d593358f01e7c8b1671a17b70ddb034dea9dbc50"
+  dependencies:
+    apollo-link "^1.2.2"
     apollo-utilities "^1.0.1"
     deprecated-decorator "^0.1.6"
     iterall "^1.1.3"
@@ -6689,9 +6699,9 @@ ipaddr.js@1.6.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/ipaddr.js/download/ipaddr.js-1.6.0.tgz#e3fa357b773da619f26e95f049d055c72796f86b"
 
-ipfs-api@^22.2.4:
-  version "22.2.4"
-  resolved "http://registry.npm.taobao.org/ipfs-api/download/ipfs-api-22.2.4.tgz#226ebe5caffb5c58ae8d96d1ed3870a694b24cc7"
+ipfs-api@^22.3.0:
+  version "22.3.0"
+  resolved "http://registry.npm.taobao.org/ipfs-api/download/ipfs-api-22.3.0.tgz#29935c5d9ca533cefef62288e00a8b7eab412ab7"
   dependencies:
     async "^2.6.1"
     big.js "^5.1.2"
@@ -6705,8 +6715,8 @@ ipfs-api@^22.2.4:
     ipfs-block "~0.7.1"
     ipfs-unixfs "~0.1.15"
     ipld-dag-cbor "~0.12.1"
-    ipld-dag-pb "~0.14.5"
-    is-ipfs "~0.3.2"
+    ipld-dag-pb "~0.14.6"
+    is-ipfs "~0.4.2"
     is-pull-stream "0.0.0"
     is-stream "^1.1.0"
     libp2p-crypto "~0.13.0"
@@ -6756,7 +6766,7 @@ ipld-dag-cbor@~0.12.1:
     multihashing-async "~0.5.1"
     traverse "~0.6.6"
 
-ipld-dag-pb@~0.14.5:
+ipld-dag-pb@~0.14.6:
   version "0.14.6"
   resolved "http://registry.npm.taobao.org/ipld-dag-pb/download/ipld-dag-pb-0.14.6.tgz#1b0357c7db8c1a75f8eef6e89505ddc614a7faaa"
   dependencies:
@@ -6963,6 +6973,15 @@ is-ipfs@~0.3.2:
     bs58 "^4.0.1"
     cids "~0.5.1"
     multihashes "~0.4.9"
+
+is-ipfs@~0.4.2:
+  version "0.4.2"
+  resolved "http://registry.npm.taobao.org/is-ipfs/download/is-ipfs-0.4.2.tgz#06a858769cbfdac39a3e0ed1ca157e3f3fcc84fc"
+  dependencies:
+    bs58 "4.0.1"
+    cids "0.5.3"
+    multibase "0.4.0"
+    multihashes "0.4.13"
 
 is-npm@^1.0.0:
   version "1.0.0"
@@ -8540,17 +8559,17 @@ multiaddr@^5.0.0:
     varint "^5.0.0"
     xtend "^4.0.1"
 
+multibase@0.4.0, multibase@~0.4.0:
+  version "0.4.0"
+  resolved "http://registry.npm.taobao.org/multibase/download/multibase-0.4.0.tgz#1bdb62c82de0114f822a1d8751bcbee91cd2efba"
+  dependencies:
+    base-x "3.0.4"
+
 multibase@~0.3.4:
   version "0.3.4"
   resolved "https://registry.yarnpkg.com/multibase/-/multibase-0.3.4.tgz#fba8b0aac9724f62e24782557e2a062e30d3ae7f"
   dependencies:
     base-x "3.0.0"
-
-multibase@~0.4.0:
-  version "0.4.0"
-  resolved "http://registry.npm.taobao.org/multibase/download/multibase-0.4.0.tgz#1bdb62c82de0114f822a1d8751bcbee91cd2efba"
-  dependencies:
-    base-x "3.0.4"
 
 multicast-dns-service-types@^1.1.0:
   version "1.1.0"
@@ -8569,7 +8588,7 @@ multicodec@~0.2.3, multicodec@~0.2.6:
   dependencies:
     varint "^5.0.0"
 
-multihashes@~0.4.12, multihashes@~0.4.13, multihashes@~0.4.9:
+multihashes@0.4.13, multihashes@~0.4.12, multihashes@~0.4.13, multihashes@~0.4.9:
   version "0.4.13"
   resolved "https://registry.yarnpkg.com/multihashes/-/multihashes-0.4.13.tgz#d10bd71bd51d24aa894e2a6f1457146bb7bac125"
   dependencies:
@@ -10487,9 +10506,9 @@ react-cosmos-fetch-proxy@^4.6.1:
     fetch-mock "^5.12.2"
     react-cosmos-shared "^4.6.1"
 
-react-cosmos-loader@^4.6.2:
-  version "4.6.2"
-  resolved "http://registry.npm.taobao.org/react-cosmos-loader/download/react-cosmos-loader-4.6.2.tgz#471a3849b7813c2adf828f74853946f7b2adbe6b"
+react-cosmos-loader@^4.6.4:
+  version "4.6.4"
+  resolved "http://registry.npm.taobao.org/react-cosmos-loader/download/react-cosmos-loader-4.6.4.tgz#50eb6ecc2d5494ba4719bd3515f8f6f5369e1ca0"
   dependencies:
     "@skidding/linked-list" "^1.0.2"
     async-until "^1.1.1"
@@ -10498,14 +10517,14 @@ react-cosmos-loader@^4.6.2:
     prop-types "^15.6.2"
     react-cosmos-shared "^4.6.1"
     react-cosmos-state-proxy "^4.6.1"
-    react-cosmos-voyager2 "^4.6.1"
+    react-cosmos-voyager2 "^4.6.4"
     react-is "^16.4.1"
     socket.io-client "^2.1.1"
     url-parse "^1.4.1"
 
-react-cosmos-playground@^4.6.2:
-  version "4.6.2"
-  resolved "http://registry.npm.taobao.org/react-cosmos-playground/download/react-cosmos-playground-4.6.2.tgz#f336e1199d890e4354971248d2c45c0d62b5a47b"
+react-cosmos-playground@^4.6.4:
+  version "4.6.4"
+  resolved "http://registry.npm.taobao.org/react-cosmos-playground/download/react-cosmos-playground-4.6.4.tgz#8298501995e7004e24af96960734b35c7a96c115"
 
 react-cosmos-redux-proxy@^4.6.1:
   version "4.6.1"
@@ -10540,9 +10559,9 @@ react-cosmos-state-proxy@^4.6.1:
     lodash.omit "^4.5.0"
     react-cosmos-shared "^4.6.1"
 
-react-cosmos-voyager2@^4.6.1:
-  version "4.6.1"
-  resolved "http://registry.npm.taobao.org/react-cosmos-voyager2/download/react-cosmos-voyager2-4.6.1.tgz#6747598260c5bf676790950c7f89f210e1267442"
+react-cosmos-voyager2@^4.6.4:
+  version "4.6.4"
+  resolved "http://registry.npm.taobao.org/react-cosmos-voyager2/download/react-cosmos-voyager2-4.6.4.tgz#c0bcbd665ed5ba7390d9edae366c6c04790ffa6f"
   dependencies:
     babel-types "^6.26.0"
     babylon "^6.18.0"
@@ -10559,9 +10578,9 @@ react-cosmos-voyager@^4.6.1:
     glob "^7.1.1"
     traverse "^0.6.6"
 
-react-cosmos@^4.6.2:
-  version "4.6.2"
-  resolved "http://registry.npm.taobao.org/react-cosmos/download/react-cosmos-4.6.2.tgz#c8c5b75ce700366abd1ff17c657fae609b06cb1c"
+react-cosmos@^4.6.4:
+  version "4.6.4"
+  resolved "http://registry.npm.taobao.org/react-cosmos/download/react-cosmos-4.6.4.tgz#c3a64a9eb371586a9ef61e2c38e89d6500170129"
   dependencies:
     chokidar "^2.0.4"
     express "^4.16.3"
@@ -10572,11 +10591,11 @@ react-cosmos@^4.6.2:
     lodash "^4.17.10"
     object.values "^1.0.4"
     react-cosmos-config "^4.6.1"
-    react-cosmos-loader "^4.6.2"
-    react-cosmos-playground "^4.6.2"
+    react-cosmos-loader "^4.6.4"
+    react-cosmos-playground "^4.6.4"
     react-cosmos-shared "^4.6.1"
     react-cosmos-voyager "^4.6.1"
-    react-cosmos-voyager2 "^4.6.1"
+    react-cosmos-voyager2 "^4.6.4"
     react-dev-utils "^5.0.1"
     react-error-overlay "^4.0.0"
     resolve-from "^4.0.0"
@@ -10635,9 +10654,9 @@ react-dev-utils@^5.0.1:
     strip-ansi "3.0.1"
     text-table "0.2.0"
 
-react-dom@^16.4.1:
-  version "16.4.1"
-  resolved "http://registry.npm.taobao.org/react-dom/download/react-dom-16.4.1.tgz#7f8b0223b3a5fbe205116c56deb85de32685dad6"
+react-dom@^16.4.2:
+  version "16.4.2"
+  resolved "http://registry.npm.taobao.org/react-dom/download/react-dom-16.4.2.tgz#4afed569689f2c561d2b8da0b819669c38a0bda4"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -10783,9 +10802,9 @@ react-slick@~0.23.1:
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
 
-react@^16.4.1:
-  version "16.4.1"
-  resolved "http://registry.npm.taobao.org/react/download/react-16.4.1.tgz#de51ba5764b5dbcd1f9079037b862bd26b82fe32"
+react@^16.4.2:
+  version "16.4.2"
+  resolved "http://registry.npm.taobao.org/react/download/react-16.4.2.tgz#2cd90154e3a9d9dd8da2991149fdca3c260e129f"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -10986,9 +11005,9 @@ regexp.prototype.flags@^1.2.0:
   dependencies:
     define-properties "^1.1.2"
 
-regexpp@^1.1.0:
-  version "1.1.0"
-  resolved "http://registry.npm.taobao.org/regexpp/download/regexpp-1.1.0.tgz#0e3516dd0b7904f413d2d4193dce4618c3a689ab"
+regexpp@^2.0.0:
+  version "2.0.0"
+  resolved "http://registry.npm.taobao.org/regexpp/download/regexpp-2.0.0.tgz#b2a7534a85ca1b033bcf5ce9ff8e56d4e0755365"
 
 regexpu-core@^1.0.0:
   version "1.0.0"
@@ -11631,44 +11650,44 @@ slash@^2.0.0:
   version "2.0.0"
   resolved "http://registry.npm.taobao.org/slash/download/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
 
-slate-base64-serializer@^0.2.44:
-  version "0.2.44"
-  resolved "http://registry.npm.taobao.org/slate-base64-serializer/download/slate-base64-serializer-0.2.44.tgz#011b2b209f8adc83b50d7d1572e35fc6c616902b"
+slate-base64-serializer@^0.2.46:
+  version "0.2.46"
+  resolved "http://registry.npm.taobao.org/slate-base64-serializer/download/slate-base64-serializer-0.2.46.tgz#51c059008ac6144b0ef90072b9c1209552c320bf"
   dependencies:
     isomorphic-base64 "^1.0.2"
 
-slate-dev-environment@^0.1.3:
-  version "0.1.3"
-  resolved "http://registry.npm.taobao.org/slate-dev-environment/download/slate-dev-environment-0.1.3.tgz#677e7b535ae6cc3402842eb54e202ae3faccdcf3"
+slate-dev-environment@^0.1.4:
+  version "0.1.4"
+  resolved "http://registry.npm.taobao.org/slate-dev-environment/download/slate-dev-environment-0.1.4.tgz#d5dd0d9a5b80b364a23bb7985202ce4e5bd3e8d3"
   dependencies:
     is-in-browser "^1.1.3"
 
-slate-dev-logger@^0.1.41:
-  version "0.1.41"
-  resolved "http://registry.npm.taobao.org/slate-dev-logger/download/slate-dev-logger-0.1.41.tgz#5b865ee2ace6368fd2422b58f9a38bb84f7c74eb"
+slate-dev-logger@^0.1.42:
+  version "0.1.42"
+  resolved "http://registry.npm.taobao.org/slate-dev-logger/download/slate-dev-logger-0.1.42.tgz#922c4693469e6d60deaa10adfd22b627c9632fbf"
 
-slate-hotkeys@^0.1.3:
-  version "0.1.3"
-  resolved "http://registry.npm.taobao.org/slate-hotkeys/download/slate-hotkeys-0.1.3.tgz#102e147a81ad5968a18a5c8a0249c610778c9569"
+slate-hotkeys@^0.1.4:
+  version "0.1.4"
+  resolved "http://registry.npm.taobao.org/slate-hotkeys/download/slate-hotkeys-0.1.4.tgz#5b10b2a178affc60827f9284d4c0a5d7e5041ffe"
   dependencies:
     is-hotkey "^0.1.1"
-    slate-dev-environment "^0.1.3"
+    slate-dev-environment "^0.1.4"
 
-slate-plain-serializer@^0.5.25:
-  version "0.5.25"
-  resolved "http://registry.npm.taobao.org/slate-plain-serializer/download/slate-plain-serializer-0.5.25.tgz#e5b29e5fbb2c461bc0990b8dc7164a997f3ec5b8"
+slate-plain-serializer@^0.5.27:
+  version "0.5.27"
+  resolved "http://registry.npm.taobao.org/slate-plain-serializer/download/slate-plain-serializer-0.5.27.tgz#79627ed0e787805f9c594fa485abcac49d08e1e0"
   dependencies:
-    slate-dev-logger "^0.1.41"
+    slate-dev-logger "^0.1.42"
 
-slate-prop-types@^0.4.42:
-  version "0.4.42"
-  resolved "http://registry.npm.taobao.org/slate-prop-types/download/slate-prop-types-0.4.42.tgz#707ab90540316db6696f48a911604fb425dfd180"
+slate-prop-types@^0.4.44:
+  version "0.4.44"
+  resolved "http://registry.npm.taobao.org/slate-prop-types/download/slate-prop-types-0.4.44.tgz#7098d849dbc0374544458d5a9d293213db70bd84"
   dependencies:
-    slate-dev-logger "^0.1.41"
+    slate-dev-logger "^0.1.42"
 
-slate-react@^0.14.2:
-  version "0.14.2"
-  resolved "http://registry.npm.taobao.org/slate-react/download/slate-react-0.14.2.tgz#8a608d5754c926f35aea7ee40cea7bf6769c7dba"
+slate-react@^0.15.0:
+  version "0.15.0"
+  resolved "http://registry.npm.taobao.org/slate-react/download/slate-react-0.15.0.tgz#776a102cb5265fb3e5bf532854cae9dd799a3811"
   dependencies:
     debug "^3.1.0"
     get-window "^1.1.1"
@@ -11679,20 +11698,20 @@ slate-react@^0.14.2:
     react-immutable-proptypes "^2.1.0"
     react-portal "^3.1.0"
     selection-is-backward "^1.0.0"
-    slate-base64-serializer "^0.2.44"
-    slate-dev-environment "^0.1.3"
-    slate-dev-logger "^0.1.41"
-    slate-hotkeys "^0.1.3"
-    slate-plain-serializer "^0.5.25"
-    slate-prop-types "^0.4.42"
+    slate-base64-serializer "^0.2.46"
+    slate-dev-environment "^0.1.4"
+    slate-dev-logger "^0.1.42"
+    slate-hotkeys "^0.1.4"
+    slate-plain-serializer "^0.5.27"
+    slate-prop-types "^0.4.44"
 
-slate-schema-violations@^0.1.23:
-  version "0.1.23"
-  resolved "http://registry.npm.taobao.org/slate-schema-violations/download/slate-schema-violations-0.1.23.tgz#b79708efcadc4fc4a280012cc896f1e573bd5599"
+slate-schema-violations@^0.1.25:
+  version "0.1.25"
+  resolved "http://registry.npm.taobao.org/slate-schema-violations/download/slate-schema-violations-0.1.25.tgz#2fc6c599395b9120f9c0e21c8d020ff06dd4f02e"
 
-slate@^0.36.1:
-  version "0.36.1"
-  resolved "http://registry.npm.taobao.org/slate/download/slate-0.36.1.tgz#3c7c6eeefb5d786db891e811b8a3b209655d0ccb"
+slate@^0.37.0:
+  version "0.37.0"
+  resolved "http://registry.npm.taobao.org/slate/download/slate-0.37.0.tgz#1e804e36fa09f6da8f187b39d9f6fcc38194d4ed"
   dependencies:
     debug "^3.1.0"
     direction "^0.1.5"
@@ -11700,8 +11719,8 @@ slate@^0.36.1:
     is-empty "^1.0.0"
     is-plain-object "^2.0.4"
     lodash "^4.17.4"
-    slate-dev-logger "^0.1.41"
-    slate-schema-violations "^0.1.23"
+    slate-dev-logger "^0.1.42"
+    slate-schema-violations "^0.1.25"
     type-of "^2.0.1"
 
 slice-ansi@1.0.0:
@@ -12169,15 +12188,14 @@ styled-components-mixins@^0.0.5:
   version "0.0.5"
   resolved "http://registry.npm.taobao.org/styled-components-mixins/download/styled-components-mixins-0.0.5.tgz#d4bee344c8ddb67038309eef7de77daf642a5ca2"
 
-styled-components@^3.3.3:
-  version "3.3.3"
-  resolved "http://registry.npm.taobao.org/styled-components/download/styled-components-3.3.3.tgz#09e702055ab11f7a8eab8229b1c0d0b855095686"
+styled-components@^3.4.0:
+  version "3.4.0"
+  resolved "http://registry.npm.taobao.org/styled-components/download/styled-components-3.4.0.tgz#d256fb4667e6c115a7ed61ab78f120283b43dd00"
   dependencies:
     buffer "^5.0.3"
     css-to-react-native "^2.0.3"
     fbjs "^0.8.16"
     hoist-non-react-statics "^2.5.0"
-    is-plain-object "^2.0.1"
     prop-types "^15.5.4"
     react-is "^16.3.1"
     stylis "^3.5.0"
