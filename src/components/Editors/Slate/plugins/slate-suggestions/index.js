@@ -1,54 +1,46 @@
-import React from 'react';
-import Portal from './suggestion-portal';
-import { UP_ARROW_KEY, DOWN_ARROW_KEY, ENTER_KEY } from './constants';
+import React, { createRef } from 'react';
+import SuggestionsContainer from './SuggestionsContainer';
 
-function matchTrigger(state, trigger) {
-  const currentNode = state.blocks.first();
+function SuggestionsPlugin(options) {
 
-  return state.isFocused && trigger.test(currentNode.text);
-}
+  const SuggestionsRef = createRef();
 
-function SuggestionsPlugin(opts) {
-  const { regex } = opts;
-  const callback = opts;
-
-  function onKeyDown(e, change, editor) {
-    const state = change.value;
-    const { keyCode } = e;
-    callback.editor = editor;
-
-    if (matchTrigger(state, regex)) {
-      // Prevent default up and down arrow key press when portal is open
-      if (keyCode === UP_ARROW_KEY || keyCode === DOWN_ARROW_KEY) {
-        e.preventDefault();
-      }
-
-      // Prevent default return/enter key press when portal is open
-      if (keyCode === ENTER_KEY) {
-        e.preventDefault();
-
-        // Close portal
-        if (callback.closePortal) {
-          callback.closePortal(state, editor);
-        }
-
-        // Handle enter
-        if (callback.onEnter && callback.suggestion !== undefined) {
-          return callback.onEnter(callback.suggestion, change);
-        }
-      } else if (callback.onKeyDown) {
-        return callback.onKeyDown(keyCode, change);
-      }
-    }
+  function Suggestions(props) {
+    return <SuggestionsContainer ref={SuggestionsRef} {...props} {...options} />;
   }
-
-  function SuggestionPortal(props) {
-    return <Portal {...props} {...opts} callback={callback} />;
-  }
-
   return {
-    onKeyDown,
-    SuggestionPortal,
+    onKeyUp(event, change, editor) {
+      const { keyCode } = event;
+
+      // is user is focusing in this node and it contains pattern to open the suggestions
+      if (change.value.isFocused && options.regex.test(change.value.blocks.first().text)) {
+        // on onEnter pressed
+        if (keyCode === 13) {
+          // When a suggestion is selected
+          // Prevent default return/enter key press when portal is open
+          event.preventDefault();
+
+          // Close portal after a suggestion is selected
+          if (options.onPortalClose) {
+            options.onPortalClose(change.value, editor.onChange);
+          }
+
+          // Handle entering a suggestion
+          if (options.onEnterSuggestion && options.suggestion !== undefined) {
+            return options.onEnterSuggestion(options.suggestion, change, editor.onChange);
+          }
+        } else if (SuggestionsRef?.current?.onKeyUp) {
+          // passing keyCode to SuggestionContainer's handler
+          if (keyCode === 38 || keyCode === 40) {
+            // Prevent default up and down arrow key press when portal is open
+            event.preventDefault();
+          }
+          // if user is input other characters
+          return SuggestionsRef.current.onKeyUp(keyCode);
+        }
+      }
+    },
+    Suggestions,
   };
 }
 

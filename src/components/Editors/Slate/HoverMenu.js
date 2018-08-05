@@ -18,7 +18,6 @@ const MenuContainer = styled.div`
   padding: 8px 7px 6px;
   position: absolute;
   z-index: 1;
-  margin-top: -6px;
   background-color: #222;
   border-radius: 4px;
   transition: opacity 0.75s;
@@ -77,13 +76,10 @@ export default class HoverMenu extends Component<*> {
       const range = selection.getRangeAt(0);
       const rect = range.getBoundingClientRect();
 
-      const top = `${rect.top + window.scrollY - offsetHeight}px`;
-      const left = `${rect.left + window.scrollX - offsetWidth / 2 + rect.width / 2}px`;
-
       return {
         opacity: 1,
-        top,
-        left,
+        top: `calc(${rect.top}px + ${window.scrollY}px - ${offsetHeight}px - 6px)`,
+        left: `calc(${rect.left}px + ${window.scrollX}px - ${offsetWidth / 2}px + ${rect.width / 2}px)`,
       };
     }
     return {};
@@ -95,6 +91,7 @@ export default class HoverMenu extends Component<*> {
     if (mountPoint) {
       return ReactDOM.createPortal(
         <MenuContainer
+          data-usage="slate-hover-menu-plugin"
           opacity={opacity}
           top={top}
           left={left}

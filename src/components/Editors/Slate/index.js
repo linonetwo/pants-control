@@ -55,30 +55,6 @@ function getCurrentWord(text, index, initialIndex) {
     return getCurrentWord(text, index + 1, initialIndex);
   }
 }
-const suggestionsPlugin = SuggestionsPlugin({
-  trigger: '@',
-  regex: /@([\w]*)/,
-  suggestions,
-  onEnter: (suggestion, change) => {
-    const { anchorText, selection } = change.value;
-    const anchorOffset = selection.anchor.offset;
-    const { text } = anchorText;
-
-    let index = { start: anchorOffset - 1, end: anchorOffset };
-
-    if (text[anchorOffset - 1] !== '@') {
-      index = getCurrentWord(text, anchorOffset - 1, anchorOffset - 1);
-    }
-
-    const newText = `${text.substring(0, index.start)}${suggestion.value} `;
-
-    change.deleteBackward(anchorOffset).insertText(newText);
-
-    return true;
-  },
-});
-const { SuggestionPortal } = suggestionsPlugin;
-const plugins = [suggestionsPlugin];
 
 const EditorContainer = styled.div``;
 
@@ -99,6 +75,39 @@ type State = {
 };
 
 class SlateEditor extends Component<Store & Dispatch & Props, State> {
+  constructor(props) {
+    super(props);
+
+    // setup slate plugins
+    const suggestionsPlugin = SuggestionsPlugin({
+      trigger: '@',
+      regex: /@([\w]*)/,
+      suggestions,
+      onEnterSuggestion: (suggestion, change, onChange) => {
+        const { anchorText, selection } = change.value;
+        const anchorOffset = selection.anchor.offset;
+        const { text } = anchorText;
+
+        let index = { start: anchorOffset - 1, end: anchorOffset };
+
+        if (text[anchorOffset - 1] !== '@') {
+          index = getCurrentWord(text, anchorOffset - 1, anchorOffset - 1);
+        }
+
+        const newText = `${text.substring(0, index.start)}${suggestion.value} `;
+        console.log(newText);
+        
+
+        onChange(change.deleteBackward(anchorOffset).insertText(newText));
+
+        return true;
+      },
+    });
+    const { Suggestions } = suggestionsPlugin;
+    this.Suggestions = Suggestions;
+    this.plugins = [suggestionsPlugin];
+  }
+
   state = {
     value: Plain.deserialize(''),
     noteID: null,
@@ -131,10 +140,11 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   render() {
     const { noteID, currentNoteInStore } = this.props;
     const { value } = this.state;
+    const { plugins, Suggestions } = this;
     return (
       <Fragment>
         {noteID && <HoverMenu value={value} onChange={this.onChange} />}
-        <SuggestionPortal value={value} onChange={this.onChange} />
+        <Suggestions value={value} onChange={this.onChange} />
         <EditorContainer>
           {noteID ? (
             <Editor

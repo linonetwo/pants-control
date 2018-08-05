@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import type { Element } from 'react';
 import styled from 'styled-components';
 import { Popover, Input, Menu, Icon } from 'antd';
-import Flex from 'styled-flex-component';
 
 const menuSize = 25;
 const MenuButton = styled.div`
