@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {},
   "dependencies": {
-    "ipfs": "^0.30.1",    
-    "ipfsd-ctl": "^0.38.0"
+    "ipfs": "^0.31.2",    
+    "ipfsd-ctl": "^0.39.1"
   },
   "devDependencies": {}
 }
