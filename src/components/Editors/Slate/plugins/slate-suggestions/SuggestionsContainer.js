@@ -9,7 +9,7 @@ import fuzzysearch from 'fuzzysearch';
 const SuggestionsList = styled.div`
   padding: 8px 7px 6px;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
 
   background-color: white;
   border-radius: 4px;
@@ -50,9 +50,8 @@ class SuggestionsContainer extends Component {
     return selectedSuggestionIndex < filteredSuggestions.length ? filteredSuggestions[selectedSuggestionIndex] : null;
   }
 
-  onKeyUp = keyCode => {
+  onKeyDown = keyCode => {
     const { filteredSuggestions } = this.state;
-
     switch (keyCode) {
       // down
       case 40:
@@ -66,18 +65,22 @@ class SuggestionsContainer extends Component {
           selectedSuggestionIndex: prevIndex - 1 === -1 ? filteredSuggestions.length - 1 : prevIndex - 1,
         }));
         return true;
-      default: {
-        const nextFilteredSuggestions = this.filteredSuggestions;
-        if (typeof nextFilteredSuggestions.then === 'function') {
-          // deal with async search result
-          return nextFilteredSuggestions.then(list => this.setState({ filteredSuggestions: list })).catch(() => {
-            this.setState({ filteredSuggestions: [], selectedSuggestionIndex: 0 });
-          });
-        }
-        this.setState({ filteredSuggestions: nextFilteredSuggestions, selectedSuggestionIndex: 0 });
-        return true;
-      }
+      default:
+        return null;
     }
+  };
+
+  onKeyUp = keyCode => {
+    if (keyCode === 38 || keyCode === 40 || keyCode === 13) return null;
+    const nextFilteredSuggestions = this.filteredSuggestions;
+    if (typeof nextFilteredSuggestions.then === 'function') {
+      // deal with async search result
+      return nextFilteredSuggestions.then(list => this.setState({ filteredSuggestions: list })).catch(() => {
+        this.setState({ filteredSuggestions: [], selectedSuggestionIndex: 0 });
+      });
+    }
+    this.setState({ filteredSuggestions: nextFilteredSuggestions, selectedSuggestionIndex: 0 });
+    return true;
   };
 
   get filteredSuggestions() {
@@ -102,17 +105,16 @@ class SuggestionsContainer extends Component {
   get lastCharacterIsTrigger() {
     const { value, trigger, onlyTriggerAtStartOfParagraph } = this.props;
 
-    const stateCondition = value.isFocused && !value.selection.isExpanded;
     if (!value.selection.anchor.key) return false;
 
     const { anchorText } = value;
 
     if (onlyTriggerAtStartOfParagraph) {
-      return stateCondition && anchorText.text === trigger;
+      return anchorText.text === trigger;
     }
 
     const lastChar = anchorText.text[value.selection.anchor.offset - 1];
-    return stateCondition && lastChar && lastChar === trigger;
+    return lastChar && lastChar === trigger;
   }
 
   getCurrentWord(text, index, initialIndex) {
@@ -171,13 +173,11 @@ class SuggestionsContainer extends Component {
     return {};
   };
 
-  onClick = (event, suggestion) => {
+  onClick = event => {
     event.preventDefault();
     event.stopPropagation();
-    console.log('aaa')
     const { onEnterSuggestion, value, onChange } = this.props;
-    console.log(suggestion)
-    onEnterSuggestion(suggestion, value.change, onChange);
+    onEnterSuggestion(this.selectedSuggestion, value.change(), onChange);
   };
 
   render() {
@@ -197,15 +197,15 @@ class SuggestionsContainer extends Component {
           }}
         >
           {filteredSuggestions.length === 0 && <SuggestionItem center>没有结果了</SuggestionItem>}
-          {filteredSuggestions.map((suggestion, index) => (
+          {filteredSuggestions.map(({ display, key }, index) => (
             <SuggestionItem
               alignCenter
               selected={index === selectedSuggestionIndex}
-              onClick={event => this.onClick(event, suggestion.suggestion)}
+              onClick={this.onClick}
               onMouseEnter={() => this.setState({ selectedSuggestionIndex: index })}
-              key={suggestion.suggestion}
+              key={key}
             >
-              {suggestion.suggestion}
+              {display}
             </SuggestionItem>
           ))}
         </SuggestionsList>,

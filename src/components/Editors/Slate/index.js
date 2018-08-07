@@ -18,27 +18,27 @@ const suggestions = [
   {
     key: 'Jon Snow',
     value: '@Jon Snow',
-    suggestion: '@Jon Snow', // Can be either string or react component
+    display: '@Jon Snow', // Can be either string or react component
   },
   {
     key: 'John Evans',
     value: '@John Evans',
-    suggestion: '@John Evans',
+    display: '@John Evans',
   },
   {
     key: 'Daenerys Targaryen',
     value: '@Daenerys Targaryen',
-    suggestion: '@Daenerys Targaryen',
+    display: '@Daenerys Targaryen',
   },
   {
     key: 'Cersei Lannister',
     value: '@Cersei Lannister',
-    suggestion: '@Cersei Lannister',
+    display: '@Cersei Lannister',
   },
   {
     key: 'Tyrion Lannister',
     value: '@Tyrion Lannister',
-    suggestion: '@Tyrion Lannister',
+    display: '@Tyrion Lannister',
   },
 ];
 function getCurrentWord(text, index, initialIndex) {
@@ -84,6 +84,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
       regex: /@([\w]*)/,
       suggestions,
       onEnterSuggestion: (suggestion, change, onChange) => {
+        if (!change?.value) return null;
         const { anchorText, selection } = change.value;
         const anchorOffset = selection.anchor.offset;
         const { text } = anchorText;
@@ -95,8 +96,6 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         }
 
         const newText = `${text.substring(0, index.start)}${suggestion.value} `;
-        console.log(newText);
-        
 
         onChange(change.deleteBackward(anchorOffset).insertText(newText));
 
@@ -144,7 +143,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
     return (
       <Fragment>
         {noteID && <HoverMenu value={value} onChange={this.onChange} />}
-        <Suggestions value={value} onChange={this.onChange} />
+        {noteID && <Suggestions value={value} onChange={this.onChange} />}
         <EditorContainer>
           {noteID ? (
             <Editor
