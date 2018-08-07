@@ -1,5 +1,5 @@
 # Dockerfile.alpine
-FROM mhart/alpine-node:10.7.0
+FROM mhart/alpine-node:10.8.0
 ENV ELECTRON_MIRROR http://npm.taobao.org/mirrors/electron/
 
 # Create app directory
