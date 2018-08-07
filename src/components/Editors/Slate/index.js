@@ -8,53 +8,11 @@ import equal from 'fast-deep-equal';
 
 import type { Note } from '../../../store/note';
 
-import HoverMenu from './HoverMenu';
+import HoverMenu from './plugins/slate-hover-menu';
 import renderMark from './renderMark';
 import renderNode from './renderNode';
 import schema from './schema';
-import SuggestionsPlugin from './plugins/slate-suggestions';
-
-const suggestions = [
-  {
-    key: 'Jon Snow',
-    value: '@Jon Snow',
-    display: '@Jon Snow', // Can be either string or react component
-  },
-  {
-    key: 'John Evans',
-    value: '@John Evans',
-    display: '@John Evans',
-  },
-  {
-    key: 'Daenerys Targaryen',
-    value: '@Daenerys Targaryen',
-    display: '@Daenerys Targaryen',
-  },
-  {
-    key: 'Cersei Lannister',
-    value: '@Cersei Lannister',
-    display: '@Cersei Lannister',
-  },
-  {
-    key: 'Tyrion Lannister',
-    value: '@Tyrion Lannister',
-    display: '@Tyrion Lannister',
-  },
-];
-function getCurrentWord(text, index, initialIndex) {
-  if (index === initialIndex) {
-    return { start: getCurrentWord(text, index - 1, initialIndex), end: getCurrentWord(text, index + 1, initialIndex) };
-  }
-  if (text[index] === ' ' || text[index] === '@' || text[index] === undefined) {
-    return index;
-  }
-  if (index < initialIndex) {
-    return getCurrentWord(text, index - 1, initialIndex);
-  }
-  if (index > initialIndex) {
-    return getCurrentWord(text, index + 1, initialIndex);
-  }
-}
+import SuggestNodeChangePlugin from './plugins/slate-suggest-node-change';
 
 const EditorContainer = styled.div``;
 
@@ -78,33 +36,32 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   constructor(props) {
     super(props);
 
-    // setup slate plugins
-    const suggestionsPlugin = SuggestionsPlugin({
-      trigger: '@',
-      regex: /@([\w]*)/,
-      suggestions,
-      onEnterSuggestion: (suggestion, change, onChange) => {
-        if (!change?.value) return null;
-        const { anchorText, selection } = change.value;
-        const anchorOffset = selection.anchor.offset;
-        const { text } = anchorText;
-
-        let index = { start: anchorOffset - 1, end: anchorOffset };
-
-        if (text[anchorOffset - 1] !== '@') {
-          index = getCurrentWord(text, anchorOffset - 1, anchorOffset - 1);
-        }
-
-        const newText = `${text.substring(0, index.start)}${suggestion.value} `;
-
-        onChange(change.deleteBackward(anchorOffset).insertText(newText));
-
-        return true;
-      },
+    const { suggestNodeChangePlugin, SuggestionsContainer } = SuggestNodeChangePlugin({
+      suggestions: [
+        {
+          key: 'title标题biaoti',
+          value: 'title',
+          display: 'Title',
+        },
+        {
+          key: 'paragraph段落duanluo',
+          value: 'paragraph',
+          display: 'Paragraph',
+        },
+        {
+          key: 'note-list节点列表jiedianliebiao',
+          value: 'note-list',
+          display: 'NoteList',
+        },
+        {
+          key: 'new-note-button新笔记按钮xinbijianniu',
+          value: 'new-note-button',
+          display: 'NewNoteButton',
+        },
+      ],
     });
-    const { Suggestions } = suggestionsPlugin;
-    this.Suggestions = Suggestions;
-    this.plugins = [suggestionsPlugin];
+    this.SuggestionsContainer = SuggestionsContainer;
+    this.plugins = [suggestNodeChangePlugin];
   }
 
   state = {
@@ -139,11 +96,11 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   render() {
     const { noteID, currentNoteInStore } = this.props;
     const { value } = this.state;
-    const { plugins, Suggestions } = this;
+    const { plugins, SuggestionsContainer } = this;
     return (
       <Fragment>
         {noteID && <HoverMenu value={value} onChange={this.onChange} />}
-        {noteID && <Suggestions value={value} onChange={this.onChange} />}
+        {noteID && <SuggestionsContainer value={value} onChange={this.onChange} />}
         <EditorContainer>
           {noteID ? (
             <Editor

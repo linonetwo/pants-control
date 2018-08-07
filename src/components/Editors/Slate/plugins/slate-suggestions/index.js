@@ -1,11 +1,11 @@
 import React, { createRef } from 'react';
-import SuggestionsContainer from './SuggestionsContainer';
+import Component from './SuggestionsContainer';
 
 function SuggestionsPlugin(options) {
   const SuggestionsContainerRef = createRef();
 
-  function Suggestions(props) {
-    return <SuggestionsContainer ref={SuggestionsContainerRef} {...props} {...options} />;
+  function SuggestionsContainer(props) {
+    return <Component ref={SuggestionsContainerRef} {...props} {...options} />;
   }
   return {
     onKeyDown(event, change, editor) {
@@ -58,7 +58,7 @@ function SuggestionsPlugin(options) {
         }
       }
     },
-    Suggestions,
+    SuggestionsContainer,
   };
 }
 

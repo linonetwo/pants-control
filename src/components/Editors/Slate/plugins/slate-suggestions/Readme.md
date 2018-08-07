@@ -14,40 +14,90 @@ import { Editor } from 'slate'
 
 const suggestions = [
   {
-    key: 'jon-snow',
+    key: 'Jon Snow',
     value: '@Jon Snow',
-    suggestion: '@Jon Snow' // Can be string or react component
+    display: 'Jon Snow', // Can be either string or react component
   },
-  // Some other suggestions
-]
-
-const suggestionsPlugin = SuggestionsPlugin({
-  trigger: '@',
-  capture: /@([\w]*)/,
-  suggestions,
-  onEnter: (suggestion) => {
-    // Modify your state up to your use-cases
-    return modifiedState
+  {
+    key: 'John Evans',
+    value: '@John Evans',
+    display: 'John Evans',
+  },
+  {
+    key: 'Daenerys Targaryen',
+    value: '@Daenerys Targaryen',
+    display: 'Daenerys Targaryen',
+  },
+  {
+    key: 'Cersei Lannister',
+    value: '@Cersei Lannister',
+    display: 'Cersei Lannister',
+  },
+  {
+    key: 'Tyrion Lannister',
+    value: '@Tyrion Lannister',
+    display: 'Tyrion Lannister',
+  },
+];
+function getCurrentWord(text, index, initialIndex) {
+  if (index === initialIndex) {
+    return { start: getCurrentWord(text, index - 1, initialIndex), end: getCurrentWord(text, index + 1, initialIndex) };
   }
-})
+  if (text[index] === ' ' || text[index] === '@' || text[index] === undefined) {
+    return index;
+  }
+  if (index < initialIndex) {
+    return getCurrentWord(text, index - 1, initialIndex);
+  }
+  if (index > initialIndex) {
+    return getCurrentWord(text, index + 1, initialIndex);
+  }
+}
 
-// Extract portal component from the plugin
-const { SuggestionPortal } = suggestionPlugin
+class SlateEditor extends Component<Store & Dispatch & Props, State> {
+  constructor(props) {
+    super(props);
 
-// Add the plugin to your set of plugins...
-const plugins = [
-  suggestionPlugin
-]
+    // setup slate plugins
+    const suggestionsPlugin = SuggestionsPlugin({
+      trigger: '@',
+      regex: /@([\w]*)/,
+      suggestions,
+      onEnterSuggestion: (suggestion, change, onChange) => {
+        if (!change?.value) return null;
+        const { anchorText, selection } = change.value;
+        const anchorOffset = selection.anchor.offset;
+        const { text } = anchorText;
 
-// And later pass it into the Slate editor...
-<Editor
-  ...
-  plugins={plugins}
-/>
-// And add portal component together with the editor
-<SuggestionPortal
-  value={this.state.value}
-/>
+        let index = { start: anchorOffset - 1, end: anchorOffset };
+
+        if (text[anchorOffset - 1] !== '@') {
+          index = getCurrentWord(text, anchorOffset - 1, anchorOffset - 1);
+        }
+
+        const newText = `${text.substring(0, index.start)}${suggestion.value} `;
+
+        onChange(change.deleteBackward(anchorOffset).insertText(newText));
+
+        return true;
+      },
+    });
+    const { Suggestions } = suggestionsPlugin;
+    this.Suggestions = Suggestions;
+    this.plugins = [suggestionsPlugin];
+  }
+
+  state = {
+    value: Plain.deserialize(''),
+  };
+
+  render() {
+    const { value } = this.state;
+    const { plugins, Suggestions } = this;
+    return (
+      <Fragment>
+        <Suggestions value={value} onChange={this.onChange} />
+        ...
 ```
 
 Option | Type | Description

@@ -98,7 +98,7 @@ class SuggestionsContainer extends Component {
     if (typeof suggestions === 'function') {
       return suggestions(text);
     }
-    return suggestions.filter(suggestion => fuzzysearch(text, suggestion));
+    return suggestions.filter(suggestion => fuzzysearch(text, suggestion.key));
   }
 
   /** is current character the trigger character */
