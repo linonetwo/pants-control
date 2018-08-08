@@ -7,6 +7,9 @@ import { Value } from 'slate';
 
 export type Note = {
   content: Object,
+  type: string,
+  title: string,
+  id: string,
 };
 export type Notes = { [id: string]: Note };
 type State = {
@@ -59,6 +62,7 @@ export default (initialState?: * = {}) => ({
       state.notes[id] = {
         ...state.notes[id],
         id,
+        type,
         content: note,
         title: title || defaultTitle,
       };

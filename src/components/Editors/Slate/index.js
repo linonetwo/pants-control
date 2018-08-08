@@ -11,7 +11,7 @@ import type { Note } from '../../../store/note';
 import HoverMenu from './plugins/slate-hover-menu';
 import renderMark from './renderMark';
 import renderNode from './renderNode';
-import schema from './schema';
+import getSchema from './schemas';
 import SuggestNodeChangePlugin from './plugins/slate-suggest-node-change';
 
 const EditorContainer = styled.div``;
@@ -106,7 +106,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
             <Editor
               plugins={plugins}
               placeholder="你可以用 @ 插入特殊块"
-              schema={currentNoteInStore.type === 'document' ? schema : null}
+              schema={getSchema(currentNoteInStore.type)}
               value={value}
               onChange={this.onChange}
               renderMark={renderMark}
