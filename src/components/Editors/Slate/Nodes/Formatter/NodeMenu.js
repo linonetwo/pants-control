@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import type { Element } from 'react';
 import styled from 'styled-components';
-import { Popover, Input, Menu, Icon } from 'antd';
+import { Popover, Input, Menu } from 'antd';
 
 const menuSize = 25;
 const MenuButton = styled.div`
@@ -59,14 +59,28 @@ export default class NodeMenu extends Component<Props> {
     onChange(change);
   }
 
+  onClickInlineNodeType(type: string) {
+    const { value, onChange, node } = this.props;
+    const hasInlineNode = node.nodes.some(subNode => subNode.type === type);
+    if (hasInlineNode) {
+      onChange(
+        value.change().withoutNormalization(c => node.nodes.forEach(subNode => c.unwrapInlineByKey(subNode.key, type))),
+      );
+    } else {
+      onChange(
+        value.change().withoutNormalization(c => node.nodes.forEach(subNode => c.wrapInlineByKey(subNode.key, type))),
+      );
+    }
+  }
+
   /**
    * Render a mark-toggling toolbar button.
    */
-  renderNodeButton(type: string, icon: string): React$Element<*> {
+  renderNodeButton(type: string, icon: string, inline?: boolean): React$Element<*> {
     return (
-      <Menu.Item key={type} onClick={() => this.onClickNodeType(type)}>
+      <Menu.Item key={type} onClick={() => (inline ? this.onClickInlineNodeType(type) : this.onClickNodeType(type))}>
         <span>
-          <Icon type={icon} />
+          <span className="material-icons">{icon}</span>
           <span>{type}</span>
         </span>
       </Menu.Item>
@@ -79,14 +93,15 @@ export default class NodeMenu extends Component<Props> {
         key="node-type"
         title={
           <span>
-            <Icon type="appstore" />
+            <span className="material-icons">compare_arrows</span>
             <span>节点类型</span>
           </span>
         }
       >
-        <Menu.ItemGroup title="文档">{this.renderNodeButton('paragraph', 'file-word')}</Menu.ItemGroup>
-        <Menu.ItemGroup title="索引">{this.renderNodeButton('note-list', 'bars')}</Menu.ItemGroup>
-        <Menu.ItemGroup title="按钮">{this.renderNodeButton('new-note-button', 'file-add')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="文档">{this.renderNodeButton('paragraph', 'subject')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="索引">{this.renderNodeButton('note-list', 'device_hub')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="按钮">{this.renderNodeButton('new-note-button', 'add_box')}</Menu.ItemGroup>
+        <Menu.ItemGroup title="分析">{this.renderNodeButton('parse', 'power_input', true)}</Menu.ItemGroup>
       </Menu.SubMenu>
     </Menu>
   );

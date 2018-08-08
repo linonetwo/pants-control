@@ -53,4 +53,8 @@ injectGlobal`
   .ant-menu-vertical {
     border-right: none !important;
   }
+  .ant-menu-item  > span > span.material-icons, .ant-menu-submenu-title  > span > span.material-icons {
+    vertical-align: middle;
+    margin-left: -15px;
+  }
 `;
