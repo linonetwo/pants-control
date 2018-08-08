@@ -9,8 +9,8 @@
     "web": "yarn clear:babel-cache && react-app-rewired start",
     "electron": "cross-env ELECTRON_START_URL=http://localhost:3000 ELECTRON_DEV=1 electron .",
     "start": "yarn clear:babel-cache && concurrently \"yarn app\" \"wait-on http://localhost:3000/ && yarn electron\"",
-    "build": "yarn clear:babel-cache && react-app-rewired build",
-    "serve": "NODE_ENV=production node ./ssr/index.js",
+    "build": "yarn clear:babel-cache && cross-env NODE_ENV=production react-app-rewired build",
+    "serve": "cross-env NODE_ENV=production node ./ssr/index.js",
     "test": "react-app-rewired test --env=jsdom",
     "pm2": "pm2 delete 0 && pm2 start yarn -- start",
     "clear:babel-cache": "rimraf -rf ./node_modules/.cache/babel-loader/*",
@@ -95,7 +95,6 @@
     "uuid": "^3.3.2"
   },
   "main": "src/electron-starter.js",
-  "homepage": "./",
   "devDependencies": {
     "@babel/plugin-proposal-do-expressions": "^7.0.0-beta.56",
     "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.56",
