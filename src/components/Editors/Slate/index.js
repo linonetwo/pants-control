@@ -8,10 +8,10 @@ import equal from 'fast-deep-equal';
 
 import type { Note } from '../../../store/note';
 
-import HoverMenu from './plugins/slate-hover-menu';
-import renderMark from './renderMark';
+import renderMark from './Marks/renderMark';
 import renderNode from './Nodes/renderNode';
 import getSchema from './schemas';
+import HoverMenuPlugin from './plugins/slate-hover-menu';
 import SuggestNodeChangePlugin from './plugins/slate-suggest-node-change';
 
 const EditorContainer = styled.div``;
@@ -60,8 +60,18 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         },
       ],
     });
-    this.SuggestionsContainer = SuggestionsContainer;
     this.plugins = [suggestNodeChangePlugin];
+    this.SuggestionsContainer = SuggestionsContainer;
+    const { HoverMenu } = HoverMenuPlugin({
+      buttons: [
+        { type: 'bold', icon: 'format_bold' },
+        { type: 'italic', icon: 'format_italic' },
+        { type: 'underlined', icon: 'format_underlined' },
+        { type: 'code', icon: 'code' },
+        { type: 'mark', icon: 'power_input' },
+      ],
+    });
+    this.HoverMenu = HoverMenu;
   }
 
   state = {
@@ -96,7 +106,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   render() {
     const { noteID, currentNoteInStore } = this.props;
     const { value } = this.state;
-    const { plugins, SuggestionsContainer } = this;
+    const { plugins, SuggestionsContainer, HoverMenu } = this;
     return (
       <Fragment>
         {noteID && <HoverMenu value={value} onChange={this.onChange} />}
