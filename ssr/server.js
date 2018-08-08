@@ -2,6 +2,7 @@
 // Express requirements
 import bodyParser from 'body-parser';
 import express from 'express';
+import compression from 'compression';
 import morgan from 'morgan';
 import serverTimingMiddleware from 'server-timing';
 import path from 'path';
@@ -16,6 +17,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Compress, parse, log, and the i18n
+app.use(compression());
 app.use(serverTimingMiddleware());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
