@@ -68,7 +68,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         { type: 'italic', icon: 'format_italic' },
         { type: 'underlined', icon: 'format_underlined' },
         { type: 'code', icon: 'code' },
-        { type: 'mark', icon: 'power_input' },
+        { type: 'parse', icon: 'power_input' },
       ],
     });
     this.HoverMenu = HoverMenu;
