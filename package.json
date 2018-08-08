@@ -16,11 +16,9 @@
     "clear:babel-cache": "rimraf -rf ./node_modules/.cache/babel-loader/*",
     "flow-typed": "rimraf flow-typed/npm && flow-typed install --overwrite || true",
     "docker-build": "docker build . -t pants-control",
-    "docker-run":
-      "docker rm -f pants-control || true && docker run --rm -d --name pants-control -p 3000:3000 pants-control",
+    "docker-run": "docker rm -f pants-control || true && docker run --rm -d --name pants-control -p 3000:3000 pants-control",
     "analyse": "webpack-bundle-analyzer ./build/stats.json ./build",
-    "install-native":
-      "cd ./src && cross-env npm_config_target=3.0.0-beta.4 npm_config_arch=x64 npm_config_target_arch=x64 npm_config_disturl=https://atom.io/download/electron npm_config_runtime=electron npm_config_build_from_source=true yarn",
+    "install-native": "cd ./src && cross-env npm_config_target=3.0.0-beta.4 npm_config_arch=x64 npm_config_target_arch=x64 npm_config_disturl=https://atom.io/download/electron npm_config_runtime=electron npm_config_build_from_source=true yarn",
     "eject": "react-scripts eject"
   },
   "private": true,
@@ -144,7 +142,16 @@
     "wait-on": "^2.1.0"
   },
   "browserslist": {
-    "development": ["last 2 chrome versions", "last 2 firefox versions", "last 2 edge versions"],
-    "production": [">1%", "last 4 versions", "Firefox ESR", "not ie < 11"]
+    "development": [
+      "last 2 chrome versions",
+      "last 2 firefox versions",
+      "last 2 edge versions"
+    ],
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
   }
 }
