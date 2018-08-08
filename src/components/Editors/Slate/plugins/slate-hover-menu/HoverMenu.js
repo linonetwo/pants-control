@@ -50,20 +50,24 @@ export default class HoverMenu extends Component<*> {
   /**
    * When a mark button is clicked, toggle the current mark.
    */
-  onClickMark(event: SyntheticEvent<HTMLButtonElement>, type: string) {
+  onClickMark(event: SyntheticEvent<HTMLButtonElement>, button: { type: string, icon: string }) {
     event.preventDefault();
-    const { value, onChange } = this.props;
-    const change = value.change().toggleMark(type);
-    onChange(change);
+    event.stopPropagation();
+    const { value, onChange, onButtonClicked } = this.props;
+    onButtonClicked(value, onChange, button);
   }
 
   /**
    * Render a mark-toggling toolbar button.
    */
-  renderMarkButton(type: string, icon: string): React$Element<*> {
+  renderMarkButton(button: { type: string, icon: string }): React$Element<*> {
     return (
-      <MenuButton key={type} onMouseDown={event => this.onClickMark(event, type)} active={this.hasMark(type)}>
-        <span className="material-icons">{icon}</span>
+      <MenuButton
+        key={button.type}
+        onMouseDown={event => this.onClickMark(event, button)}
+        active={this.hasMark(button.type)}
+      >
+        <span className="material-icons">{button.icon}</span>
       </MenuButton>
     );
   }
@@ -100,7 +104,7 @@ export default class HoverMenu extends Component<*> {
             this.menuRef = elem;
           }}
         >
-          {buttons.map(({ type, icon }) => this.renderMarkButton(type, icon))}
+          {buttons.map(button => this.renderMarkButton(button))}
         </MenuContainer>,
         mountPoint,
       );

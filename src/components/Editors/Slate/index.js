@@ -68,6 +68,9 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         { type: 'code', icon: 'code' },
         { type: 'parse', icon: 'power_input' },
       ],
+      onButtonClicked(value, onChange, button) {
+        onChange(value.change().toggleMark(button.type));
+      },
     });
     this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin];
   }

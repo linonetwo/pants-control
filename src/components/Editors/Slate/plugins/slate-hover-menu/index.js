@@ -8,10 +8,12 @@ export default function HoverMenuPlugin(options = {}) {
     { type: 'underlined', icon: 'format_underlined' },
     { type: 'code', icon: 'code' },
   ];
+  const onButtonClicked =
+    options.onButtonClicked || ((value, onChange, button) => onChange(value.change().toggleMark(button.type)));
 
   return {
     renderPortal(value, editor) {
-      return <HoverMenu buttons={buttons} value={value} onChange={editor.onChange} {...options} />;
+      return <HoverMenu buttons={buttons} onButtonClicked={onButtonClicked} value={value} onChange={editor.onChange} />;
     },
   };
 }

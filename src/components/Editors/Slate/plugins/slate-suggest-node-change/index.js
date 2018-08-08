@@ -45,7 +45,14 @@ export default function SuggestNodeChangePlugin(options = {}) {
         prefixEndIndex = getCurrentTextEnd(text, anchorOffset - 1, anchorOffset - 1);
       }
 
-      onChange(change.deleteBackward(anchorOffset).insertText(text.substring(0, prefixEndIndex)).setBlocks(suggestion.value));
+      onChange(
+        change.withoutNormalization(c =>
+          c
+            .deleteBackward(anchorOffset)
+            .insertText(text.substring(0, prefixEndIndex))
+            .setBlocks(suggestion.value),
+        ),
+      );
       return true;
     },
     ...options,
