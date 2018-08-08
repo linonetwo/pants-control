@@ -5,7 +5,7 @@ import WrapNodeMenu from './Wrappers/NodeMenu';
 // nodes are building blocks of document
 import NewNoteButton from './Buttons/NewNoteButton';
 import NoteList from './Facets/NoteList';
-import TextNode from './Nodes/Text';
+import TextNode from './Documents/Text';
 
 function renderBasicNode(props) {
   const { attributes, children, node } = props;

@@ -8,7 +8,7 @@ import Flex from 'styled-flex-component';
 import is from 'styled-is';
 import { Link } from 'react-router-dom';
 
-import { materialButton } from '../../../../styles/material';
+import { materialButton } from '../../../../../styles/material';
 
 const Container = styled(Flex)`
   padding-top: 5px;

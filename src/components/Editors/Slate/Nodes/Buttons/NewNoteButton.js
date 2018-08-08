@@ -7,7 +7,7 @@ import Flex from 'styled-flex-component';
 import Ink from 'react-ink';
 import uuid from 'uuid/v4';
 
-import { materialButton } from '../../../../styles/material';
+import { materialButton } from '../../../../../styles/material';
 
 const ButtonContainer = styled(Flex)`
   ${materialButton};

@@ -10,7 +10,7 @@ import type { Note } from '../../../store/note';
 
 import HoverMenu from './plugins/slate-hover-menu';
 import renderMark from './renderMark';
-import renderNode from './renderNode';
+import renderNode from './Nodes/renderNode';
 import getSchema from './schemas';
 import SuggestNodeChangePlugin from './plugins/slate-suggest-node-change';
 
