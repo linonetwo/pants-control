@@ -42,14 +42,13 @@ export default (initialState?: * = {}) => ({
       { note, id, title, type = 'document' }: { note: Object, id: string, title?: string, type?: string },
     ) {
       // get potential title of document
-      let defaultTitle = id;
+      let nextTitle = title || id;
       if (
-        !title &&
         type === 'document' &&
         note.getIn(['document', 'nodes', 0, 'type']) === 'title' &&
         note.getIn(['document', 'nodes', 0, 'nodes', 0, 'leaves', 0, 'text'])
       ) {
-        defaultTitle = note
+        nextTitle = note
           .getIn(['document', 'nodes', 0, 'nodes', 0, 'leaves'])
           .map(leaf => leaf.get('text'))
           .join('');
@@ -64,7 +63,7 @@ export default (initialState?: * = {}) => ({
         id,
         type,
         content: note,
-        title: title || defaultTitle,
+        title: nextTitle,
       };
       // add note to ready to sync list, sync it to backend later
       state.notSyncedNoteIDs = uniq([...state.notSyncedNoteIDs, id]);
