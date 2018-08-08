@@ -36,7 +36,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   constructor(props) {
     super(props);
 
-    const { suggestNodeChangePlugin, SuggestionsContainer } = SuggestNodeChangePlugin({
+    const suggestNodeChangePlugin = SuggestNodeChangePlugin({
       suggestions: [
         {
           key: 'title标题biaoti',
@@ -60,9 +60,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         },
       ],
     });
-    this.plugins = [suggestNodeChangePlugin];
-    this.SuggestionsContainer = SuggestionsContainer;
-    const { HoverMenu } = HoverMenuPlugin({
+    const hoverMenuPlugin = HoverMenuPlugin({
       buttons: [
         { type: 'bold', icon: 'format_bold' },
         { type: 'italic', icon: 'format_italic' },
@@ -71,7 +69,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         { type: 'parse', icon: 'power_input' },
       ],
     });
-    this.HoverMenu = HoverMenu;
+    this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin];
   }
 
   state = {
@@ -106,15 +104,12 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   render() {
     const { noteID, currentNoteInStore } = this.props;
     const { value } = this.state;
-    const { plugins, SuggestionsContainer, HoverMenu } = this;
     return (
       <Fragment>
-        {noteID && <HoverMenu value={value} onChange={this.onChange} />}
-        {noteID && <SuggestionsContainer value={value} onChange={this.onChange} />}
         <EditorContainer>
           {noteID ? (
             <Editor
-              plugins={plugins}
+              plugins={this.plugins}
               placeholder="你可以用 @ 插入特殊块"
               schema={getSchema(currentNoteInStore.type)}
               value={value}

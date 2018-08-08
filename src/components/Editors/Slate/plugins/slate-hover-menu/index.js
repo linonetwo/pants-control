@@ -1,5 +1,5 @@
 import React from 'react';
-import Component from './HoverMenu';
+import HoverMenu from './HoverMenu';
 
 export default function HoverMenuPlugin(options = {}) {
   const buttons = options.buttons || [
@@ -8,11 +8,10 @@ export default function HoverMenuPlugin(options = {}) {
     { type: 'underlined', icon: 'format_underlined' },
     { type: 'code', icon: 'code' },
   ];
-  function HoverMenu(props) {
-    return <Component buttons={buttons} {...props} {...options} />;
-  }
 
   return {
-    HoverMenu,
+    renderPortal(value, editor) {
+      return <HoverMenu buttons={buttons} value={value} onChange={editor.onChange} {...options} />;
+    },
   };
 }

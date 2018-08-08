@@ -1,12 +1,9 @@
 import React, { createRef } from 'react';
-import Component from './SuggestionsContainer';
+import SuggestionsContainer from './SuggestionsContainer';
 
 function SuggestionsPlugin(options) {
   const SuggestionsContainerRef = createRef();
 
-  function SuggestionsContainer(props) {
-    return <Component ref={SuggestionsContainerRef} {...props} {...options} />;
-  }
   return {
     onKeyDown(event, change, editor) {
       const { keyCode } = event;
@@ -58,7 +55,11 @@ function SuggestionsPlugin(options) {
         }
       }
     },
-    SuggestionsContainer,
+    renderPortal(value, editor) {
+      return (
+        <SuggestionsContainer ref={SuggestionsContainerRef} value={value} onChange={editor.onChange} {...options} />
+      );
+    },
   };
 }
 

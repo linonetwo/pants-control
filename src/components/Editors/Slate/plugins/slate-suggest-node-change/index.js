@@ -51,9 +51,5 @@ export default function SuggestNodeChangePlugin(options = {}) {
     ...options,
   });
 
-  const { SuggestionsContainer } = suggestionsPlugin;
-  return {
-    suggestNodeChangePlugin: suggestionsPlugin,
-    SuggestionsContainer,
-  };
+  return suggestionsPlugin;
 }
