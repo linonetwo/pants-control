@@ -1,8 +1,8 @@
 // @flow
 import React, { Fragment } from 'react';
 // wrappers to provide shared functionality
-import WrapNodeMenu from './Wrappers/NodeMenu';
-import Parse from './Wrappers/Parse';
+import WrapNodeMenu from './Formatter/NodeMenu';
+import Parse from './Formatter/Parse';
 // nodes are building blocks of document
 import NewNoteButton from './Buttons/NewNoteButton';
 import NoteList from './Facets/NoteList';
@@ -30,7 +30,7 @@ export default function renderNodeWithWrapper(value, onChange) {
         {/* InlineNodes */}
         {do {
           if (node.type === 'parse') {
-            <Parse {...attributes} node={node}>
+            <Parse {...attributes} value={value} onChange={onChange} node={node}>
               {children}
             </Parse>;
           }
