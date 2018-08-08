@@ -6,11 +6,12 @@ const Highlight = styled.mark``;
 
 type Props = {
   children: string | Object,
+  node: Object,
 };
 export default class Parse extends Component<Props> {
   render() {
-    const { children, text } = this.props;
-    console.log(text)
+    const { children, node } = this.props;
+    console.log(node.text)
     return <Highlight>{children}</Highlight>;
   }
 }

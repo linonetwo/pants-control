@@ -93,6 +93,7 @@ export default class NodeMenu extends Component<Props> {
 
   render() {
     const { children } = this.props;
+    if (!children) return null;
     return (
       <Container>
         <Popover content={this.menu} title={this.menuSearch} trigger="click">

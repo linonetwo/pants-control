@@ -1,5 +1,4 @@
 import React from 'react';
-import Parse from './Parse';
 
 export default function renderMark(props) {
   const { children, mark } = props;
@@ -12,8 +11,6 @@ export default function renderMark(props) {
       return <em>{children}</em>;
     case 'underlined':
       return <u>{children}</u>;
-    case 'parse':
-      return <Parse {...props} />;
     default:
       return <span>{children}</span>;
   }

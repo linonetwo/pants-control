@@ -4,6 +4,20 @@ import styled from 'styled-components';
 import is from 'styled-is';
 import ReactDOM from 'react-dom';
 
+/**
+ * Check if the current selection has a mark with `type` in it.
+ */
+export function hasMarkOrInline(type: string, value): boolean {
+  let has = false;
+  if (value.activeMarks) {
+    has = value.activeMarks.some(mark => mark.type === type);
+  }
+  if (value.inlines) {
+    has = has || value.inlines.some(inline => inline.type === type);
+  }
+  return has;
+}
+
 const MenuButton = styled.span`
   cursor: pointer;
 
@@ -38,16 +52,6 @@ export default class HoverMenu extends Component<*> {
   menuRef = null;
 
   /**
-   * Check if the current selection has a mark with `type` in it.
-   */
-  hasMark(type: string): boolean {
-    const { value } = this.props;
-
-    if (!value.activeMarks) return false;
-    return value.activeMarks.some(mark => mark.type === type);
-  }
-
-  /**
    * When a mark button is clicked, toggle the current mark.
    */
   onClickMark(event: SyntheticEvent<HTMLButtonElement>, button: { type: string, icon: string }) {
@@ -60,12 +64,12 @@ export default class HoverMenu extends Component<*> {
   /**
    * Render a mark-toggling toolbar button.
    */
-  renderMarkButton(button: { type: string, icon: string }): React$Element<*> {
+  renderMarkButton(button: { type: string, icon: string }, value): React$Element<*> {
     return (
       <MenuButton
         key={button.type}
         onMouseDown={event => this.onClickMark(event, button)}
-        active={this.hasMark(button.type)}
+        active={hasMarkOrInline(button.type, value)}
       >
         <span className="material-icons">{button.icon}</span>
       </MenuButton>
@@ -93,7 +97,7 @@ export default class HoverMenu extends Component<*> {
     const { opacity, top, left } = this.getMenuStyle();
     const mountPoint = document.getElementById('root');
     if (mountPoint) {
-      const { buttons } = this.props;
+      const { buttons, value } = this.props;
       return ReactDOM.createPortal(
         <MenuContainer
           data-usage="slate-hover-menu-plugin"
@@ -104,7 +108,7 @@ export default class HoverMenu extends Component<*> {
             this.menuRef = elem;
           }}
         >
-          {buttons.map(button => this.renderMarkButton(button))}
+          {buttons.map(button => this.renderMarkButton(button, value))}
         </MenuContainer>,
         mountPoint,
       );

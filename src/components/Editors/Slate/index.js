@@ -11,7 +11,7 @@ import type { Note } from '../../../store/note';
 import renderMark from './Marks/renderMark';
 import renderNode from './Nodes/renderNode';
 import getSchema from './schemas';
-import HoverMenuPlugin from './plugins/slate-hover-menu';
+import HoverMenuPlugin, { hasMarkOrInline } from './plugins/slate-hover-menu';
 import SuggestNodeChangePlugin from './plugins/slate-suggest-node-change';
 
 const EditorContainer = styled.div``;
@@ -66,10 +66,18 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         { type: 'italic', icon: 'format_italic' },
         { type: 'underlined', icon: 'format_underlined' },
         { type: 'code', icon: 'code' },
-        { type: 'parse', icon: 'power_input' },
+        { type: 'parse', inline: true, icon: 'power_input' },
       ],
       onButtonClicked(value, onChange, button) {
-        onChange(value.change().toggleMark(button.type));
+        if (button.inline) {
+          if (hasMarkOrInline(button.type, value)) {
+            onChange(value.change().unwrapInline(button.type));
+          } else {
+            onChange(value.change().wrapInline(button.type));
+          }
+        } else {
+          onChange(value.change().toggleMark(button.type));
+        }
       },
     });
     this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin];

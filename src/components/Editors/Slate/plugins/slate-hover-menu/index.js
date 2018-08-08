@@ -1,6 +1,7 @@
 import React from 'react';
-import HoverMenu from './HoverMenu';
+import HoverMenu, { hasMarkOrInline } from './HoverMenu';
 
+export { hasMarkOrInline };
 export default function HoverMenuPlugin(options = {}) {
   const buttons = options.buttons || [
     { type: 'bold', icon: 'format_bold' },
