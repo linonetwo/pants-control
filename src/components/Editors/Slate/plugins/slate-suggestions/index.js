@@ -55,6 +55,12 @@ function SuggestionsPlugin(options) {
         }
       }
     },
+    onBlur() {
+      if (SuggestionsContainerRef.current.state.mouseInNotHandled) {
+        return true;
+      }
+      return null;
+    },
     renderPortal(value, editor) {
       return (
         <SuggestionsContainer ref={SuggestionsContainerRef} value={value} onChange={editor.onChange} {...options} />

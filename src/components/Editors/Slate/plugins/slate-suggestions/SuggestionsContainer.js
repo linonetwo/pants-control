@@ -1,4 +1,5 @@
-/* eslint-disable react/prop-types, react/destructuring-assignment */
+// @flow
+/* eslint-disable react/prop-types, react/destructuring-assignment, react/no-unused-state */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import styled from 'styled-components';
@@ -39,6 +40,7 @@ class SuggestionsContainer extends Component {
   state = {
     selectedSuggestionIndex: 0,
     filteredSuggestions: [],
+    mouseInNotHandled: false,
   };
 
   componentDidMount() {
@@ -173,7 +175,7 @@ class SuggestionsContainer extends Component {
     return {};
   };
 
-  onClick = event => {
+  onClick = (event: SyntheticEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
     const { onEnterSuggestion, value, onChange } = this.props;
@@ -202,7 +204,8 @@ class SuggestionsContainer extends Component {
               alignCenter
               selected={index === selectedSuggestionIndex}
               onClick={this.onClick}
-              onMouseEnter={() => this.setState({ selectedSuggestionIndex: index })}
+              onMouseEnter={() => this.setState({ selectedSuggestionIndex: index, mouseInNotHandled: true })}
+              onMouseLeave={() => this.setState({ mouseInNotHandled: false })}
               key={key}
             >
               {display}
