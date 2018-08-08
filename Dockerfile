@@ -26,8 +26,8 @@ RUN cd /tmp && yarn && cp -a /tmp/node_modules /usr/src/app/
 # "layer" that's been cached will be used if possible
 WORKDIR /usr/src/app
 COPY . /usr/src/app
-
+RUN yarn build
 # Expose port
 EXPOSE 3000
 
-CMD ["yarn", "web"]
+CMD ["yarn", "serve"]

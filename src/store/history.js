@@ -1,14 +1,11 @@
 // @flow
-import createHistory from 'history/createBrowserHistory';
-
-export const history = createHistory();
 
 type State = {};
 export default (initialState?: State = {}) => ({
   state: { ...initialState },
   effects: {
     async syncIDFromURLToStore() {
-      const { dispatch, getState } = await import('./');
+      const { dispatch, getState, history } = await import('./');
       // if user is inside a note page, loads note data
       if (/\/note\//.test(history.location.pathname)) {
         const {

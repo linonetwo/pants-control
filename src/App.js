@@ -1,37 +1,28 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
+import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
-import { Router, Route, Switch } from 'react-router';
+import { Router } from 'react-router';
+import { hydrate, render } from 'react-dom';
 
 import './globalStyle';
-import registerServiceWorker from './registerServiceWorker';
-import { store, dispatch, history } from './store';
-import { APP_START } from './store/constants/core';
-import NoteBook from './pages/NoteBook';
-import Login from './pages/Login';
+import register from './registerServiceWorker';
+import { store, history } from './store';
+import Routes from './Routes';
 
-class App extends Component {
-  async componentDidMount() {
-    dispatch({ type: APP_START });
-    await dispatch.viewer.rememberUser();
-    dispatch.history.syncIDFromURLToStore();
-  }
+const Application = (
+  <Provider store={store}>
+    <Router history={history}>
+      <Routes />
+    </Router>
+  </Provider>
+);
 
-  render() {
-    return (
-      <Provider store={store}>
-        <Router history={history}>
-          <Switch>
-            {/* 登录和注册页 */}
-            <Route exact path="/" component={Login} />
-            {/* 通过 multihash 打开编辑器 */}
-            <Route exact path="/note/:ID" component={NoteBook} />
-          </Switch>
-        </Router>
-      </Provider>
-    );
-  }
+const root = document.getElementById('root');
+if (root.hasChildNodes()) {
+  Loadable.preloadReady().then(() => {
+    hydrate(Application, root);
+  });
+} else {
+  render(Application, root);
 }
-
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+register();
