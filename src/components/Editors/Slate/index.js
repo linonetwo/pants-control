@@ -10,7 +10,7 @@ import type { Note } from '../../../store/note';
 
 import renderMark from './Marks/renderMark';
 import renderNode from './Nodes/renderNode';
-import getSchema from './schemas';
+import schema from './schema';
 import HoverMenuPlugin, { hasMarkOrInline } from './plugins/slate-hover-menu';
 import SuggestNodeChangePlugin from './plugins/slate-suggest-node-change';
 
@@ -113,7 +113,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
   };
 
   render() {
-    const { noteID, currentNoteInStore } = this.props;
+    const { noteID } = this.props;
     const { value } = this.state;
     return (
       <Fragment>
@@ -122,7 +122,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
             <Editor
               plugins={this.plugins}
               placeholder="你可以用 @ 插入特殊块"
-              schema={getSchema(currentNoteInStore.type)}
+              schema={schema}
               value={value}
               onChange={this.onChange}
               renderMark={renderMark}
