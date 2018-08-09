@@ -19,7 +19,7 @@ COPY yarn.lock /tmp/yarn.lock
 # COPY src/yarn.lock /tmp/src/yarn.lock
 # Use America source since we are ouside GFW
 # RUN sed -i 's/registry.npm.taobao.org/registry.npmjs.org/g' /tmp/yarn.lock
-RUN cd /tmp && yarn && cp -a /tmp/node_modules /usr/src/app/
+RUN cd /tmp && yarn && ln -s /tmp/node_modules /usr/src/app/node_modules
 # RUN cd /tmp/src && yarn && cp -a /tmp/src/node_modules /usr/src/app/src/
 
 # From here we load our application's code in, therefore the previous docker
