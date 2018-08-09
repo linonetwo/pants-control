@@ -101,6 +101,7 @@ export default class NodeMenu extends Component<Props> {
         <Menu.ItemGroup title="文档">
           {this.renderNodeButton('title', 'title')}
           {this.renderNodeButton('paragraph', 'subject')}
+          {this.renderNodeButton('code_block', 'code')}
         </Menu.ItemGroup>
         <Menu.ItemGroup title="索引">{this.renderNodeButton('note-list', 'device_hub')}</Menu.ItemGroup>
         <Menu.ItemGroup title="按钮">{this.renderNodeButton('new-note-button', 'add_box')}</Menu.ItemGroup>

@@ -3,16 +3,17 @@ import React, { Component } from 'react';
 import type { Element } from 'react';
 import styled from 'styled-components';
 
-const TextContainer = styled.article`
+const CodeContainer = styled.article`
   padding-top: 7px;
+  background-color: #ccc;
 `;
 
 type Props = {
   children: string | Element<any>,
 };
-export default class Text extends Component<Props> {
+export default class Code extends Component<Props> {
   render() {
     const { children } = this.props;
-    return <TextContainer>{children}</TextContainer>;
+    return <CodeContainer>{children}</CodeContainer>;
   }
 }

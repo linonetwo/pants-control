@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { Editor } from 'slate-react';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
+import Prism from 'slate-prism';
+import EditCode from 'slate-edit-code';
 
 import type { Note } from '../../../store/note';
 
@@ -49,6 +51,11 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
           display: 'Paragraph',
         },
         {
+          key: 'code_block代码daima',
+          value: 'code_block',
+          display: 'Code',
+        },
+        {
           key: 'note-list节点列表jiedianliebiao',
           value: 'note-list',
           display: 'NoteList',
@@ -80,7 +87,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         }
       },
     });
-    this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin];
+    this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin, EditCode()];
   }
 
   state = {

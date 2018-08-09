@@ -7,6 +7,7 @@ import Parse from './Formatter/Parse';
 import NewNoteButton from './Buttons/NewNoteButton';
 import NoteList from './Facets/NoteList';
 import TextNode from './Documents/Text';
+import CodeNode from './Documents/Code';
 
 export default function renderNodeWithWrapper(value, onChange) {
   return (props: *) => {
@@ -24,6 +25,8 @@ export default function renderNodeWithWrapper(value, onChange) {
               <h2 {...attributes}>{children}</h2>;
             } else if (node.type === 'paragraph') {
               <TextNode {...attributes}>{children}</TextNode>;
+            } else if (node.type === 'code_block') {
+              <CodeNode {...attributes}>{children}</CodeNode>;
             }
           }}
         </WrapNodeMenu>
@@ -33,6 +36,8 @@ export default function renderNodeWithWrapper(value, onChange) {
             <Parse {...attributes} value={value} onChange={onChange} node={node}>
               {children}
             </Parse>;
+          } else if (node.type === 'code_line') {
+            <pre {...attributes}>{children}</pre>;
           }
         }}
       </Fragment>
