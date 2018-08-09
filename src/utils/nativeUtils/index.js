@@ -16,6 +16,7 @@ type NativeUtils = {
 
 /** 用于判断当前是否在 SSR */
 export const isServer = !(typeof window !== 'undefined' && window.document && window.document.createElement);
+export const isSSR = isServer && !isElectron();
 export function getInitialStateFromServer() {
   // Do we have preloaded state available? Great, save it.
   const initialStateFromServer = !isServer ? window.__PRELOADED_STATE__ : {};

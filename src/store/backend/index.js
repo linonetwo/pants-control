@@ -2,6 +2,7 @@
 import IPFSFileUploader from './ipfs/IPFSFileUploader';
 import IPFSFileGetter from './ipfs/IPFSFileGetter';
 import getLevelDB from './levelDB';
+import { isSSR } from '../../utils/nativeUtils';
 
 type State = {
   currentBackEnd?: string,
@@ -18,7 +19,11 @@ export default (initialState?: * = {}) => ({
     },
   },
   effects: {
-    save(payload: { id: string, data: string }) {
+    save(payload: { id: string, data: * }) {
+      if (isSSR) {
+        console.warn("Don't support save in SSR.");
+        return null;
+      }
       switch (this.currentBackEnd) {
         case 'ipfs':
           return this.saveDataToIPFS(payload);
@@ -27,7 +32,11 @@ export default (initialState?: * = {}) => ({
           return this.saveDataToLevelDB(payload);
       }
     },
-    load(id: string): Promise<string> {
+    load(id: string): Promise<*> {
+      if (isSSR) {
+        console.warn("Don't support load in SSR.");
+        return null;
+      }
       switch (this.currentBackEnd) {
         case 'ipfs':
           return this.loadDataFromIPFS(id);
@@ -50,14 +59,14 @@ export default (initialState?: * = {}) => ({
       return files;
     },
 
-    async saveDataToLevelDB({ id, data }: { id: string, data: string }) {
+    async saveDataToLevelDB({ id, data }: { id: string, data: * }) {
       const db = await getLevelDB();
       await db.put(id, data);
     },
-    async loadDataFromLevelDB(id: string): Promise<string> {
+    async loadDataFromLevelDB(id: string): Promise<*> {
       const db = await getLevelDB();
-      const data: Buffer = await db.get(id);
-      return data.toString('utf8');
+      const data = await db.get(id);
+      return data;
     },
   },
 });

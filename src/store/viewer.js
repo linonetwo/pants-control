@@ -6,7 +6,6 @@ import queryString from 'query-string';
 import Plain from 'slate-plain-serializer';
 import { Value } from 'slate';
 
-import { saveStorage, loadStorage } from '../utils/nativeUtils';
 import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
 
 const getPrivateKeyStoreKey = (profileID: string) => `${profileID}-private`;
@@ -46,16 +45,22 @@ export default (initialState?: * = {}) => ({
   },
   effects: {
     async getAvailableUsers(): Promise<string[]> {
-      const usersString = await loadStorage('users');
-      const users = usersString ? JSON.parse(usersString) : [];
+      const { dispatch } = await import('./');
+      let users = [];
+      try {
+        users = await dispatch.backend.load('users');
+      } catch (error) {
+        console.log('No registered users.');
+      }
       this.setAvailableUsers(users);
       return users;
     },
     /** 用户注册成功后把他注册的用户名保存到本地可登录的用户名列表里 */
     async pushAvailableUsers(newUserName: string) {
+      const { dispatch } = await import('./');
       const users = await this.getAvailableUsers();
       const newUsers = [...users, newUserName];
-      await saveStorage('users', JSON.stringify(newUsers));
+      await dispatch.backend.save({ id: 'users', data: newUsers });
       this.setAvailableUsers(newUsers);
     },
     async createUser({ name, password, remember }: { name: string, password: string, remember?: number }) {
@@ -84,15 +89,18 @@ export default (initialState?: * = {}) => ({
       try {
         const { dispatch, history } = await import('./');
         // Put private key to localStorage
-        await saveStorage(getPrivateKeyStoreKey(profileID), encryptedPrivateKeyHex);
+        await dispatch.backend.save({ id: getPrivateKeyStoreKey(profileID), data: encryptedPrivateKeyHex });
         // Remember username in localStorage for later login
-        await Promise.all([saveStorage(getLocalProfileIDStoreKey(name), profileID), this.pushAvailableUsers(name)]);
+        await Promise.all([
+          dispatch.backend.save({ id: getLocalProfileIDStoreKey(name), data: profileID }),
+          this.pushAvailableUsers(name),
+        ]);
         // Remember username for 8 Days so later it can auto login
         if (remember && typeof remember === 'number') {
-          await saveStorage(
-            'currentUser',
-            JSON.stringify({ name, password, expire: Date.now() + remember * 24 * 3600 * 1000 }),
-          );
+          await dispatch.backend.save({
+            id: 'currentUser',
+            data: { name, password, expire: Date.now() + remember * 24 * 3600 * 1000 },
+          });
         }
         // inform UI that register succeed
         this.setProfile(newProfile);
@@ -127,20 +135,23 @@ export default (initialState?: * = {}) => ({
       }
     },
     async rememberUser() {
-      const remembered = await loadStorage('currentUser');
-      if (remembered) {
-        const { name, password, expire } = JSON.parse(remembered);
+      const { dispatch } = await import('./');
+      try {
+        const remembered = await dispatch.backend.load('currentUser');
+        const { name, password, expire } = remembered;
         if (expire && expire - Date.now() > 0) {
           message.loading('正在登录记住的账户', 0.5);
           return this.userLogin({ name, password });
         }
+      } catch (error) {
+        console.log('No user to remember.');
       }
     },
     async userLogin({ name, password, remember }: { name: string, password: string, remember?: number }) {
       try {
         // loads profile
-        const profileID = await loadStorage(getLocalProfileIDStoreKey(name));
         const { dispatch, history } = await import('./');
+        const profileID = await dispatch.backend.load(getLocalProfileIDStoreKey(name));
         const profileString = await dispatch.backend.load(profileID);
         let profile = {};
         try {
@@ -150,7 +161,7 @@ export default (initialState?: * = {}) => ({
           throw new Error(`Profile 格式不对：\n${profileString}`);
         }
         // checks password
-        const encryptedPrivateKeyHex = await loadStorage(getPrivateKeyStoreKey(profileID));
+        const encryptedPrivateKeyHex = await dispatch.backend.load(getPrivateKeyStoreKey(profileID));
         const privateKey = await decrypt(name, password, encryptedPrivateKeyHex);
 
         try {
@@ -162,10 +173,10 @@ export default (initialState?: * = {}) => ({
         }
         // Remember username for 8 Days so later it can auto login
         if (remember && typeof remember === 'number') {
-          await saveStorage(
-            'currentUser',
-            JSON.stringify({ name, password, expire: Date.now() + remember * 24 * 3600 * 1000 }),
-          );
+          await dispatch.backend.save({
+            id: 'currentUser',
+            data: { name, password, expire: Date.now() + remember * 24 * 3600 * 1000 },
+          });
         }
         // get profile from backend
         // inform UI that loading succeed
