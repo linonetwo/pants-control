@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import { Editor } from 'slate-react';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
-import Prism from 'slate-prism';
-import EditCode from 'slate-edit-code';
+import EditCode from './plugins/slate-edit-code/lib';
 
 import type { Note } from '../../../store/note';
 
