@@ -5,10 +5,11 @@ export default {
   document: {
     nodes: [
       {
-        match: [{ type: 'title' }, { type: 'paragraph' }, { type: 'note-list' }, { type: 'new-note-button' }],
+        match: [{ type: 'title' }, { type: 'paragraph' }, { type: 'note-list' }, { type: 'new-note-button' }, { type: 'code_block' }, { type: 'code_line' }],
       },
     ],
     normalize: (change, { code, node, child, index }) => {
+      console.log(code)
       switch (code) {
         case CHILD_TYPE_INVALID: {
           const type = index === 0 ? 'title' : 'paragraph';
