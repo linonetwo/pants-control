@@ -108,11 +108,22 @@ export default (initialState?: * = {}) => ({
         this.setProfile(newProfile);
         this.setPrivateKey(privateKey);
         // create initial notes
-        await dispatch.note.saveNewNoteFromString({
+        const defaultProfileNoteValue = (
+          <value>
+            <document>
+              <block type="code_block" data={{ language: 'json' }}>
+                {JSON.stringify(newProfile, null, '  ')
+                  .split('\n')
+                  .map(jsonLine => <block type="code_line">{jsonLine}</block>)}
+              </block>
+            </document>
+          </value>
+        );
+        const defaultProfileNote = JSON.stringify(defaultProfileNoteValue.toJS());
+        await dispatch.note.saveNewNoteFromJSONString({
           id: profileID,
-          note: JSON.stringify(newProfile, null, '  '),
+          note: defaultProfileNote,
           title: '账户信息',
-          type: 'json',
         });
 
         const defaultSideNoteValue = (
@@ -124,7 +135,6 @@ export default (initialState?: * = {}) => ({
           </value>
         );
         const defaultSideNote = JSON.stringify(defaultSideNoteValue.toJS());
-
         await dispatch.note.saveNewNoteFromJSONString({
           id: sideNoteID,
           note: defaultSideNote,
