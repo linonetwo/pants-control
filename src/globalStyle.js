@@ -8,11 +8,11 @@ injectGlobal`
   body {
     margin: 0;
     color: #333;
+    font-family: Arial, Helvetica, Helvetica Neue, "Microsoft Yahei", "PingFang SC", "华文细黑", STXihei, serif;
   }
   * {
-    outline: none;
-    font-family: Arial, Helvetica, Helvetica Neue, "Microsoft Yahei", "PingFang SC", "华文细黑", STXihei, serif;
     -webkit-font-smoothing: antialiased;
+    outline: none;
   }
 
   input:-webkit-autofill {

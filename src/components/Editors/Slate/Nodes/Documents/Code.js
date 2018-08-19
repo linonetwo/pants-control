@@ -4,8 +4,13 @@ import type { Element } from 'react';
 import styled from 'styled-components';
 
 const CodeContainer = styled.article`
-  padding-top: 7px;
-  background-color: #ccc;
+  padding: 7px;
+  background-color: #f6f8fa;
+
+  pre {
+    margin: 0;
+    font-family: 'Fira Code', Consolas, monospace;
+  }
 `;
 
 type Props = {
