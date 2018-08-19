@@ -87,7 +87,13 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         }
       },
     });
-    this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin, EditCode(), Prism()];
+    const prismPlugin = Prism({
+      getSyntax: node => {
+        const language = node.getIn(['data', 'language']) || 'javascript';
+        return language;
+      },
+    });
+    this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin, EditCode(), prismPlugin];
   }
 
   state = {

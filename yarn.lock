@@ -2505,6 +2505,10 @@ babel-plugin-preval@^3.0.0:
     babel-plugin-macros "^2.2.2"
     require-from-string "^2.0.2"
 
+babel-plugin-prismjs@^1.0.2:
+  version "1.0.2"
+  resolved "http://registry.npm.taobao.org/babel-plugin-prismjs/download/babel-plugin-prismjs-1.0.2.tgz#837bf6b32168b3ba624c054fc755946deb1b63fa"
+
 babel-plugin-styled-components@^1.5.1:
   version "1.5.1"
   resolved "http://registry.npm.taobao.org/babel-plugin-styled-components/download/babel-plugin-styled-components-1.5.1.tgz#31dbeb696d1354d1585e60d66c7905f5e474afcd"

@@ -24,6 +24,17 @@ module.exports = function override(config, env) {
   config = injectBabelPlugin(['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }], config);
   config = injectBabelPlugin('lodash', config);
   config = injectBabelPlugin('date-fns', config);
+  config = injectBabelPlugin(
+    [
+      'prismjs',
+      {
+        languages: ['javascript', 'css', 'markup', 'json', 'python', 'rust'],
+        theme: 'tomorrow',
+        css: true,
+      },
+    ],
+    config,
+  );
 
   if (env === 'production') {
     console.log('⚡ Production build with optimization ⚡');
