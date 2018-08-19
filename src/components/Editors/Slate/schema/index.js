@@ -9,7 +9,6 @@ export default {
       },
     ],
     normalize: (change, { code, node, child, index }) => {
-      console.log(code)
       switch (code) {
         case CHILD_TYPE_INVALID: {
           const type = index === 0 ? 'title' : 'paragraph';

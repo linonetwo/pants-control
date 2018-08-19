@@ -1,3 +1,4 @@
+/** @jsx h */
 // @flow
 import keypair from 'keypair';
 import uuid from 'uuid/v4';
@@ -5,6 +6,7 @@ import { message } from 'antd';
 import queryString from 'query-string';
 import Plain from 'slate-plain-serializer';
 import { Value } from 'slate';
+import h from 'slate-hyperscript';
 
 import { encrypt, decrypt, checkKeyPair } from '../utils/crypto';
 
@@ -112,10 +114,20 @@ export default (initialState?: * = {}) => ({
           title: '账户信息',
           type: 'json',
         });
+
+        const defaultSideNoteValue = (
+          <value>
+            <document>
+              <block type="title">侧边栏</block>
+              <block type="note-list">笔记目录</block>
+            </document>
+          </value>
+        );
+        const defaultSideNote = JSON.stringify(defaultSideNoteValue.toJS());
+
         await dispatch.note.saveNewNoteFromJSONString({
           id: sideNoteID,
-          note:
-            '{"object":"value","document":{"object":"document","data":{},"nodes":[{"object":"block","type":"title","isVoid":false,"data":{},"nodes":[{"object":"text","leaves":[{"object":"leaf","text":"侧边栏","marks":[]}]}]},{"object":"block","type":"note-list","isVoid":false,"data":{},"nodes":[{"object":"text","leaves":[{"object":"leaf","text":"笔记目录","marks":[]}]}]}]}}',
+          note: defaultSideNote,
         });
         await dispatch.note.setSideNote(sideNoteID);
         await dispatch.note.saveNewNoteFromString({ id: homepageID, title: '主页' });
