@@ -49,6 +49,7 @@ function onKeyDown(
         // User is pressing Tab
         return onTab(...args);
     } else if (opts.exitBlockType && isModEnter(event)) {
+        console.log('aaa')
         // User is pressing Mod+Enter
         return onModEnter(...args);
     } else if (isEnter(event)) {
