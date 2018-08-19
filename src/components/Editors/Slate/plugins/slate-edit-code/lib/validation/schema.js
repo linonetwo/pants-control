@@ -3,9 +3,9 @@
 import { Block, type Change, type Node } from 'slate';
 import {
     CHILD_TYPE_INVALID,
-    CHILD_INVALID,
+    CHILD_OBJECT_INVALID,
     PARENT_TYPE_INVALID,
-    PARENT_INVALID
+    PARENT_OBJECT_INVALID
 } from 'slate-schema-violations';
 import { List } from 'immutable';
 
@@ -22,7 +22,7 @@ function schema(opts: Options): Object {
                 nodes: [{ types: [opts.lineType] }],
                 normalize(change: Change, violation: string, context: Object) {
                     switch (violation) {
-                        case CHILD_INVALID:
+                        case CHILD_OBJECT_INVALID:
                         case CHILD_TYPE_INVALID:
                             return onlyLine(opts, change, context);
                         default:
@@ -39,7 +39,7 @@ function schema(opts: Options): Object {
                         // official Slate, but exists in GitBook's
                         // fork. Until the PR is merged, we accept both
                         // https://github.com/ianstormtaylor/slate/pull/1842
-                        case PARENT_INVALID:
+                        case PARENT_OBJECT_INVALID:
                         case PARENT_TYPE_INVALID:
                             return noOrphanLine(opts, change, context);
                         default:
