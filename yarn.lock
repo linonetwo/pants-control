@@ -6643,7 +6643,7 @@ immutable-tuple@^0.4.4:
   version "0.4.4"
   resolved "http://registry.npm.taobao.org/immutable-tuple/download/immutable-tuple-0.4.4.tgz#e2d6ce971d61f34d636e1de64fa183f5e44dd4c7"
 
-immutable@^3.7.4:
+immutable@^3.7.4, immutable@^3.8.2:
   version "3.8.2"
   resolved "http://registry.npm.taobao.org/immutable/download/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
 
