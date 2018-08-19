@@ -6,6 +6,7 @@ import { Editor } from 'slate-react';
 import Plain from 'slate-plain-serializer';
 import equal from 'fast-deep-equal';
 import EditCode from './plugins/slate-edit-code/lib';
+import Prism from './plugins/slate-prism/lib';
 
 import type { Note } from '../../../store/note';
 
@@ -86,7 +87,7 @@ class SlateEditor extends Component<Store & Dispatch & Props, State> {
         }
       },
     });
-    this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin, EditCode()];
+    this.plugins = [suggestNodeChangePlugin, hoverMenuPlugin, EditCode(), Prism()];
   }
 
   state = {
