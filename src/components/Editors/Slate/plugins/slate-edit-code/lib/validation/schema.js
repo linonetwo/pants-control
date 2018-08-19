@@ -19,29 +19,29 @@ function schema(opts: Options): Object {
     const baseSchema = {
         blocks: {
             [opts.get('containerType')]: {
-                nodes: [{ types: [opts.get('lineType')] }],
-                normalize(change: Change, violation: string, context: Object) {
-                    switch (violation) {
+                nodes: [{ match: [{ type: opts.get('lineType') }] }],
+                normalize(change: Change, error: Object) {
+                    switch (error.code) {
                         case CHILD_OBJECT_INVALID:
                         case CHILD_TYPE_INVALID:
-                            return onlyLine(opts, change, context);
+                            return onlyLine(opts, change, error);
                         default:
                             return undefined;
                     }
                 }
             },
             [opts.get('lineType')]: {
-                nodes: [{ objects: ['text'], min: 1 }],
-                parent: { types: [opts.get('containerType')] },
-                normalize(change: Change, violation: string, context: Object) {
-                    switch (violation) {
+                nodes: [{ match: [{ object: 'text', min: 1 }] }],
+                parent: { type: opts.get('containerType') },
+                normalize(change: Change, error: Object) {
+                    switch (error.code) {
                         // This constant does not exist yet in
                         // official Slate, but exists in GitBook's
                         // fork. Until the PR is merged, we accept both
                         // https://github.com/ianstormtaylor/slate/pull/1842
                         case PARENT_OBJECT_INVALID:
                         case PARENT_TYPE_INVALID:
-                            return noOrphanLine(opts, change, context);
+                            return noOrphanLine(opts, change, error);
                         default:
                             return undefined;
                     }
@@ -79,9 +79,9 @@ function getSuccessiveNodes(
 /**
  * A rule that ensure code blocks only contain lines of code, and no marks
  */
-function onlyLine(opts: Options, change: Change, context: Object) {
+function onlyLine(opts: Options, change: Change, error: Object) {
     const isNotLine = n => n.type !== opts.get('lineType');
-    const nonLineGroups = getSuccessiveNodes(context.node.nodes, isNotLine);
+    const nonLineGroups = getSuccessiveNodes(error.node.nodes, isNotLine);
 
     nonLineGroups.filter(group => !group.isEmpty()).forEach(nonLineGroup => {
         // Convert text to code lines
@@ -117,8 +117,8 @@ function onlyLine(opts: Options, change: Change, context: Object) {
  * A rule that ensure code lines are always children
  * of a code block.
  */
-function noOrphanLine(opts: Options, change: Change, context: Object): ?Change {
-    const { parent } = context;
+function noOrphanLine(opts: Options, change: Change, error: Object): ?Change {
+    const { parent } = error;
 
     const isLine = n => n.type === opts.get('lineType');
 
