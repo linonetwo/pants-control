@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 // @flow
 import Prism from 'prismjs';
 import { Point, type Node, type Text, type Range } from 'slate';
@@ -28,7 +29,7 @@ function PrismPlugin(optsParam: OptionsFormat = {}) {
 /**
  * Returns the decoration for a node
  */
-function decorateNode(opts: Options, block: Node) {
+function decorateNode(opts: Options, block: Node): Array<Range> {
     const grammarName = opts.get('getSyntax')(block);
     const grammar = Prism.languages[grammarName];
     if (!grammar) {
