@@ -27,16 +27,17 @@ register(ignoreStyles.DEFAULT_EXTENSIONS, (mod, filename) => {
     })}`;
     return ignoreStyles.noOp();
   }
-
+  
   // If we find an image
   const hash = md5File.sync(filename).slice(0, 8);
   const bn = path.basename(filename).replace(/(\.\w{3})$/, `.${hash}$1`);
-
+  
   mod.exports = `/static/media/${bn}`;
 });
 
 // Set up babel to do its thing... env for the latest toys, react-app for CRA
 // Notice three plugins: the first two allow us to use import rather than require, the third is for code splitting
+const { prismLanguages, prismTheme } = require('../src/config');
 require('@babel/register')({
   ignore: [/\/build\//, /\/node_modules(?![\\/](react-echarts-v3|antd|rc-.+|styled-components-mixins)[\\/])/],
   presets: ['@babel/env', 'react-app'],
@@ -47,6 +48,14 @@ require('@babel/register')({
       'babel-plugin-styled-components',
       {
         ssr: true,
+      },
+    ],
+    [
+      'prismjs',
+      {
+        languages: prismLanguages,
+        theme: prismTheme,
+        css: true,
       },
     ],
     '@babel/plugin-proposal-do-expressions',

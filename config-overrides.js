@@ -17,6 +17,8 @@ function babelIgnorePath(exclude = [], config) {
   return config;
 }
 
+const { prismLanguages, prismTheme } = require('./src/config');
+
 module.exports = function override(config, env) {
   // config = injectBabelPlugin('transform-decorators-legacy', config);
   config = injectBabelPlugin('@babel/plugin-proposal-do-expressions', config);
@@ -28,8 +30,8 @@ module.exports = function override(config, env) {
     [
       'prismjs',
       {
-        languages: ['javascript', 'css', 'markup', 'json', 'python', 'rust'],
-        theme: 'tomorrow',
+        languages: prismLanguages,
+        theme: prismTheme,
         css: true,
       },
     ],
