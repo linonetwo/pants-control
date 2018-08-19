@@ -18,8 +18,8 @@ import { deserializeCode } from '../utils';
 function schema(opts: Options): Object {
     const baseSchema = {
         blocks: {
-            [opts.containerType]: {
-                nodes: [{ types: [opts.lineType] }],
+            [opts.get('containerType')]: {
+                nodes: [{ types: [opts.get('lineType')] }],
                 normalize(change: Change, violation: string, context: Object) {
                     switch (violation) {
                         case CHILD_OBJECT_INVALID:
@@ -30,9 +30,9 @@ function schema(opts: Options): Object {
                     }
                 }
             },
-            [opts.lineType]: {
+            [opts.get('lineType')]: {
                 nodes: [{ objects: ['text'], min: 1 }],
-                parent: { types: [opts.containerType] },
+                parent: { types: [opts.get('containerType')] },
                 normalize(change: Change, violation: string, context: Object) {
                     switch (violation) {
                         // This constant does not exist yet in
@@ -51,7 +51,7 @@ function schema(opts: Options): Object {
     };
 
     if (!opts.allowMarks) {
-        baseSchema.blocks[opts.lineType].marks = [];
+        baseSchema.blocks[opts.get('lineType')].marks = [];
     }
 
     return baseSchema;
@@ -80,7 +80,7 @@ function getSuccessiveNodes(
  * A rule that ensure code blocks only contain lines of code, and no marks
  */
 function onlyLine(opts: Options, change: Change, context: Object) {
-    const isNotLine = n => n.type !== opts.lineType;
+    const isNotLine = n => n.type !== opts.get('lineType');
     const nonLineGroups = getSuccessiveNodes(context.node.nodes, isNotLine);
 
     nonLineGroups.filter(group => !group.isEmpty()).forEach(nonLineGroup => {
@@ -120,12 +120,12 @@ function onlyLine(opts: Options, change: Change, context: Object) {
 function noOrphanLine(opts: Options, change: Change, context: Object): ?Change {
     const { parent } = context;
 
-    const isLine = n => n.type === opts.lineType;
+    const isLine = n => n.type === opts.get('lineType');
 
     const linesGroup = getSuccessiveNodes(parent.nodes, isLine);
 
     linesGroup.forEach(group => {
-        const container = Block.create({ type: opts.containerType, nodes: [] });
+        const container = Block.create({ type: opts.get('containerType'), nodes: [] });
         const firstLineIndex = parent.nodes.indexOf(group.first());
 
         change.insertNodeByKey(parent.key, firstLineIndex, container, {
