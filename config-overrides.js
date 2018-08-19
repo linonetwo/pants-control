@@ -18,7 +18,7 @@ function babelIgnorePath(exclude = [], config) {
 }
 
 module.exports = function override(config, env) {
-  config = injectBabelPlugin('transform-decorators-legacy', config);
+  // config = injectBabelPlugin('transform-decorators-legacy', config);
   config = injectBabelPlugin('@babel/plugin-proposal-do-expressions', config);
   config = injectBabelPlugin('@babel/plugin-proposal-optional-chaining', config);
   config = injectBabelPlugin(['import', { libraryName: 'antd', libraryDirectory: 'es', style: true }], config);
@@ -31,16 +31,16 @@ module.exports = function override(config, env) {
     config = injectBabelPlugin('@babel/plugin-transform-react-inline-elements', config);
     config = injectBabelPlugin('@babel/plugin-transform-react-constant-elements', config);
   } else {
-    config = injectBabelPlugin(
-      [
-        'flow-runtime',
-        {
-          assert: true,
-          annotate: true,
-        },
-      ],
-      config,
-    );
+    // config = injectBabelPlugin(
+    //   [
+    //     'flow-runtime',
+    //     {
+    //       assert: true,
+    //       annotate: true,
+    //     },
+    //   ],
+    //   config,
+    // );
   }
 
   // remove eslint in eslint, we only need it on VSCode
