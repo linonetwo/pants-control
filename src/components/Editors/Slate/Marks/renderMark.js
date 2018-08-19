@@ -12,6 +12,6 @@ export default function renderMark(props) {
     case 'underlined':
       return <u>{children}</u>;
     default:
-      return <span>{children}</span>;
+      return null;
   }
 }

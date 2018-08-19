@@ -12,35 +12,34 @@ import CodeNode from './Documents/Code';
 export default function renderNodeWithWrapper(value, onChange) {
   return (props: *) => {
     const { attributes, children, node } = props;
-    return (
-      <Fragment>
-        {/* BasicNodes */}
-        <WrapNodeMenu value={value} onChange={onChange} node={node}>
-          {do {
-            if (node.type === 'new-note-button') {
-              <NewNoteButton>{children}</NewNoteButton>;
-            } else if (node.type === 'note-list') {
-              <NoteList>{children}</NoteList>;
-            } else if (node.type === 'title') {
-              <h2 {...attributes}>{children}</h2>;
-            } else if (node.type === 'paragraph') {
-              <TextNode {...attributes}>{children}</TextNode>;
-            } else if (node.type === 'code_block') {
-              <CodeNode {...attributes}>{children}</CodeNode>;
-            }
-          }}
-        </WrapNodeMenu>
-        {/* InlineNodes */}
+    const BasicNodes = (
+      <WrapNodeMenu value={value} onChange={onChange} node={node}>
         {do {
-          if (node.type === 'parse') {
-            <Parse {...attributes} value={value} onChange={onChange} node={node}>
-              {children}
-            </Parse>;
-          } else if (node.type === 'code_line') {
-            <pre {...attributes}>{children}</pre>;
+          if (node.type === 'new-note-button') {
+            <NewNoteButton>{children}</NewNoteButton>;
+          } else if (node.type === 'note-list') {
+            <NoteList>{children}</NoteList>;
+          } else if (node.type === 'title') {
+            <h2 {...attributes}>{children}</h2>;
+          } else if (node.type === 'paragraph') {
+            <TextNode {...attributes}>{children}</TextNode>;
+          } else if (node.type === 'code_block') {
+            <CodeNode {...attributes}>{children}</CodeNode>;
           }
         }}
-      </Fragment>
+      </WrapNodeMenu>
     );
+    const InlineNodes = do {
+      if (node.type === 'parse') {
+        <Parse {...attributes} value={value} onChange={onChange} node={node}>
+          {children}
+        </Parse>;
+      } else if (node.type === 'code_line') {
+        <pre {...attributes}>{children}</pre>;
+      } else {
+        null;
+      }
+    };
+    return BasicNodes || InlineNodes;
   };
 }
