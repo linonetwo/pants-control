@@ -63,7 +63,7 @@ export function notif(message: string) {
   } else if (Notification.permission === 'granted') {
     // Let's check whether notification permissions have already been granted
     // If it's okay let's create a notification
-    const myNotification = new Notification('MemectExtractor', {
+    const myNotification = new Notification('PantsControl', {
       body: message,
     });
     return myNotification;
@@ -72,7 +72,7 @@ export function notif(message: string) {
     Notification.requestPermission(permission => {
       // If the user accepts, let's create a notification
       if (permission === 'granted') {
-        const myNotification = new Notification('MemectExtractor', {
+        const myNotification = new Notification('PantsControl', {
           body: message,
         });
         return myNotification;

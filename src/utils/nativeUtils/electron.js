@@ -14,7 +14,7 @@ export function copy(content: any) {
 }
 
 export function notif(message: string) {
-  const myNotification = new Notification('MemectExtractor', {
+  const myNotification = new Notification('PantsControl', {
     body: message,
   });
   return myNotification;
